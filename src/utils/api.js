@@ -126,7 +126,7 @@ export const getAllLenderApplications = (options, token) => {
         Authorization: token,
       },
     }
-  );
+  ).then(handleRes);
 };
 
 export const getLenderApplication = (id, token) => {
@@ -205,7 +205,7 @@ export const getAllBorrowApplications = (options, token) => {
         Authorization: token,
       },
     }
-  );
+  ).then(handleRes);
 };
 
 export const getBorrowApplication = (id, token) => {
@@ -229,6 +229,48 @@ export const updateBorrowApplication = ({ data, token, id }) => {
 
 export const deleteBorrowApplication = ({ id, token }) => {
   return fetch(`${BASE_URL}/api/applications/borrow/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: token,
+    },
+  }).then(handleRes);
+};
+
+
+export const getAllNotifications = (options, token) => {
+  const queryParams = new URLSearchParams(options);
+  return fetch(
+    `${BASE_URL}/api/notifications?${queryParams.toString()}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    }
+  ).then(handleRes);
+};
+
+export const getNotification = (id, token) => {
+  return fetch(`${BASE_URL}/api/notifications/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  }).then(handleRes);
+};
+
+export const updateNotification = ({ data, token, id }) => {
+  return fetch(`${BASE_URL}/api/notifications/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: token,
+      "Content-Type":CONTENT_TYPE_JSON,
+    },
+  }).then(handleRes);
+};
+
+export const deleteNotification = ({ id, token }) => {
+  return fetch(`${BASE_URL}/api/notifications/${id}`, {
     method: "DELETE",
     headers: {
       Authorization: token,

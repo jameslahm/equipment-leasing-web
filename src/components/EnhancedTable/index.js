@@ -8,20 +8,13 @@ import {
   TablePagination,
   TableRow,
   Paper,
-  Checkbox,
   FormControlLabel,
   Switch,
-  IconButton,
 } from "@material-ui/core";
-import { Skeleton } from "@material-ui/lab";
 import EnhancedTableToolbar from "./EnhancedTableToolbar";
 import EnhancedTableHead from "./EnhancedTableHead";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
 import { useQuery, useMutation, queryCache } from "react-query";
 import { AuthContext } from "../../utils";
-import { Link as ReachLink } from "@reach/router";
 import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
@@ -42,6 +35,7 @@ function EnhancedTable({
   resource,
   getAllResource,
   deleteResource,
+  RowData,
 }) {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
@@ -71,7 +65,9 @@ function EnhancedTable({
 
   const [mutate] = useMutation(deleteResource);
 
-  const rows = data.resource || [];
+  // here we use fake rows
+  console.log(data,resource)
+  const rows = data[resource] || Array(rowsPerPage).fill(undefined);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -161,89 +157,27 @@ function EnhancedTable({
               rowCount={rows.length}
             />
             <TableBody>
-              {rows
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+              {rows.map((row, index) => {
+                console.log(row,isLoading)
 
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.username}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ "aria-labelledby": labelId }}
-                          onClick={(event) => handleClick(event, row.name)}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {isLoading ? (
-                          <Skeleton variant="rect"></Skeleton>
-                        ) : (
-                          row.username
-                        )}
-                      </TableCell>
-                      <TableCell align="right">
-                        {isLoading ? (
-                          <Skeleton variant="rect"></Skeleton>
-                        ) : (
-                          row.username
-                        )}
-                      </TableCell>
-                      <TableCell align="right">
-                        {isLoading ? (
-                          <Skeleton variant="rect"></Skeleton>
-                        ) : (
-                          row.username
-                        )}
-                      </TableCell>
-                      <TableCell align="right">
-                        {isLoading ? (
-                          <Skeleton variant="rect"></Skeleton>
-                        ) : (
-                          row.username
-                        )}
-                      </TableCell>
-                      <TableCell align="right">
-                        {isLoading ? (
-                          <Skeleton variant="rect"></Skeleton>
-                        ) : (
-                          <>{row.username}</>
-                        )}
-                      </TableCell>
-                      <TableCell align="right">
-                        <IconButton
-                          component={ReachLink}
-                          to={`/users/${row.id}`}
-                          state={{ status: "IDLE" }}
-                        >
-                          <VisibilityIcon></VisibilityIcon>
-                        </IconButton>
-                        <IconButton
-                          component={ReachLink}
-                          to={`/users/${row.id}`}
-                          state={{ status: "EDIT" }}
-                        >
-                          <EditIcon></EditIcon>
-                        </IconButton>
-                        <IconButton onClick={(e) => handleDelete(row.id)}>
-                          <DeleteIcon></DeleteIcon>
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                if (isLoading) {
+                  return <RowData key={index} isLoading={true}></RowData>;
+                }
+                
+                const isItemSelected = isSelected(row[headCells[0].id]);
+                const labelId = `enhanced-table-checkbox-${index}`;
+                return (
+                  <RowData
+                    row={row}
+                    key={row.id}
+                    isItemSelected={isItemSelected}
+                    labelId={labelId}
+                    isLoading={isLoading}
+                    onDelete={handleDelete}
+                    onClick={handleClick}
+                  ></RowData>
+                );
+              })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
                   <TableCell colSpan={6} />

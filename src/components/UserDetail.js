@@ -70,7 +70,7 @@ function UserDetail() {
     : "IDLE";
   const [status, setStatus] = useState(initialStatus);
   const queryKey = ["user", params.id, authState.token];
-  const { data = {} } = useQuery(
+  useQuery(
     queryKey,
     (key, id, token) => getUser(id, token),
     {
@@ -103,9 +103,11 @@ function UserDetail() {
     }
 
     try {
-      const data = await mutate({
-        data: { username, confirmed, password, email },
-      });
+      await mutate({
+        data:{username,email,confirmed},
+        id:params.id,
+        token:authState.token
+      })
       enqueueSnackbar("Update Success", {
         variant: "success",
       });

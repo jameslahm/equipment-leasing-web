@@ -5,7 +5,6 @@ import {
   AuthContext,
   getEquipment,
   updateEquipment,
-  INITIAL_PASSWORD,
 } from "../utils";
 import {
   TextField,
@@ -74,13 +73,12 @@ function EquipmentDetail() {
     : "IDLE";
   const [status, setStatus] = useState(initialStatus);
   const queryKey = ["equipment", params.id, authState.token];
-  const { data = {} } = useQuery(
+  useQuery(
     queryKey,
     (key, id, token) => getEquipment(id, token),
     {
       onSuccess: (data) => {
         ReactDOM.unstable_batchedUpdates(() => {
-          console.log(data)
           setName(data.name);
           setUsage(data.usage);
           setEquipmentStatus(data.status);
@@ -109,8 +107,10 @@ function EquipmentDetail() {
     }
 
     try {
-      const data = await mutate({
+      await mutate({
         data: { name, confirmed_back: confirmedBack, usage },
+        id: params.id,
+        token: authState.token,
       });
       enqueueSnackbar("Update Success", {
         variant: "success",

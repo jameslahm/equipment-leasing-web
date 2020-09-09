@@ -67,7 +67,7 @@ const FAKE_EQUIPMENT_PUTON_APPLICATION = {
 };
 
 const FAKE_EQUIPMENT_PUTON_APPLICATIONS = {
-  applications: [FAKE_EQUIPMENT_PUTON_APPLICATION],
+  equipment_puton_applications: [FAKE_EQUIPMENT_PUTON_APPLICATION],
   total: 1,
 };
 
@@ -93,7 +93,7 @@ const FAKE_EQUIPMENT_BORROW_APPLICATION = {
 };
 
 const FAKE_EQUIPMENT_BORROW_APPLICATIONS = {
-  applications: [FAKE_EQUIPMENT_BORROW_APPLICATION],
+  equipment_borrow_applications: [FAKE_EQUIPMENT_BORROW_APPLICATION],
   total: 1,
 };
 
@@ -111,7 +111,7 @@ const FAKE_LENDER_APPLICATION = {
 };
 
 const FAKE_LENDER_APPLICATIONS = {
-  applications: [FAKE_LENDER_APPLICATION],
+  lender_applications: [FAKE_LENDER_APPLICATION],
   total: 1,
 };
 
@@ -122,6 +122,7 @@ const FAKE_APPLICATION_NOTIFICATION = {
     avatar: "fake",
     id: 1,
   },
+  id:1,
   content: "fake",
   notification_time: "fake",
   isRead: false,
@@ -186,16 +187,16 @@ const handlers = [
     return res(ctx.status(200), ctx.json(FAKE_LENDER_APPLICATIONS));
   }),
 
-  rest.get("/api/application/lender/:id", (req, res, ctx) => {
+  rest.get("/api/applications/lender/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_LENDER_APPLICATION));
   }),
 
   // Here we could use to agree or refuse the application
-  rest.put("/api/application/lender/:id", (req, res, ctx) => {
+  rest.put("/api/applications/lender/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_LENDER_APPLICATION));
   }),
 
-  rest.delete("/api/application/lender/:id", (req, res, ctx) => {
+  rest.delete("/api/applications/lender/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_LENDER_APPLICATION));
   }),
 
@@ -204,16 +205,16 @@ const handlers = [
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATIONS));
   }),
 
-  rest.get("/api/application/puton/:id", (req, res, ctx) => {
+  rest.get("/api/applications/puton/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATION));
   }),
 
   // Here we could use to agree or refuse the application
-  rest.put("/api/application/puton/:id", (req, res, ctx) => {
+  rest.put("/api/applications/puton/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATION));
   }),
 
-  rest.delete("/api/application/puton/:id", (req, res, ctx) => {
+  rest.delete("/api/applications/puton/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATION));
   }),
 
@@ -222,16 +223,16 @@ const handlers = [
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATIONS));
   }),
 
-  rest.get("/api/application/borrow/:id", (req, res, ctx) => {
+  rest.get("/api/applications/borrow/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATION));
   }),
 
   // Here we could use to agree or refuse the application
-  rest.put("/api/application/borrow/:id", (req, res, ctx) => {
+  rest.put("/api/applications/borrow/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATION));
   }),
 
-  rest.delete("/api/application/borrow/:id", (req, res, ctx) => {
+  rest.delete("/api/applications/borrow/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATION));
   }),
 

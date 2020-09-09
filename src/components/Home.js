@@ -127,7 +127,6 @@ function Home({ children }) {
   };
 
   const location = useLocation();
-  console.log(location.pathname.split("/"))
   const title = TitleMap[location.pathname.split("/")[1] || ""];
 
   const { authState } = useContext(AuthContext);

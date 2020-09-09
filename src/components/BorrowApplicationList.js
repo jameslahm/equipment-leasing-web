@@ -1,24 +1,24 @@
 import React from "react";
-import { getAllEquipments, deleteEquipment } from "../utils";
-import EnhancedTable from "./EnhancedTable";
-import { Link as ReachLink } from "@reach/router";
 import { TableCell, TableRow, Checkbox, IconButton } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { getAllBorrowApplications,deleteBorrowApplication } from "../utils";
+import { Link as ReachLink } from "@reach/router";
+import EnhancedTable from "./EnhancedTable";
 
 const headCells = [
-  { id: "name", th: true, disablePadding: true, label: "Name" },
-  { id: "owner", th: false, disablePadding: false, label: "Owner" },
+  { id: "id", th: true, disablePadding: true, label: "ID" },
+  { id: "candidate", th: false, disablePadding: false, label: "Candidate" },
   { id: "usage", th: false, disablePadding: false, label: "Usage" },
-  { id: "status", th: false, disablePadding: false, label: "Status" },
   {
-    id: "confirmed_back",
+    id: "status",
     th: false,
     disablePadding: false,
-    label: "ConfirmedBack",
+    label: "Status",
   },
+  { id: "review", th: false, disablePadding: false, label: "Review" },
   {
     id: "actions",
     label: "Actions",
@@ -46,29 +46,27 @@ function RowData({
           <Checkbox
             checked={isItemSelected}
             inputProps={{ "aria-labelledby": labelId }}
-            onClick={(event) => onClick(event, row.name)}
+            onClick={(event) => onClick(event, row.id)}
           />
         </TableCell>
         <TableCell component="th" id={labelId} scope="row" padding="none">
-          {row.name}
+          {row.id}
         </TableCell>
-        <TableCell align="right">{row.owner.username}</TableCell>
+        <TableCell align="right">{row.candidate.username}</TableCell>
         <TableCell align="right">{row.usage}</TableCell>
         <TableCell align="right">{row.status}</TableCell>
-        <TableCell align="right">
-          {row.confirmed_back ? "Confirmed" : "UnConfirmed"}
-        </TableCell>
+        <TableCell align="right">{row.reviewer.username}</TableCell>
         <TableCell align="right">
           <IconButton
             component={ReachLink}
-            to={`/equipments/${row.id}`}
+            to={`/applications/borrow/${row.id}`}
             state={{ status: "IDLE" }}
           >
             <VisibilityIcon></VisibilityIcon>
           </IconButton>
           <IconButton
             component={ReachLink}
-            to={`/equipments/${row.id}`}
+            to={`/applications/borrow/${row.id}`}
             state={{ status: "EDIT" }}
           >
             <EditIcon></EditIcon>
@@ -82,9 +80,8 @@ function RowData({
   } else {
     return (
       <TableRow hover tabIndex={-1}>
-        <TableCell padding="checkbox">
-          {/* <Checkbox /> */}
-        </TableCell>
+        <TableCell padding="checkbox">{/* <Checkbox
+          /> */}</TableCell>
         <TableCell component="th" scope="row" padding="none">
           <Skeleton variant="rect"></Skeleton>
         </TableCell>
@@ -108,16 +105,16 @@ function RowData({
   }
 }
 
-function EquipmentList() {
+function BorrowApplicationList() {
   return (
     <EnhancedTable
       headCells={headCells}
-      resource="equipments"
-      getAllResource={getAllEquipments}
-      deleteResource={deleteEquipment}
+      resource="equipment_borrow_applications"
+      getAllResource={getAllBorrowApplications}
+      deleteResource={deleteBorrowApplication}
       RowData={RowData}
     ></EnhancedTable>
   );
 }
 
-export default EquipmentList;
+export default BorrowApplicationList;
