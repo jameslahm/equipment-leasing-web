@@ -18,6 +18,7 @@ import EquipmentDetail from "./components/EquipmentDetail";
 import LenderApplicationDetail from "./components/LenderApplicationDetail";
 import PutOnApplicationDetail from "./components/PutOnApplicationDetail";
 import BorrowApplicationDetail from "./components/BorrowApplicationDetail";
+import NotificationDetail from './components/NotificationDetail'
 
 if (process.env.NODE_ENV === "development") {
   const { worker } = require("./utils");
@@ -63,6 +64,7 @@ function App() {
             <PutOnApplicationDetail path="applications/puton/:id"></PutOnApplicationDetail>
             <BorrowApplicationDetail path="applications/borrow/:id"></BorrowApplicationDetail>
             <NotificationList path="notifications"></NotificationList>
+            <NotificationDetail path="notifications/:id"></NotificationDetail>
             <UserList path="users"></UserList>
             <UserDetail path="users/:id"></UserDetail>
             <EquipmentList path="equipments"></EquipmentList>

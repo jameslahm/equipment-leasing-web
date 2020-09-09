@@ -1,17 +1,24 @@
 import React from "react";
-import { TableCell, TableRow, Checkbox, IconButton } from "@material-ui/core";
-import { Skeleton } from "@material-ui/lab";
+import {
+  TableCell,
+  TableRow,
+  Checkbox,
+  IconButton,
+  makeStyles,
+  Link,
+} from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { getAllBorrowApplications,deleteBorrowApplication } from "../utils";
+import { getAllBorrowApplications, deleteBorrowApplication } from "../utils";
 import { Link as ReachLink } from "@reach/router";
 import EnhancedTable from "./EnhancedTable";
+import TableRowSkeleton from "./EnhancedTable/TableRowSkeleton";
+import StatusHint from "./StatusHint";
 
 const headCells = [
   { id: "id", th: true, disablePadding: true, label: "ID" },
   { id: "candidate", th: false, disablePadding: false, label: "Candidate" },
-  { id: "usage", th: false, disablePadding: false, label: "Usage" },
   {
     id: "status",
     th: false,
@@ -26,6 +33,15 @@ const headCells = [
   },
 ];
 
+const useStyles = makeStyles((theme) => ({
+  tableCell: {
+    textAlign: "right",
+  },
+  capitalize: {
+    textTransform: "capitalize",
+  },
+}));
+
 function RowData({
   row,
   isItemSelected,
@@ -34,6 +50,7 @@ function RowData({
   onDelete,
   onClick,
 }) {
+  const classes = useStyles();
   if (!isLoading) {
     return (
       <TableRow
@@ -52,11 +69,20 @@ function RowData({
         <TableCell component="th" id={labelId} scope="row" padding="none">
           {row.id}
         </TableCell>
-        <TableCell align="right">{row.candidate.username}</TableCell>
-        <TableCell align="right">{row.usage}</TableCell>
-        <TableCell align="right">{row.status}</TableCell>
-        <TableCell align="right">{row.reviewer.username}</TableCell>
-        <TableCell align="right">
+        <TableCell className={classes.tableCell}>
+          <Link component={ReachLink} to={`/users/${row.candidate.id}`}>
+            {row.candidate.username}
+          </Link>
+        </TableCell>
+        <TableCell className={classes.tableCell}>
+          <StatusHint result={row.result}></StatusHint>
+        </TableCell>
+        <TableCell className={classes.tableCell}>
+          <Link component={ReachLink} to={`/users/${row.reviewer.id}`}>
+            {row.reviewer.username}
+          </Link>
+        </TableCell>
+        <TableCell className={classes.tableCell}>
           <IconButton
             component={ReachLink}
             to={`/applications/borrow/${row.id}`}
@@ -78,30 +104,7 @@ function RowData({
       </TableRow>
     );
   } else {
-    return (
-      <TableRow hover tabIndex={-1}>
-        <TableCell padding="checkbox">{/* <Checkbox
-          /> */}</TableCell>
-        <TableCell component="th" scope="row" padding="none">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-        <TableCell align="right">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-        <TableCell align="right">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-        <TableCell align="right">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-        <TableCell align="right">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-        <TableCell align="right">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-      </TableRow>
-    );
+    return <TableRowSkeleton columns={5}></TableRowSkeleton>;
   }
 }
 

@@ -2,16 +2,39 @@ import React from "react";
 import { getAllEquipments, deleteEquipment } from "../utils";
 import EnhancedTable from "./EnhancedTable";
 import { Link as ReachLink } from "@reach/router";
-import { TableCell, TableRow, Checkbox, IconButton } from "@material-ui/core";
-import { Skeleton } from "@material-ui/lab";
+import {
+  TableCell,
+  TableRow,
+  Checkbox,
+  IconButton,
+  Link,
+  makeStyles,
+} from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import TableRowSkeleton from "./EnhancedTable/TableRowSkeleton";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
+const useStyles = makeStyles((theme) => ({
+  tableCell: {
+    textAlign: "right",
+  },
+  capitalize: {
+    textTransform: "capitalize",
+  },
+  success: {
+    color: theme.palette.success.main,
+  },
+  error: {
+    color: theme.palette.error.main,
+  },
+}));
 const headCells = [
-  { id: "name", th: true, disablePadding: true, label: "Name" },
+  { id: "id", th: true, disablePadding: true, label: "ID" },
+  { id: "name", th: false, disablePadding: false, label: "Name" },
   { id: "owner", th: false, disablePadding: false, label: "Owner" },
-  { id: "usage", th: false, disablePadding: false, label: "Usage" },
   { id: "status", th: false, disablePadding: false, label: "Status" },
   {
     id: "confirmed_back",
@@ -34,6 +57,7 @@ function RowData({
   onDelete,
   onClick,
 }) {
+  const classes = useStyles();
   if (!isLoading) {
     return (
       <TableRow
@@ -50,15 +74,25 @@ function RowData({
           />
         </TableCell>
         <TableCell component="th" id={labelId} scope="row" padding="none">
-          {row.name}
+          {row.id}
         </TableCell>
-        <TableCell align="right">{row.owner.username}</TableCell>
-        <TableCell align="right">{row.usage}</TableCell>
-        <TableCell align="right">{row.status}</TableCell>
-        <TableCell align="right">
-          {row.confirmed_back ? "Confirmed" : "UnConfirmed"}
+        <TableCell className={classes.tableCell}>{row.name}</TableCell>
+        <TableCell className={classes.tableCell}>
+          <Link component={ReachLink} to={`/users/${row.owner.id}`}>
+            {row.owner.username}
+          </Link>
         </TableCell>
-        <TableCell align="right">
+        <TableCell className={classes.tableCell}>{row.status.toUpperCase()}</TableCell>
+        <TableCell className={classes.tableCell}>
+          {row.confirmed_back ? (
+            <CheckCircleOutlineIcon
+              className={classes.success}
+            ></CheckCircleOutlineIcon>
+          ) : (
+            <ErrorOutlineIcon className={classes.error}></ErrorOutlineIcon>
+          )}
+        </TableCell>
+        <TableCell className={classes.tableCell}>
           <IconButton
             component={ReachLink}
             to={`/equipments/${row.id}`}
@@ -80,31 +114,7 @@ function RowData({
       </TableRow>
     );
   } else {
-    return (
-      <TableRow hover tabIndex={-1}>
-        <TableCell padding="checkbox">
-          {/* <Checkbox /> */}
-        </TableCell>
-        <TableCell component="th" scope="row" padding="none">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-        <TableCell align="right">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-        <TableCell align="right">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-        <TableCell align="right">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-        <TableCell align="right">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-        <TableCell align="right">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-      </TableRow>
-    );
+    return <TableRowSkeleton columns={6}></TableRowSkeleton>;
   }
 }
 

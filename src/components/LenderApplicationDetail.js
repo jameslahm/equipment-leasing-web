@@ -9,11 +9,8 @@ import {
 import {
   Button,
   makeStyles,
-  Container,
-  FormControl,
-  Select,
-  InputLabel,
-  MenuItem,
+  CardContent,
+  CardActions,
   Paper,
   Box,
   IconButton,
@@ -24,25 +21,34 @@ import EditIcon from "@material-ui/icons/Edit";
 import ReactDOM from "react-dom";
 import { useSnackbar } from "notistack";
 import { Skeleton } from "@material-ui/lab";
+import StatusHint from "./StatusHint";
 
 const useStyles = makeStyles((theme) => ({
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    margin: "auto",
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  input: {
-    marginTop: theme.spacing(2),
-  },
   paper: {
-    paddingTop: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-    paddingBottom: theme.spacing(2),
+    paddingTop: theme.spacing(4),
+    paddingRight: theme.spacing(2),
+    paddingBottom: theme.spacing(4),
+    paddingLeft: theme.spacing(2),
+    position: "relative",
+  },
+  avatar: {
+    width: theme.spacing(16),
+    height: theme.spacing(16),
   },
   text: {
+    marginTop: theme.spacing(1),
+  },
+  success: {
+    color: theme.palette.success.main,
+  },
+  error: {
+    color: theme.palette.error.main,
+  },
+  form: {
+    maxWidth: "500px",
+    margin: "auto",
+  },
+  submit: {
     marginTop: theme.spacing(2),
   },
 }));
@@ -96,92 +102,47 @@ function LenderApplicationDetail() {
     }
   };
 
+  if (isLoading) {
+    return <Skeleton variant="rect"></Skeleton>;
+  }
+
   return (
-    <>
-      <Container maxWidth="sm">
-        <Paper className={classes.paper}>
-          {!isLoading ? (
-            <>
-              <Box display="flex" justifyContent="flex-end">
-                {authState.role === "admin" || authState.id === params.id ? (
-                  status === "IDLE" ? (
-                    <IconButton onClick={() => setStatus("EDIT")}>
-                      <EditIcon></EditIcon>
-                    </IconButton>
-                  ) : (
-                    <IconButton onClick={() => setStatus("IDLE")}>
-                      <VisibilityIcon></VisibilityIcon>
-                    </IconButton>
-                  )
-                ) : null}
-              </Box>
-              <Box paddingX={4}>
-                {status === "EDIT" ? (
-                  <form
-                    noValidate
-                    onSubmit={handleSubmit}
-                    className={classes.form}
-                  >
-                    <FormControl
-                      variant="outlined"
-                      fullWidth
-                      className={classes.input}
-                    >
-                      <InputLabel id="role">Role</InputLabel>
-                      <Select
-                        labelId="status"
-                        value={applicationStatus}
-                        onChange={(e) => setApplicationStatus(e.target.value)}
-                        label="status"
-                        // disabled
-                      >
-                        <MenuItem value={"unreviewed"}>Unreviewed</MenuItem>
-                        <MenuItem value={"agree"}>Agree</MenuItem>
-                        <MenuItem value={"refuse"}>Refuse</MenuItem>
-                      </Select>
-                    </FormControl>
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      className={classes.submit}
-                    >
-                      Save
-                    </Button>
-                  </form>
-                ) : (
-                  <Box>
-                    <Typography className={classes.text} variant="h6">
-                      Candidate
-                    </Typography>
-                    <Typography variant="subtitle1">
-                      {data.candidate.username}
-                    </Typography>
-                    <Typography className={classes.text} variant="h6">
-                      LabName
-                    </Typography>
-                    <Typography variant="subtitle1">{data.lab_name}</Typography>
-                    <Typography className={classes.text} variant="h6">
-                      LabLocation
-                    </Typography>
-                    <Typography variant="subtitle1">
-                      {data.lab_loaction}
-                    </Typography>
-                    <Typography className={classes.text} variant="h6">
-                      Status
-                    </Typography>
-                    <Typography variant="subtitle1">{data.status}</Typography>
-                  </Box>
-                )}
-              </Box>
-            </>
+    <Paper className={classes.paper}>
+      <Box position="absolute" right={4} top={4}>
+        {authState.role === "admin" || authState.id === params.id ? (
+          status === "IDLE" ? (
+            <IconButton onClick={() => setStatus("EDIT")}>
+              <EditIcon></EditIcon>
+            </IconButton>
           ) : (
-            <Skeleton variant="rect"></Skeleton>
-          )}
-        </Paper>
-      </Container>
-    </>
+            <IconButton onClick={() => setStatus("IDLE")}>
+              <VisibilityIcon></VisibilityIcon>
+            </IconButton>
+          )
+        ) : null}
+      </Box>
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="h2">
+          {data.candidate.username}
+        </Typography>
+        <Typography variant="body1" color="textSecondary" component="p">
+          {data.lab_name}
+        </Typography>
+        <Typography variant="body1" color="textSecondary" component="p">
+          {data.lab_location}
+        </Typography>
+      </CardContent>
+      {status === "EDIT" ? (
+        <CardActions>
+          <Button size="small" color="primary">
+            Agree
+          </Button>
+          <Button size="small" color="primary">
+            Reject
+          </Button>
+        </CardActions>
+      ) : null}
+    </Paper>
   );
 }
 

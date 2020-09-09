@@ -126,8 +126,8 @@ const FAKE_APPLICATION_NOTIFICATION = {
   content: "fake",
   notification_time: "fake",
   isRead: false,
-  application_id: "fake",
-  type: "fake",
+  application_id: "1",
+  type: "lender",
   result: "agree",
 };
 
@@ -239,6 +239,10 @@ const handlers = [
   // notification
   rest.get("/api/notifications", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_APPLICATION_NOTIFICATIONS));
+  }),
+
+  rest.get("/api/notifications/:id", (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(FAKE_APPLICATION_NOTIFICATION));
   }),
 
   // here we could use to change isRead

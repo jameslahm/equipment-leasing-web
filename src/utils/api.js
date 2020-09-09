@@ -157,7 +157,7 @@ export const deleteLenderApplication = ({ id, token }) => {
   }).then(handleRes);
 };
 
-export const getAllPutonApplications = (options, token) => {
+export const getAllPutOnApplications = (options, token) => {
   const queryParams = new URLSearchParams(options);
   return fetch(`${BASE_URL}/api/applications/puton?${queryParams.toString()}`, {
     method: "GET",
@@ -167,7 +167,7 @@ export const getAllPutonApplications = (options, token) => {
   }).then(handleRes);
 };
 
-export const getPutonApplication = (id, token) => {
+export const getPutOnApplication = (id, token) => {
   return fetch(`${BASE_URL}/api/applications/puton/${id}`, {
     method: "GET",
     headers: {
@@ -176,7 +176,7 @@ export const getPutonApplication = (id, token) => {
   }).then(handleRes);
 };
 
-export const updatePutonApplication = ({ data, token, id }) => {
+export const updatePutOnApplication = ({ data, token, id }) => {
   return fetch(`${BASE_URL}/api/applications/puton/${id}`, {
     method: "PUT",
     headers: {
@@ -186,7 +186,7 @@ export const updatePutonApplication = ({ data, token, id }) => {
   }).then(handleRes);
 };
 
-export const deletePutonApplication = ({ id, token }) => {
+export const deletePutOnApplication = ({ id, token }) => {
   return fetch(`${BASE_URL}/api/applications/puton/${id}`, {
     method: "DELETE",
     headers: {

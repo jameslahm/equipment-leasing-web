@@ -1,25 +1,53 @@
 import React from "react";
-import { TableCell, TableRow, Checkbox, IconButton } from "@material-ui/core";
-import { Skeleton } from "@material-ui/lab";
+import {
+  TableCell,
+  TableRow,
+  Checkbox,
+  IconButton,
+  Avatar,
+  makeStyles,
+  Box,
+} from "@material-ui/core";
+import clsx from "clsx";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { getAllUsers, deleteUser } from "../utils";
 import { Link as ReachLink } from "@reach/router";
 import EnhancedTable from "./EnhancedTable";
+import TableRowSkeleton from "./EnhancedTable/TableRowSkeleton";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
+// Table Header
 const headCells = [
-  { id: "username", th: true, disablePadding: true, label: "Username" },
-  { id: "email", th: false, disablePadding: false, label: "Email" },
-  { id: "avatar", th: false, disablePadding: false, label: "Avatar" },
-  { id: "role", th: false, disablePadding: false, label: "Role" },
-  { id: "confirmed", th: false, disablePadding: false, label: "Confirmed" },
+  { id: "id", th: true, label: "ID" },
+  { id: "username", th: false, label: "Username" },
+  { id: "email", th: false, label: "Email" },
+  { id: "avatar", th: false, label: "Avatar" },
+  { id: "role", th: false, label: "Role" },
+  { id: "confirmed", th: false, label: "Confirmed" },
   {
     id: "actions",
     label: "Actions",
     th: false,
   },
 ];
+
+const useStyles = makeStyles((theme) => ({
+  tableCell: {
+    textAlign: "right",
+  },
+  capitalize: {
+    textTransform: "capitalize",
+  },
+  success:{
+    color:theme.palette.success.main
+  },
+  error:{
+    color:theme.palette.error.main
+  }
+}));
 
 function RowData({
   row,
@@ -29,31 +57,39 @@ function RowData({
   onDelete,
   onClick,
 }) {
+  const classes = useStyles();
+
   if (!isLoading) {
     return (
-      <TableRow
-        hover
-        aria-checked={isItemSelected}
-        tabIndex={-1}
-        selected={isItemSelected}
-      >
+      <TableRow hover>
         <TableCell padding="checkbox">
           <Checkbox
             checked={isItemSelected}
             inputProps={{ "aria-labelledby": labelId }}
-            onClick={(event) => onClick(event, row.username)}
+            onClick={(event) => onClick(event, row.id)}
           />
         </TableCell>
         <TableCell component="th" id={labelId} scope="row" padding="none">
-          {row.username}
+          {row.id}
         </TableCell>
-        <TableCell align="right">{row.email}</TableCell>
-        <TableCell align="right">{row.avatar}</TableCell>
-        <TableCell align="right">{row.role}</TableCell>
-        <TableCell align="right">
-          {row.confirmed ? "Confirmed" : "UnConfirmed"}
+        <TableCell className={classes.tableCell}>{row.username}</TableCell>
+        <TableCell className={classes.tableCell}>{row.email}</TableCell>
+        <TableCell className={classes.tableCell}>
+          <Box display="flex" justifyContent="flex-end">
+            <Avatar src={row.avatar} alt={row.username}></Avatar>
+          </Box>
         </TableCell>
-        <TableCell align="right">
+        <TableCell className={clsx([classes.tableCell, classes.capitalize])}>
+          {row.role}
+        </TableCell>
+        <TableCell className={classes.tableCell}>
+          {row.confirmed ? (
+            <CheckCircleOutlineIcon className={classes.success}></CheckCircleOutlineIcon>
+          ) : (
+            <ErrorOutlineIcon className={classes.error}></ErrorOutlineIcon>
+          )}
+        </TableCell>
+        <TableCell className={classes.tableCell}>
           <IconButton
             component={ReachLink}
             to={`/users/${row.id}`}
@@ -75,32 +111,7 @@ function RowData({
       </TableRow>
     );
   } else {
-    return (
-      <TableRow hover tabIndex={-1}>
-        <TableCell padding="checkbox">
-        {/* <Checkbox
-          /> */}
-        </TableCell>
-        <TableCell component="th" scope="row" padding="none">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-        <TableCell align="right">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-        <TableCell align="right">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-        <TableCell align="right">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-        <TableCell align="right">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-        <TableCell align="right">
-          <Skeleton variant="rect"></Skeleton>
-        </TableCell>
-      </TableRow>
-    );
+    return <TableRowSkeleton columns={7}></TableRowSkeleton>;
   }
 }
 
