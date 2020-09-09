@@ -15,6 +15,10 @@ import { SnackbarProvider } from "notistack";
 import CloseIcon from "@material-ui/icons/Close";
 import UserDetail from "./components/UserDetail";
 import EquipmentDetail from "./components/EquipmentDetail";
+import LenderApplicationDetail from "./components/LenderApplicationDetail";
+import PutOnApplicationDetail from "./components/PutOnApplicationDetail";
+import BorrowApplicationDetail from "./components/BorrowApplicationDetail";
+import NotificationDetail from './components/NotificationDetail'
 
 if (process.env.NODE_ENV === "development") {
   const { worker } = require("./utils");
@@ -56,7 +60,11 @@ function App() {
           <Home path="/">
             <Dashboard path="/"></Dashboard>
             <ApplicationList path="applications"></ApplicationList>
+            <LenderApplicationDetail path="applications/lender/:id"></LenderApplicationDetail>
+            <PutOnApplicationDetail path="applications/puton/:id"></PutOnApplicationDetail>
+            <BorrowApplicationDetail path="applications/borrow/:id"></BorrowApplicationDetail>
             <NotificationList path="notifications"></NotificationList>
+            <NotificationDetail path="notifications/:id"></NotificationDetail>
             <UserList path="users"></UserList>
             <UserDetail path="users/:id"></UserDetail>
             <EquipmentList path="equipments"></EquipmentList>

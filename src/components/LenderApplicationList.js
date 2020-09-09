@@ -1,25 +1,38 @@
-import React, { useContext } from "react";
-import {
-  getAllEquipments,
-  deleteEquipment,
-  canEdit,
-  AuthContext,
-} from "../utils";
-import EnhancedTable from "./EnhancedTable";
-import { Link as ReachLink } from "@reach/router";
+import React from "react";
 import {
   TableCell,
   TableRow,
   Checkbox,
   IconButton,
-  Link,
   makeStyles,
+  Link,
 } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { getAllLenderApplications, deleteLenderApplication } from "../utils";
+import { Link as ReachLink } from "@reach/router";
+import EnhancedTable from "./EnhancedTable";
 import TableRowSkeleton from "./EnhancedTable/TableRowSkeleton";
-import ConfirmHint from "./ConfirmHint";
+import StatusHint from "./StatusHint";
+
+const headCells = [
+  { id: "id", th: true, disablePadding: true, label: "ID" },
+  { id: "candidate", th: false, disablePadding: false, label: "Candidate" },
+  { id: "lab_name", th: false, disablePadding: false, label: "LabName" },
+  {
+    id: "lab_location",
+    th: false,
+    disablePadding: false,
+    label: "LabLocation",
+  },
+  { id: "status", th: false, disablePadding: false, label: "Status" },
+  {
+    id: "actions",
+    label: "Actions",
+    th: false,
+  },
+];
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -29,23 +42,6 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "capitalize",
   },
 }));
-const headCells = [
-  { id: "id", th: true, disablePadding: true, label: "ID" },
-  { id: "name", th: false, disablePadding: false, label: "Name" },
-  { id: "owner", th: false, disablePadding: false, label: "Owner" },
-  { id: "status", th: false, disablePadding: false, label: "Status" },
-  {
-    id: "confirmed_back",
-    th: false,
-    disablePadding: false,
-    label: "ConfirmedBack",
-  },
-  {
-    id: "actions",
-    label: "Actions",
-    th: false,
-  },
-];
 
 function RowData({
   row,
@@ -56,7 +52,6 @@ function RowData({
   onClick,
 }) {
   const classes = useStyles();
-  const { authState } = useContext(AuthContext);
   if (!isLoading) {
     return (
       <TableRow
@@ -69,36 +64,34 @@ function RowData({
           <Checkbox
             checked={isItemSelected}
             inputProps={{ "aria-labelledby": labelId }}
-            onClick={(event) => onClick(event, row.name)}
+            onClick={(event) => onClick(event, row.id)}
           />
         </TableCell>
         <TableCell component="th" id={labelId} scope="row" padding="none">
           {row.id}
         </TableCell>
-        <TableCell className={classes.tableCell}>{row.name}</TableCell>
         <TableCell className={classes.tableCell}>
-          <Link component={ReachLink} to={`/users/${row.owner.id}`}>
-            {row.owner.username}
+          <Link component={ReachLink} to={`/users/${row.candidate.id}`}>
+            {row.candidate.username}
           </Link>
         </TableCell>
+        <TableCell className={classes.tableCell}>{row.lab_name}</TableCell>
+        <TableCell className={classes.tableCell}>{row.lab_location}</TableCell>
         <TableCell className={classes.tableCell}>
-          {row.status.toUpperCase()}
-        </TableCell>
-        <TableCell className={classes.tableCell}>
-          <ConfirmHint result={row.confirmed_back}></ConfirmHint>
+          <StatusHint color result={row.status}></StatusHint>
         </TableCell>
         <TableCell className={classes.tableCell}>
           <IconButton
             component={ReachLink}
-            to={`/equipments/${row.id}`}
+            to={`/applications/lender/${row.id}`}
             state={{ status: "IDLE" }}
           >
             <VisibilityIcon></VisibilityIcon>
           </IconButton>
-          {canEdit(authState, { id: row.owner.id }) ? (
+          {row.status === "unreviewed" ? (
             <IconButton
               component={ReachLink}
-              to={`/equipments/${row.id}`}
+              to={`/applications/lender/${row.id}`}
               state={{ status: "EDIT" }}
             >
               <EditIcon></EditIcon>
@@ -115,16 +108,16 @@ function RowData({
   }
 }
 
-function EquipmentList() {
+function LenderApplicationList() {
   return (
     <EnhancedTable
       headCells={headCells}
-      resource="equipments"
-      getAllResource={getAllEquipments}
-      deleteResource={deleteEquipment}
+      resource="lender_applications"
+      getAllResource={getAllLenderApplications}
+      deleteResource={deleteLenderApplication}
       RowData={RowData}
     ></EnhancedTable>
   );
 }
 
-export default EquipmentList;
+export default LenderApplicationList;

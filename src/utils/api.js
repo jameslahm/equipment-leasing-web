@@ -126,7 +126,7 @@ export const getAllLenderApplications = (options, token) => {
         Authorization: token,
       },
     }
-  );
+  ).then(handleRes);
 };
 
 export const getLenderApplication = (id, token) => {
@@ -157,7 +157,7 @@ export const deleteLenderApplication = ({ id, token }) => {
   }).then(handleRes);
 };
 
-export const getAllPutonApplications = (options, token) => {
+export const getAllPutOnApplications = (options, token) => {
   const queryParams = new URLSearchParams(options);
   return fetch(`${BASE_URL}/api/applications/puton?${queryParams.toString()}`, {
     method: "GET",
@@ -167,7 +167,7 @@ export const getAllPutonApplications = (options, token) => {
   }).then(handleRes);
 };
 
-export const getPutonApplication = (id, token) => {
+export const getPutOnApplication = (id, token) => {
   return fetch(`${BASE_URL}/api/applications/puton/${id}`, {
     method: "GET",
     headers: {
@@ -176,7 +176,7 @@ export const getPutonApplication = (id, token) => {
   }).then(handleRes);
 };
 
-export const updatePutonApplication = ({ data, token, id }) => {
+export const updatePutOnApplication = ({ data, token, id }) => {
   return fetch(`${BASE_URL}/api/applications/puton/${id}`, {
     method: "PUT",
     headers: {
@@ -186,7 +186,7 @@ export const updatePutonApplication = ({ data, token, id }) => {
   }).then(handleRes);
 };
 
-export const deletePutonApplication = ({ id, token }) => {
+export const deletePutOnApplication = ({ id, token }) => {
   return fetch(`${BASE_URL}/api/applications/puton/${id}`, {
     method: "DELETE",
     headers: {
@@ -205,7 +205,7 @@ export const getAllBorrowApplications = (options, token) => {
         Authorization: token,
       },
     }
-  );
+  ).then(handleRes);
 };
 
 export const getBorrowApplication = (id, token) => {
@@ -229,6 +229,48 @@ export const updateBorrowApplication = ({ data, token, id }) => {
 
 export const deleteBorrowApplication = ({ id, token }) => {
   return fetch(`${BASE_URL}/api/applications/borrow/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: token,
+    },
+  }).then(handleRes);
+};
+
+
+export const getAllNotifications = (options, token) => {
+  const queryParams = new URLSearchParams(options);
+  return fetch(
+    `${BASE_URL}/api/notifications?${queryParams.toString()}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    }
+  ).then(handleRes);
+};
+
+export const getNotification = (id, token) => {
+  return fetch(`${BASE_URL}/api/notifications/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  }).then(handleRes);
+};
+
+export const updateNotification = ({ data, token, id }) => {
+  return fetch(`${BASE_URL}/api/notifications/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: token,
+      "Content-Type":CONTENT_TYPE_JSON,
+    },
+  }).then(handleRes);
+};
+
+export const deleteNotification = ({ id, token }) => {
+  return fetch(`${BASE_URL}/api/notifications/${id}`, {
     method: "DELETE",
     headers: {
       Authorization: token,

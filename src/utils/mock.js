@@ -6,7 +6,7 @@ const FAKE_USER_UNCONFIRMED = {
   confirm_token: "jwt.token.here",
   username: "fake",
   avatar: "http://example.com",
-  role: "admin",
+  role: "normal",
   confirmed: false,
 };
 
@@ -16,7 +16,7 @@ const FAKE_USER_CONFIRMED = {
   token: "jwt.token.here",
   username: "fake",
   avatar: "http://example.com",
-  role: "admin",
+  role: "normal",
   confirmed: true,
 };
 
@@ -67,7 +67,7 @@ const FAKE_EQUIPMENT_PUTON_APPLICATION = {
 };
 
 const FAKE_EQUIPMENT_PUTON_APPLICATIONS = {
-  applications: [FAKE_EQUIPMENT_PUTON_APPLICATION],
+  equipment_puton_applications: [FAKE_EQUIPMENT_PUTON_APPLICATION],
   total: 1,
 };
 
@@ -93,13 +93,14 @@ const FAKE_EQUIPMENT_BORROW_APPLICATION = {
 };
 
 const FAKE_EQUIPMENT_BORROW_APPLICATIONS = {
-  applications: [FAKE_EQUIPMENT_BORROW_APPLICATION],
+  equipment_borrow_applications: [FAKE_EQUIPMENT_BORROW_APPLICATION],
   total: 1,
 };
 
 const FAKE_LENDER_APPLICATION = {
   id: 1,
-  status: "unreviewed",
+  status: "agree",
+  application_time:"2019-08-11",
   lab_name: "fake",
   lab_location: "fake",
   candidate: {
@@ -111,7 +112,7 @@ const FAKE_LENDER_APPLICATION = {
 };
 
 const FAKE_LENDER_APPLICATIONS = {
-  applications: [FAKE_LENDER_APPLICATION],
+  lender_applications: [FAKE_LENDER_APPLICATION],
   total: 1,
 };
 
@@ -122,11 +123,12 @@ const FAKE_APPLICATION_NOTIFICATION = {
     avatar: "fake",
     id: 1,
   },
+  id:1,
   content: "fake",
   notification_time: "fake",
   isRead: false,
-  application_id: "fake",
-  type: "fake",
+  application_id: "1",
+  type: "lender",
   result: "agree",
 };
 
@@ -186,16 +188,16 @@ const handlers = [
     return res(ctx.status(200), ctx.json(FAKE_LENDER_APPLICATIONS));
   }),
 
-  rest.get("/api/application/lender/:id", (req, res, ctx) => {
+  rest.get("/api/applications/lender/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_LENDER_APPLICATION));
   }),
 
   // Here we could use to agree or refuse the application
-  rest.put("/api/application/lender/:id", (req, res, ctx) => {
+  rest.put("/api/applications/lender/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_LENDER_APPLICATION));
   }),
 
-  rest.delete("/api/application/lender/:id", (req, res, ctx) => {
+  rest.delete("/api/applications/lender/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_LENDER_APPLICATION));
   }),
 
@@ -204,16 +206,16 @@ const handlers = [
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATIONS));
   }),
 
-  rest.get("/api/application/puton/:id", (req, res, ctx) => {
+  rest.get("/api/applications/puton/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATION));
   }),
 
   // Here we could use to agree or refuse the application
-  rest.put("/api/application/puton/:id", (req, res, ctx) => {
+  rest.put("/api/applications/puton/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATION));
   }),
 
-  rest.delete("/api/application/puton/:id", (req, res, ctx) => {
+  rest.delete("/api/applications/puton/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATION));
   }),
 
@@ -222,22 +224,26 @@ const handlers = [
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATIONS));
   }),
 
-  rest.get("/api/application/borrow/:id", (req, res, ctx) => {
+  rest.get("/api/applications/borrow/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATION));
   }),
 
   // Here we could use to agree or refuse the application
-  rest.put("/api/application/borrow/:id", (req, res, ctx) => {
+  rest.put("/api/applications/borrow/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATION));
   }),
 
-  rest.delete("/api/application/borrow/:id", (req, res, ctx) => {
+  rest.delete("/api/applications/borrow/:id", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATION));
   }),
 
   // notification
   rest.get("/api/notifications", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_APPLICATION_NOTIFICATIONS));
+  }),
+
+  rest.get("/api/notifications/:id", (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(FAKE_APPLICATION_NOTIFICATION));
   }),
 
   // here we could use to change isRead

@@ -52,7 +52,7 @@ function EnhancedTableHead({
           <TableCell
             key={headCell.id}
             align={headCell.th ? "left" : "right"}
-            padding={headCell.disablePadding ? "none" : "default"}
+            padding={headCell.th ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
