@@ -39,6 +39,10 @@ const FAKE_EQUIPMENT = {
     username: "fake",
   },
   confirmed_back: false,
+  current_application:{
+    id:1,
+    candidate_id:2
+  }
 };
 
 const FAKE_EQUIPMENTS = {
@@ -184,6 +188,10 @@ const handlers = [
   }),
 
   // application lender
+  rest.post("/api/applications/lender", (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(FAKE_LENDER_APPLICATION));
+  }),
+
   rest.get("/api/applications/lender", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_LENDER_APPLICATIONS));
   }),
@@ -202,6 +210,10 @@ const handlers = [
   }),
 
   // application puton
+  rest.post("/api/applications/puton", (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATION));
+  }),
+
   rest.get("/api/applications/puton", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATIONS));
   }),
@@ -220,6 +232,10 @@ const handlers = [
   }),
 
   // application borrow
+  rest.post("/api/applications/borrow", (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATION));
+  }),
+
   rest.get("/api/applications/borrow", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATIONS));
   }),

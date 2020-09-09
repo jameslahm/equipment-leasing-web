@@ -123,7 +123,7 @@ function UserDetail() {
         },
         id: params.id,
         token: authState.token,
-      });
+      },{throwOnError:true});
       enqueueSnackbar("Update Success", {
         variant: "success",
       });

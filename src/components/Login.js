@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 import {
   Avatar,
   Button,
-  TextField,
   Link,
   Grid,
   Typography,
@@ -16,6 +15,7 @@ import { navigate, useLocation } from "@reach/router";
 import { useMutation } from "react-query";
 import { login, AuthContext } from "../utils";
 import { useSnackbar } from "notistack";
+import TextField from "./TextField";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -61,7 +61,7 @@ export default function SignIn() {
     }
 
     try {
-      const data = await mutate({ username: username, password: password });
+      const data = await mutate({ username: username, password: password },{throwOnError:true});
       setAuthStateAndSave(data);
       enqueueSnackbar("Login Success", {
         variant: "success",
@@ -95,14 +95,7 @@ export default function SignIn() {
           <TextField
             error={!!errors.username}
             helperText={errors.username}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            autoComplete="username"
+            label="username"
             autoFocus
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -110,14 +103,8 @@ export default function SignIn() {
           <TextField
             error={!!errors.password}
             helperText={errors.password}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
+            label="password"
             type="password"
-            id="password"
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

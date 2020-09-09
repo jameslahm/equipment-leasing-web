@@ -7,7 +7,7 @@ import {
   Tooltip,
   IconButton,
 } from "@material-ui/core";
-import FilterListIcon from "@material-ui/icons/FilterList";
+// import FilterListIcon from "@material-ui/icons/FilterList";
 import DeleteIcon from "@material-ui/icons/Delete";
 import clsx from "clsx";
 
@@ -31,7 +31,11 @@ const useToolbarStyles = makeStyles((theme) => ({
   },
 }));
 
-const EnhancedTableToolbar = ({ numSelected, onDelete }) => {
+const EnhancedTableToolbar = ({
+  numSelected,
+  onDelete,
+  children = null,
+}) => {
   const classes = useToolbarStyles();
 
   return (
@@ -58,11 +62,7 @@ const EnhancedTableToolbar = ({ numSelected, onDelete }) => {
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+        children
       )}
     </Toolbar>
   );

@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -13,6 +12,7 @@ import { Link as ReachLink,useLocation,navigate } from "@reach/router";
 import { AuthContext, register } from "../utils";
 import { useMutation } from "react-query";
 import { useSnackbar } from "notistack";
+import TextField from "./TextField";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -69,7 +69,7 @@ export default function SignUp() {
         username: username,
         email: email,
         password: password,
-      });
+      },{throwOnError:true});
       setAuthStateAndSave(data);
       enqueueSnackbar("Register Success", {
         variant: "success",
@@ -100,14 +100,7 @@ export default function SignUp() {
           <TextField
             error={!!errors.email}
             helperText={errors.email}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email"
-            name="email"
-            autoComplete="email"
+            label="email"
             autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -115,28 +108,15 @@ export default function SignUp() {
           <TextField
             error={!!errors.username}
             helperText={errors.username}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            autoComplete="username"
+            label="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
           <TextField
             error={!!errors.password}
             helperText={errors.password}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
+            label="password"
             type="password"
-            id="password"
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

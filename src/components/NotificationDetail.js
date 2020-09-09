@@ -28,7 +28,7 @@ function EquipmentDetail() {
   const [mutate] = useMutation(updateNotification);
 
   useEffect(() => {
-    mutate({ data: { isRead: true }, id: params.id, token: authState.token });
+    mutate({ data: { isRead: true }, id: params.id, token: authState.token },{throwOnError:true});
   });
 
   if (isLoading) {

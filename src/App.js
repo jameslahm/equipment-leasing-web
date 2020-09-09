@@ -3,7 +3,7 @@ import { CssBaseline, IconButton } from "@material-ui/core";
 import { Router } from "@reach/router";
 import Login from "./components/Login";
 import Home from "./components/Home";
-import ApplicationList from "./components/ApplicationList";
+import ApplicationList from "./components/ApplicationTabs";
 import NotificationList from "./components/NotificationList";
 import UserList from "./components/UserList";
 import EquipmentList from "./components/EquipmentList";
@@ -19,6 +19,7 @@ import LenderApplicationDetail from "./components/LenderApplicationDetail";
 import PutOnApplicationDetail from "./components/PutOnApplicationDetail";
 import BorrowApplicationDetail from "./components/BorrowApplicationDetail";
 import NotificationDetail from './components/NotificationDetail'
+import ApplicationCreate from './components/ApplicationCreate'
 
 if (process.env.NODE_ENV === "development") {
   const { worker } = require("./utils");
@@ -60,6 +61,9 @@ function App() {
           <Home path="/">
             <Dashboard path="/"></Dashboard>
             <ApplicationList path="applications"></ApplicationList>
+            <ApplicationCreate type="lender" path="applications/lender/create"></ApplicationCreate>
+            <ApplicationCreate type="puton" path="applications/puton/create"></ApplicationCreate>
+            <ApplicationCreate type="borrow" path="applications/borrow/create/:id"></ApplicationCreate>
             <LenderApplicationDetail path="applications/lender/:id"></LenderApplicationDetail>
             <PutOnApplicationDetail path="applications/puton/:id"></PutOnApplicationDetail>
             <BorrowApplicationDetail path="applications/borrow/:id"></BorrowApplicationDetail>

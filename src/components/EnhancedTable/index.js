@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Table,
@@ -11,11 +11,11 @@ import {
   FormControlLabel,
   Switch,
 } from "@material-ui/core";
-import EnhancedTableToolbar from "./EnhancedTableToolbar";
 import EnhancedTableHead from "./EnhancedTableHead";
 import { useQuery, useMutation, queryCache } from "react-query";
 import { AuthContext } from "../../utils";
 import { useSnackbar } from "notistack";
+import EnhancedTableToolbar from "./EnhancedTableToolbar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,14 +36,16 @@ function EnhancedTable({
   getAllResource,
   deleteResource,
   RowData,
+  TableToolbar = EnhancedTableToolbar,
 }) {
   const classes = useStyles();
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState(headCells[0].id);
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [order, setOrder] = useState("asc");
+  const [options, setOptions] = useState({});
+  const [orderBy, setOrderBy] = useState(headCells[0].id);
+  const [selected, setSelected] = useState([]);
+  const [page, setPage] = useState(0);
+  const [dense, setDense] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const { authState } = useContext(AuthContext);
 
@@ -56,6 +58,7 @@ function EnhancedTable({
       page_size: rowsPerPage,
       order,
       orderBy,
+      ...options,
     },
     authState.token,
   ];
@@ -66,7 +69,7 @@ function EnhancedTable({
   const [mutate] = useMutation(deleteResource);
 
   // here we use fake rows
-  console.log(data,resource)
+  console.log(data, resource);
   const rows = data[resource] || Array(rowsPerPage).fill(undefined);
 
   const handleRequestSort = (event, property) => {
@@ -124,7 +127,7 @@ function EnhancedTable({
   const handleDelete = async (...ids) => {
     try {
       await Promise.all(
-        ids.map((id) => mutate({ id, token: authState.token }))
+        ids.map((id) => mutate({ id, token: authState.token },{throwOnError:true}))
       );
       enqueueSnackbar("Delete Success", {
         variant: "success",
@@ -137,10 +140,14 @@ function EnhancedTable({
     }
   };
 
+  const handleFilter = (options) => {
+    setOptions(options);
+  };
+
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <TableToolbar numSelected={selected.length} onFilter={handleFilter} />
         <TableContainer>
           <Table
             className={classes.table}
@@ -158,12 +165,12 @@ function EnhancedTable({
             />
             <TableBody>
               {rows.map((row, index) => {
-                console.log(row,isLoading)
+                console.log(row, isLoading);
 
                 if (isLoading) {
                   return <RowData key={index} isLoading={true}></RowData>;
                 }
-                
+
                 const isItemSelected = isSelected(row[headCells[0].id]);
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (

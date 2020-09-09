@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useLocation, useParams } from "@reach/router";
+import { useLocation, useParams, Link as ReachLink } from "@reach/router";
 import { useQuery, useMutation, queryCache } from "react-query";
 import { AuthContext, getEquipment, updateEquipment, canEdit } from "../utils";
 import {
@@ -101,11 +101,34 @@ function EquipmentDetail() {
     }
 
     try {
-      await mutate({
-        data: { name, confirmed_back: confirmedBack, usage },
-        id: params.id,
-        token: authState.token,
+      await mutate(
+        {
+          data: { confirmed_back: true },
+          id: params.id,
+          token: authState.token,
+        },
+        { throwOnError: true }
+      );
+      enqueueSnackbar("Return Success", {
+        variant: "success",
       });
+    } catch (e) {
+      enqueueSnackbar("Return Fail", {
+        variant: "error",
+      });
+    }
+  };
+
+  const handleReturnBack = async () => {
+    try {
+      await mutate(
+        {
+          data: { name, confirmed_back: confirmedBack, usage },
+          id: params.id,
+          token: authState.token,
+        },
+        { throwOnError: true }
+      );
       enqueueSnackbar("Update Success", {
         variant: "success",
       });
@@ -145,6 +168,9 @@ function EquipmentDetail() {
             onChange={(e) => setName(e.target.value)}
           />
           <TextField
+            multiline
+            rows={5}
+            rowsMax={20}
             error={!!errors.usage}
             helperText={errors.usage}
             label="usage"
@@ -188,10 +214,33 @@ function EquipmentDetail() {
             <Typography variant="subtitle1" component="p">
               {usage}
             </Typography>
-            <Typography variant="body2"  component="p" color="secondary">
-              {
-                !data.application_id && !confirmedBack ? "Please confirm the equipment has been returned back":null
-              }
+            {authState.role === "normal" && !data.current_application ? (
+              <Button
+                component={ReachLink}
+                to={`/applications/borrow/create/${data.id}`}
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Apply
+              </Button>
+            ) : null}
+            {authState.id === data.current_application.candidate_id ? (
+              <Button
+                fullWidth
+                onClick={handleReturnBack}
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Return Back
+              </Button>
+            ) : null}
+            <Typography variant="body2" component="p" color="secondary">
+              {!data.application_id && !confirmedBack
+                ? "Please confirm the equipment has been returned back"
+                : null}
             </Typography>
           </CardContent>
         </Box>

@@ -18,25 +18,25 @@ const handleRes = async (res) => {
   }
 };
 
-export const login = (data ) => {
+export const login = (data) => {
   return fetch(`${BASE_URL}/api/login`, {
     method: "POST",
-    headers:{
-      "Content-Type":CONTENT_TYPE_JSON
+    headers: {
+      "Content-Type": CONTENT_TYPE_JSON,
     },
     body: JSON.stringify(data),
   }).then(handleRes);
 };
 
-export const register=(data)=>{
+export const register = (data) => {
   return fetch(`${BASE_URL}/api/register`, {
     method: "POST",
-    headers:{
-      "Content-Type":CONTENT_TYPE_JSON
+    headers: {
+      "Content-Type": CONTENT_TYPE_JSON,
     },
     body: JSON.stringify(data),
   }).then(handleRes);
-}
+};
 
 export const getAllUsers = (options, token) => {
   const queryParams = new URLSearchParams(options);
@@ -61,7 +61,7 @@ export const updateUser = ({ data, token, id }) => {
   return fetch(`${BASE_URL}/api/users/${id}`, {
     method: "PUT",
     headers: {
-      "Content-Type":CONTENT_TYPE_JSON,
+      "Content-Type": CONTENT_TYPE_JSON,
       Authorization: token,
     },
     body: JSON.stringify(data),
@@ -101,7 +101,7 @@ export const updateEquipment = ({ data, token, id }) => {
     method: "PUT",
     headers: {
       Authorization: token,
-      "Content-Type":CONTENT_TYPE_JSON,
+      "Content-Type": CONTENT_TYPE_JSON,
     },
     body: JSON.stringify(data),
   }).then(handleRes);
@@ -113,6 +113,16 @@ export const deleteEquipment = ({ token, id }) => {
     headers: {
       Authorization: token,
     },
+  }).then(handleRes);
+};
+
+export const createLenderApplication = ({ data, token }) => {
+  return fetch(`${BASE_URL}/api/applications/lender`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+    body: JSON.stringify(data),
   }).then(handleRes);
 };
 
@@ -143,7 +153,7 @@ export const updateLenderApplication = ({ data, token, id }) => {
     method: "PUT",
     headers: {
       Authorization: token,
-      "Content-Type":CONTENT_TYPE_JSON,
+      "Content-Type": CONTENT_TYPE_JSON,
     },
   }).then(handleRes);
 };
@@ -154,6 +164,16 @@ export const deleteLenderApplication = ({ id, token }) => {
     headers: {
       Authorization: token,
     },
+  }).then(handleRes);
+};
+
+export const createPutOnApplication = ({ data, token }) => {
+  return fetch(`${BASE_URL}/api/applications/puton`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+    body: JSON.stringify(data),
   }).then(handleRes);
 };
 
@@ -181,7 +201,7 @@ export const updatePutOnApplication = ({ data, token, id }) => {
     method: "PUT",
     headers: {
       Authorization: token,
-      "Content-Type":CONTENT_TYPE_JSON,
+      "Content-Type": CONTENT_TYPE_JSON,
     },
   }).then(handleRes);
 };
@@ -192,6 +212,16 @@ export const deletePutOnApplication = ({ id, token }) => {
     headers: {
       Authorization: token,
     },
+  }).then(handleRes);
+};
+
+export const createBorrowApplication = ({ data, token }) => {
+  return fetch(`${BASE_URL}/api/applications/borrow`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+    body: JSON.stringify(data),
   }).then(handleRes);
 };
 
@@ -222,7 +252,7 @@ export const updateBorrowApplication = ({ data, token, id }) => {
     method: "PUT",
     headers: {
       Authorization: token,
-      "Content-Type":CONTENT_TYPE_JSON,
+      "Content-Type": CONTENT_TYPE_JSON,
     },
   }).then(handleRes);
 };
@@ -236,18 +266,14 @@ export const deleteBorrowApplication = ({ id, token }) => {
   }).then(handleRes);
 };
 
-
 export const getAllNotifications = (options, token) => {
   const queryParams = new URLSearchParams(options);
-  return fetch(
-    `${BASE_URL}/api/notifications?${queryParams.toString()}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: token,
-      },
-    }
-  ).then(handleRes);
+  return fetch(`${BASE_URL}/api/notifications?${queryParams.toString()}`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  }).then(handleRes);
 };
 
 export const getNotification = (id, token) => {
@@ -264,7 +290,7 @@ export const updateNotification = ({ data, token, id }) => {
     method: "PUT",
     headers: {
       Authorization: token,
-      "Content-Type":CONTENT_TYPE_JSON,
+      "Content-Type": CONTENT_TYPE_JSON,
     },
   }).then(handleRes);
 };

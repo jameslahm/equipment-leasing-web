@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ApplicationList() {
+function ApplicationTabs() {
   const classes = useStyles();
   const [tabValue, setTabValue] = React.useState("1");
 
@@ -44,4 +44,4 @@ function ApplicationList() {
   );
 }
 
-export default ApplicationList;
+export default ApplicationTabs;

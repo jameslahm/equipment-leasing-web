@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   TableCell,
   TableRow,
@@ -6,15 +6,22 @@ import {
   IconButton,
   makeStyles,
   Link,
+  Box,
 } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { getAllLenderApplications, deleteLenderApplication } from "../utils";
+import {
+  getAllLenderApplications,
+  deleteLenderApplication,
+  AuthContext,
+} from "../utils";
 import { Link as ReachLink } from "@reach/router";
 import EnhancedTable from "./EnhancedTable";
 import TableRowSkeleton from "./EnhancedTable/TableRowSkeleton";
 import StatusHint from "./StatusHint";
+import EnhancedTableToolbar from "./EnhancedTable/EnhancedTableToolbar";
+import AddIcon from "@material-ui/icons/Add";
 
 const headCells = [
   { id: "id", th: true, disablePadding: true, label: "ID" },
@@ -108,6 +115,21 @@ function RowData({
   }
 }
 
+function TableToolbar({ numSelected, onFilter }) {
+  const { authState } = useContext(AuthContext);
+  return (
+    <EnhancedTableToolbar numSelected={numSelected}>
+      <Box width="100%" display="flex" justifyContent="flex-end">
+        {authState.role === "normal" ? (
+          <IconButton component={ReachLink} to={`/applications/lender/create`}>
+            <AddIcon></AddIcon>
+          </IconButton>
+        ) : null}
+      </Box>
+    </EnhancedTableToolbar>
+  );
+}
+
 function LenderApplicationList() {
   return (
     <EnhancedTable
@@ -116,6 +138,7 @@ function LenderApplicationList() {
       getAllResource={getAllLenderApplications}
       deleteResource={deleteLenderApplication}
       RowData={RowData}
+      TableToolbar={TableToolbar}
     ></EnhancedTable>
   );
 }

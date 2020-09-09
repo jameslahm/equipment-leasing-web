@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useLocation, useParams } from "@reach/router";
 import { useQuery, useMutation, queryCache } from "react-query";
-import { AuthContext,canEdit } from "../utils";
+import { AuthContext, canEdit } from "../utils";
 import {
   Button,
   makeStyles,
@@ -89,11 +89,14 @@ function ApplicationDetail({
 
   const handleSubmit = async (v) => {
     try {
-      await mutate({
-        data: { status: v },
-        id: params.id,
-        token: authState.token,
-      });
+      await mutate(
+        {
+          data: { status: v },
+          id: params.id,
+          token: authState.token,
+        },
+        { throwOnError: true }
+      );
       enqueueSnackbar("Update Success", {
         variant: "success",
       });
