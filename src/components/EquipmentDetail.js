@@ -1,11 +1,9 @@
 import React, { useState, useContext } from "react";
 import { useLocation, useParams } from "@reach/router";
-import { useQuery, useMutation, queryCache } from "react-query";
+import { useMutation, queryCache } from "react-query";
 import {
   AuthContext,
-  getEquipment,
   updateEquipment,
-  INITIAL_PASSWORD,
 } from "../utils";
 import {
   TextField,
@@ -25,7 +23,6 @@ import {
 } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
-import ReactDOM from "react-dom";
 import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
@@ -55,7 +52,7 @@ function EquipmentDetail() {
   const [name, setName] = useState("");
   const [usage, setUsage] = useState("");
   const [equipmentStatus, setEquipmentStatus] = useState("normal");
-  const [owner, setOwner] = useState({});
+  const [owner] = useState({});
   // const [avatar,setAvatar]=useState("")
   const [confirmedBack, setConfirmedBack] = useState(false);
   const [errors, setErrors] = useState({
@@ -74,23 +71,7 @@ function EquipmentDetail() {
     : "IDLE";
   const [status, setStatus] = useState(initialStatus);
   const queryKey = ["equipment", params.id, authState.token];
-  const { data = {} } = useQuery(
-    queryKey,
-    (key, id, token) => getEquipment(id, token),
-    {
-      onSuccess: (data) => {
-        ReactDOM.unstable_batchedUpdates(() => {
-          console.log(data)
-          setName(data.name);
-          setUsage(data.usage);
-          setEquipmentStatus(data.status);
-          setConfirmedBack(data.confirmed_back);
-          setOwner(data.owner);
-        });
-      },
-    }
-  );
-  const [mutate] = useMutation(updateEquipment, {
+  const [] = useMutation(updateEquipment, {
     onSuccess: (data) => queryCache.setQueryData(queryKey, data),
   });
 
@@ -109,9 +90,6 @@ function EquipmentDetail() {
     }
 
     try {
-      const data = await mutate({
-        data: { name, confirmed_back: confirmedBack, usage },
-      });
       enqueueSnackbar("Update Success", {
         variant: "success",
       });
@@ -195,7 +173,7 @@ function EquipmentDetail() {
                   control={
                     <Switch
                       value={confirmedBack}
-                      onChange={(e) => setConfirmedBack(!confirmedBack)}
+                      onChange={() => setConfirmedBack(!confirmedBack)}
                     ></Switch>
                   }
                   label="ConfirmedBack"
