@@ -108,6 +108,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const TitleMap = {
+  "": "Dashboard",
+  "users": "Users",
+  "equipments": "Equipments",
+  "applications": "Applications",
+  "notifications": "Notifications",
+};
+
 function Home({ children }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -119,10 +127,10 @@ function Home({ children }) {
   };
 
   const location = useLocation();
-  const title = location.pathname.slice(1).toLocaleUpperCase();
+  console.log(location.pathname.split("/"))
+  const title = TitleMap[location.pathname.split("/")[1] || ""];
 
   const { authState } = useContext(AuthContext);
-
 
   if (!authState) {
     return (
@@ -180,7 +188,7 @@ function Home({ children }) {
           </IconButton>
         </div>
         <List>
-          <ListItem component={Link} to="/dashboard">
+          <ListItem component={Link} to="/">
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>

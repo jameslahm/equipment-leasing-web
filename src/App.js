@@ -54,7 +54,7 @@ function App() {
           <Login path="/login"></Login>
           <Register path="/register"></Register>
           <Home path="/">
-            <Dashboard path="dashboard"></Dashboard>
+            <Dashboard path="/"></Dashboard>
             <ApplicationList path="applications"></ApplicationList>
             <NotificationList path="notifications"></NotificationList>
             <UserList path="users"></UserList>
