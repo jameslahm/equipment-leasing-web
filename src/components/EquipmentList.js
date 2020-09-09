@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   getAllEquipments,
   deleteEquipment,
@@ -14,12 +14,16 @@ import {
   IconButton,
   Link,
   makeStyles,
+  Box,
 } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TableRowSkeleton from "./EnhancedTable/TableRowSkeleton";
 import ConfirmHint from "./ConfirmHint";
+import EnhancedTableToolbar from "./EnhancedTable/EnhancedTableToolbar";
+import FilterListIcon from "@material-ui/icons/FilterList";
+import TextField from "./TextField";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -115,6 +119,47 @@ function RowData({
   }
 }
 
+const useToolbarStyles = makeStyles((theme) => ({
+  input: {
+    maxWidth: "300px",
+    marginRight: theme.spacing(2),
+  },
+}));
+
+function TableToolbar({ numSelected, onFilter }) {
+  const classes = useToolbarStyles();
+  const { authState } = useContext(AuthContext);
+  const [name, setName] = useState("");
+
+  const handleClick = () => {
+    onFilter({ name: name });
+  };
+
+  return (
+    <EnhancedTableToolbar numSelected={numSelected}>
+      <Box
+        width="100%"
+        display="flex"
+        justifyContent="flex-end"
+        alignItems="center"
+      >
+        <TextField
+          size="small"
+          className={classes.input}
+          label="name"
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
+        ></TextField>
+        <IconButton onClick={handleClick}>
+          <FilterListIcon></FilterListIcon>
+        </IconButton>
+      </Box>
+    </EnhancedTableToolbar>
+  );
+}
+
 function EquipmentList() {
   return (
     <EnhancedTable
@@ -123,6 +168,7 @@ function EquipmentList() {
       getAllResource={getAllEquipments}
       deleteResource={deleteEquipment}
       RowData={RowData}
+      TableToolbar={TableToolbar}
     ></EnhancedTable>
   );
 }
