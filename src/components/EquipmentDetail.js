@@ -19,6 +19,7 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import { useSnackbar } from "notistack";
 import TextField from "./TextField";
+import ReactDOM from "react-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
