@@ -1,7 +1,13 @@
 import React, { useState, useContext } from "react";
 import { useLocation, useParams } from "@reach/router";
 import { useQuery, useMutation, queryCache } from "react-query";
-import { AuthContext, getUser, updateUser, INITIAL_PASSWORD } from "../utils";
+import {
+  AuthContext,
+  getUser,
+  updateUser,
+  INITIAL_PASSWORD,
+  canEdit,
+} from "../utils";
 import {
   Button,
   makeStyles,
@@ -18,8 +24,7 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import ReactDOM from "react-dom";
 import { useSnackbar } from "notistack";
-import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
-import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import ConfirmHint from "./ConfirmHint";
 import TextField from "./TextField";
 import { capitalize } from "../utils";
 
@@ -136,7 +141,7 @@ function UserDetail() {
   return (
     <Paper className={classes.paper}>
       <Box position="absolute" right={4} top={4}>
-        {authState.role === "admin" || authState.id === params.id ? (
+        {canEdit(authState, { id: params.id }) ? (
           status === "IDLE" ? (
             <IconButton onClick={() => setStatus("EDIT")}>
               <EditIcon></EditIcon>
@@ -214,13 +219,7 @@ function UserDetail() {
               {capitalize(data.role)}
             </Typography>
             <Typography className={classes.text}>
-              {data.confirmed ? (
-                <CheckCircleOutlineIcon
-                  className={classes.success}
-                ></CheckCircleOutlineIcon>
-              ) : (
-                <ErrorOutlineIcon className={classes.error}></ErrorOutlineIcon>
-              )}
+              <ConfirmHint result={data.confirmed}></ConfirmHint>
             </Typography>
           </Box>
         </Box>

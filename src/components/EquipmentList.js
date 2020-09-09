@@ -1,5 +1,10 @@
-import React from "react";
-import { getAllEquipments, deleteEquipment } from "../utils";
+import React, { useContext } from "react";
+import {
+  getAllEquipments,
+  deleteEquipment,
+  canEdit,
+  AuthContext,
+} from "../utils";
 import EnhancedTable from "./EnhancedTable";
 import { Link as ReachLink } from "@reach/router";
 import {
@@ -14,8 +19,7 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TableRowSkeleton from "./EnhancedTable/TableRowSkeleton";
-import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
-import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import ConfirmHint from "./ConfirmHint";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -23,12 +27,6 @@ const useStyles = makeStyles((theme) => ({
   },
   capitalize: {
     textTransform: "capitalize",
-  },
-  success: {
-    color: theme.palette.success.main,
-  },
-  error: {
-    color: theme.palette.error.main,
   },
 }));
 const headCells = [
@@ -58,6 +56,7 @@ function RowData({
   onClick,
 }) {
   const classes = useStyles();
+  const { authState } = useContext(AuthContext);
   if (!isLoading) {
     return (
       <TableRow
@@ -82,15 +81,11 @@ function RowData({
             {row.owner.username}
           </Link>
         </TableCell>
-        <TableCell className={classes.tableCell}>{row.status.toUpperCase()}</TableCell>
         <TableCell className={classes.tableCell}>
-          {row.confirmed_back ? (
-            <CheckCircleOutlineIcon
-              className={classes.success}
-            ></CheckCircleOutlineIcon>
-          ) : (
-            <ErrorOutlineIcon className={classes.error}></ErrorOutlineIcon>
-          )}
+          {row.status.toUpperCase()}
+        </TableCell>
+        <TableCell className={classes.tableCell}>
+          <ConfirmHint result={row.confirmed_back}></ConfirmHint>
         </TableCell>
         <TableCell className={classes.tableCell}>
           <IconButton
@@ -100,13 +95,15 @@ function RowData({
           >
             <VisibilityIcon></VisibilityIcon>
           </IconButton>
-          <IconButton
-            component={ReachLink}
-            to={`/equipments/${row.id}`}
-            state={{ status: "EDIT" }}
-          >
-            <EditIcon></EditIcon>
-          </IconButton>
+          {canEdit(authState, { id: row.owner.id }) ? (
+            <IconButton
+              component={ReachLink}
+              to={`/equipments/${row.id}`}
+              state={{ status: "EDIT" }}
+            >
+              <EditIcon></EditIcon>
+            </IconButton>
+          ) : null}
           <IconButton onClick={() => onDelete(row.id)}>
             <DeleteIcon></DeleteIcon>
           </IconButton>

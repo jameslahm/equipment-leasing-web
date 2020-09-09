@@ -24,7 +24,7 @@ import BuildIcon from "@material-ui/icons/Build";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { useLocation, Link as ReachLink, Redirect } from "@reach/router";
 import Footer from "./Footer";
-import { AuthContext } from "../utils";
+import { AuthContext,isAdmin } from "../utils";
 
 const drawerWidth = 240;
 
@@ -110,10 +110,10 @@ const useStyles = makeStyles((theme) => ({
 
 const TitleMap = {
   "": "Dashboard",
-  "users": "Users",
-  "equipments": "Equipments",
-  "applications": "Applications",
-  "notifications": "Notifications",
+  users: "Users",
+  equipments: "Equipments",
+  applications: "Applications",
+  notifications: "Notifications",
 };
 
 function Home({ children }) {
@@ -169,7 +169,11 @@ function Home({ children }) {
           >
             {title}
           </Typography>
-          <IconButton color="inherit" component={ReachLink} to="/profile">
+          <IconButton
+            color="inherit"
+            component={ReachLink}
+            to={`/users/${authState.id}`}
+          >
             <AccountCircle></AccountCircle>
           </IconButton>
         </Toolbar>
@@ -193,7 +197,7 @@ function Home({ children }) {
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItem>
-          {authState.role === "admin" ? (
+          {isAdmin(authState) ? (
             <ListItem component={Link} to="/users">
               <ListItemIcon>
                 <PeopleIcon />

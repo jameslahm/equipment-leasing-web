@@ -1,11 +1,18 @@
 import React from "react";
-import { Paper, Tab } from "@material-ui/core";
+import { Tab, makeStyles,Box } from "@material-ui/core";
 import { TabPanel, TabContext, TabList } from "@material-ui/lab";
 import LenderApplicationList from "./LenderApplicationList";
 import PutOnApplicationList from "./PutOnApplicationList";
 import BorrowApplicationList from "./BorrowApplicationList";
 
+const useStyles = makeStyles((theme) => ({
+  panel: {
+    padding: 0,
+  },
+}));
+
 function ApplicationList() {
+  const classes = useStyles();
   const [tabValue, setTabValue] = React.useState("1");
 
   const handleTabValueChange = (event, newValue) => {
@@ -13,7 +20,7 @@ function ApplicationList() {
   };
 
   return (
-    <Paper square>
+    <Box >
       <TabContext value={tabValue}>
         <TabList
           onChange={handleTabValueChange}
@@ -23,17 +30,17 @@ function ApplicationList() {
           <Tab label="EquipmentPutOn" value="2" />
           <Tab label="EquipmentBorrow" value="3" />
         </TabList>
-        <TabPanel value="1">
+        <TabPanel value="1" className={classes.panel}>
           <LenderApplicationList></LenderApplicationList>
         </TabPanel>
-        <TabPanel value="2">
+        <TabPanel value="2" className={classes.panel}>
           <PutOnApplicationList></PutOnApplicationList>
         </TabPanel>
-        <TabPanel value="3">
+        <TabPanel value="3" className={classes.panel}>
           <BorrowApplicationList></BorrowApplicationList>
         </TabPanel>
       </TabContext>
-    </Paper>
+    </Box>
   );
 }
 

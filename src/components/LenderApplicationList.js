@@ -14,9 +14,7 @@ import { getAllLenderApplications, deleteLenderApplication } from "../utils";
 import { Link as ReachLink } from "@reach/router";
 import EnhancedTable from "./EnhancedTable";
 import TableRowSkeleton from "./EnhancedTable/TableRowSkeleton";
-import ThumbDownIcon from "@material-ui/icons/ThumbDown";
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import StatusHint from "./StatusHint";
 
 const headCells = [
   { id: "id", th: true, disablePadding: true, label: "ID" },
@@ -42,12 +40,6 @@ const useStyles = makeStyles((theme) => ({
   },
   capitalize: {
     textTransform: "capitalize",
-  },
-  success: {
-    color: theme.palette.success.main,
-  },
-  error: {
-    color: theme.palette.error.main,
   },
 }));
 
@@ -86,13 +78,7 @@ function RowData({
         <TableCell className={classes.tableCell}>{row.lab_name}</TableCell>
         <TableCell className={classes.tableCell}>{row.lab_location}</TableCell>
         <TableCell className={classes.tableCell}>
-          {row.result === "agree" ? (
-            <ThumbUpIcon className={classes.success}></ThumbUpIcon>
-          ) : row.result === "refuse" ? (
-            <ThumbDownIcon className={classes.error}></ThumbDownIcon>
-          ) : (
-            <HelpOutlineIcon></HelpOutlineIcon>
-          )}
+          <StatusHint color result={row.status}></StatusHint>
         </TableCell>
         <TableCell className={classes.tableCell}>
           <IconButton
@@ -102,13 +88,15 @@ function RowData({
           >
             <VisibilityIcon></VisibilityIcon>
           </IconButton>
-          <IconButton
-            component={ReachLink}
-            to={`/applications/lender/${row.id}`}
-            state={{ status: "EDIT" }}
-          >
-            <EditIcon></EditIcon>
-          </IconButton>
+          {row.status === "unreviewed" ? (
+            <IconButton
+              component={ReachLink}
+              to={`/applications/lender/${row.id}`}
+              state={{ status: "EDIT" }}
+            >
+              <EditIcon></EditIcon>
+            </IconButton>
+          ) : null}
           <IconButton onClick={() => onDelete(row.id)}>
             <DeleteIcon></DeleteIcon>
           </IconButton>

@@ -75,7 +75,7 @@ function RowData({
           </Link>
         </TableCell>
         <TableCell className={classes.tableCell}>
-          <StatusHint result={row.result}></StatusHint>
+          <StatusHint color result={row.result}></StatusHint>
         </TableCell>
         <TableCell className={classes.tableCell}>
           <Link component={ReachLink} to={`/users/${row.reviewer.id}`}>
@@ -90,13 +90,15 @@ function RowData({
           >
             <VisibilityIcon></VisibilityIcon>
           </IconButton>
-          <IconButton
-            component={ReachLink}
-            to={`/applications/borrow/${row.id}`}
-            state={{ status: "EDIT" }}
-          >
-            <EditIcon></EditIcon>
-          </IconButton>
+          {row.status === "unreviewed" ? (
+            <IconButton
+              component={ReachLink}
+              to={`/applications/borrow/${row.id}`}
+              state={{ status: "EDIT" }}
+            >
+              <EditIcon></EditIcon>
+            </IconButton>
+          ) : null}
           <IconButton onClick={() => onDelete(row.id)}>
             <DeleteIcon></DeleteIcon>
           </IconButton>

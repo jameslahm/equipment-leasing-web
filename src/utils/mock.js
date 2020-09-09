@@ -6,7 +6,7 @@ const FAKE_USER_UNCONFIRMED = {
   confirm_token: "jwt.token.here",
   username: "fake",
   avatar: "http://example.com",
-  role: "admin",
+  role: "normal",
   confirmed: false,
 };
 
@@ -16,7 +16,7 @@ const FAKE_USER_CONFIRMED = {
   token: "jwt.token.here",
   username: "fake",
   avatar: "http://example.com",
-  role: "admin",
+  role: "normal",
   confirmed: true,
 };
 
@@ -99,7 +99,8 @@ const FAKE_EQUIPMENT_BORROW_APPLICATIONS = {
 
 const FAKE_LENDER_APPLICATION = {
   id: 1,
-  status: "unreviewed",
+  status: "agree",
+  application_time:"2019-08-11",
   lab_name: "fake",
   lab_location: "fake",
   candidate: {

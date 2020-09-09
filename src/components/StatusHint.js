@@ -6,26 +6,28 @@ import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   success: {
-    color: theme.palette.success.main,
+    color: theme.palette.primary.main,
   },
   error: {
-    color: theme.palette.error.main,
+    color: theme.palette.secondary.main,
   },
 }));
 
-function StatusHint({ result }) {
+function StatusHint({ result, color = false }) {
   const classes = useStyles();
   return (
     <>
       {result === "agree" ? (
-        <ThumbUpIcon className={classes.success}></ThumbUpIcon>
+        <ThumbUpIcon className={color ? classes.success : ""}></ThumbUpIcon>
       ) : result === "refuse" ? (
-        <ThumbDownIcon className={classes.error}></ThumbDownIcon>
+        <ThumbDownIcon className={color ? classes.error : ""}></ThumbDownIcon>
       ) : (
-        <HelpOutlineIcon></HelpOutlineIcon>
+        <HelpOutlineIcon
+          className={color ? classes.error : ""}
+        ></HelpOutlineIcon>
       )}
     </>
   );
 }
 
-export default StatusHint
+export default StatusHint;

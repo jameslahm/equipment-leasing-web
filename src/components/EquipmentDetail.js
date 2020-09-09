@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useLocation, useParams } from "@reach/router";
 import { useQuery, useMutation, queryCache } from "react-query";
-import { AuthContext, getEquipment, updateEquipment } from "../utils";
+import { AuthContext, getEquipment, updateEquipment, canEdit } from "../utils";
 import {
   Button,
   makeStyles,
@@ -70,7 +70,7 @@ function EquipmentDetail() {
     : "IDLE";
   const [status, setStatus] = useState(initialStatus);
   const queryKey = ["equipment", params.id, authState.token];
-  const { isLoading } = useQuery(
+  const { data = {}, isLoading } = useQuery(
     queryKey,
     (key, id, token) => getEquipment(id, token),
     {
@@ -123,7 +123,7 @@ function EquipmentDetail() {
   return (
     <Paper className={classes.paper}>
       <Box position="absolute" right={4} top={4}>
-        {authState.role === "admin" || authState.id === params.id ? (
+        {canEdit(authState, { id: data.owner.id }) ? (
           status === "IDLE" ? (
             <IconButton onClick={() => setStatus("EDIT")}>
               <EditIcon></EditIcon>
@@ -182,8 +182,16 @@ function EquipmentDetail() {
             <Typography gutterBottom variant="h5" component="h2">
               {name}
             </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
+            {/* <Link component={ReachLink}>
+
+            </Link> */}
+            <Typography variant="subtitle1" component="p">
               {usage}
+            </Typography>
+            <Typography variant="body2"  component="p" color="secondary">
+              {
+                !data.application_id && !confirmedBack ? "Please confirm the equipment has been returned back":null
+              }
             </Typography>
           </CardContent>
         </Box>

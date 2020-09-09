@@ -16,8 +16,7 @@ import { getAllUsers, deleteUser } from "../utils";
 import { Link as ReachLink } from "@reach/router";
 import EnhancedTable from "./EnhancedTable";
 import TableRowSkeleton from "./EnhancedTable/TableRowSkeleton";
-import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
-import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import ConfirmHint from './ConfirmHint'
 
 // Table Header
 const headCells = [
@@ -41,12 +40,6 @@ const useStyles = makeStyles((theme) => ({
   capitalize: {
     textTransform: "capitalize",
   },
-  success:{
-    color:theme.palette.success.main
-  },
-  error:{
-    color:theme.palette.error.main
-  }
 }));
 
 function RowData({
@@ -83,11 +76,7 @@ function RowData({
           {row.role}
         </TableCell>
         <TableCell className={classes.tableCell}>
-          {row.confirmed ? (
-            <CheckCircleOutlineIcon className={classes.success}></CheckCircleOutlineIcon>
-          ) : (
-            <ErrorOutlineIcon className={classes.error}></ErrorOutlineIcon>
-          )}
+          <ConfirmHint result={row.confirmed}></ConfirmHint>
         </TableCell>
         <TableCell className={classes.tableCell}>
           <IconButton

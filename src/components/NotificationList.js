@@ -14,9 +14,6 @@ import {
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TableRowSkeleton from "./EnhancedTable/TableRowSkeleton";
-import ThumbDownIcon from "@material-ui/icons/ThumbDown";
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import StatusHint from "./StatusHint";
 
 const headCells = [
@@ -36,7 +33,7 @@ const headCells = [
   },
 ];
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   tableCell: {
     textAlign: "right",
   },
@@ -80,7 +77,7 @@ function RowData({
           </Link>
         </TableCell>
         <TableCell className={classes.tableCell}>
-          <StatusHint result={row.result}></StatusHint>
+          <StatusHint color result={row.result}></StatusHint>
         </TableCell>
         <TableCell className={classes.tableCell}>
           <Link
