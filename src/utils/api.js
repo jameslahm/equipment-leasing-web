@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "http://localhost:3000";
 
 class HTTPError extends Error {
   constructor(message, status) {

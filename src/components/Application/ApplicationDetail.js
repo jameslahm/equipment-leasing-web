@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
-import { useLocation, useParams } from "@reach/router";
+import { useLocation, useParams,navigate } from "@reach/router";
 import { useQuery, useMutation, queryCache } from "react-query";
-import { AuthContext, canEdit } from "utils";
+import { AuthContext, canEdit, formatDate, generateMessage } from "utils";
 import {
   Button,
   makeStyles,
@@ -26,7 +26,7 @@ import {
   TimelineSeparator,
 } from "@material-ui/lab";
 import AssignmentIcon from "@material-ui/icons/Assignment";
-import {StatusHint} from "components/Widget";
+import { StatusHint } from "components/Widget";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -78,8 +78,21 @@ function ApplicationDetail({
     : "IDLE";
   const [status, setStatus] = useState(initialStatus);
   const queryKey = [resource, params.id, authState.token];
-  const { data = {}, isLoading } = useQuery(queryKey, (key, id, token) =>
-    getResource(id, token)
+  const { data = {}, isLoading, isError } = useQuery(
+    queryKey,
+    (key, id, token) => getResource(id, token),
+    {
+      staleTime: Infinity,
+      retry: false,
+      onError: (e) => {
+        enqueueSnackbar(generateMessage(e), {
+          variant: "error",
+        });
+        if (e.status === 401) {
+          navigate("/login");
+        }
+      },
+    }
   );
   const [mutate] = useMutation(updateResource, {
     onSuccess: (data) => queryCache.setQueryData(queryKey, data),
@@ -107,7 +120,7 @@ function ApplicationDetail({
     }
   };
 
-  if (isLoading) {
+  if (isLoading || isError) {
     return <Skeleton variant="rect" height="400px"></Skeleton>;
   }
 
@@ -161,9 +174,9 @@ function ApplicationDetail({
             <TimelineItem>
               <TimelineOppositeContent>
                 <Typography variant="body2" color="textSecondary">
-                  {data.status === "unreviewed"
-                    ? new Date().toISOString()
-                    : data.review_time}
+                  {formatDate(
+                    data.status === "unreviewed" ? new Date() : data.review_time
+                  )}
                 </Typography>
               </TimelineOppositeContent>
               <TimelineSeparator>
@@ -187,7 +200,7 @@ function ApplicationDetail({
             <TimelineItem>
               <TimelineOppositeContent>
                 <Typography variant="body2" color="textSecondary">
-                  {data.application_time}
+                  {formatDate(data.application_time)}
                 </Typography>
               </TimelineOppositeContent>
               <TimelineSeparator>

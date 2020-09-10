@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useLocation, useParams,navigate } from "@reach/router";
+import { useLocation, useParams, navigate } from "@reach/router";
 import { useQuery, useMutation, queryCache } from "react-query";
 import {
   AuthContext,
@@ -7,6 +7,7 @@ import {
   updateUser,
   INITIAL_PASSWORD,
   canEdit,
+  generateMessage,
 } from "utils";
 import {
   Button,
@@ -73,10 +74,11 @@ function UserDetail() {
     email: "",
     password: "",
   });
+  const { enqueueSnackbar } = useSnackbar();
 
   const params = useParams();
   const location = useLocation();
-  const { authState,setAuthStateAndSave } = useContext(AuthContext);
+  const { authState, setAuthStateAndSave } = useContext(AuthContext);
   const initialStatus = location.state
     ? location.state.status
       ? location.state.status
@@ -84,7 +86,7 @@ function UserDetail() {
     : "IDLE";
   const [status, setStatus] = useState(initialStatus);
   const queryKey = ["user", params.id, authState.token];
-  const { data = {}, isLoading } = useQuery(
+  const { data = {}, isLoading, isError } = useQuery(
     queryKey,
     (key, id, token) => getUser(id, token),
     {
@@ -96,13 +98,20 @@ function UserDetail() {
         });
       },
       staleTime: Infinity,
+      retry: false,
+      onError: (e) => {
+        enqueueSnackbar(generateMessage(e, "/edit"), {
+          variant: "error",
+        });
+        if (e.status === 401) {
+          navigate("/login");
+        }
+      },
     }
   );
   const [mutate] = useMutation(updateUser, {
     onSuccess: (data) => queryCache.setQueryData(queryKey, data),
   });
-
-  const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -140,15 +149,15 @@ function UserDetail() {
     }
   };
 
-  const handleLogOut=()=>{
-    setAuthStateAndSave(null)
-    enqueueSnackbar("LogOut Success",{
-      variant:"success"
-    })
-    navigate(`/login`)
-  }
+  const handleLogOut = () => {
+    setAuthStateAndSave(null);
+    enqueueSnackbar("LogOut Success", {
+      variant: "success",
+    });
+    navigate(`/login`);
+  };
 
-  if (isLoading) {
+  if (isLoading || isError) {
     return <Skeleton variant="rect" height="400px"></Skeleton>;
   }
 

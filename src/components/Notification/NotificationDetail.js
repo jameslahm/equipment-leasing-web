@@ -1,10 +1,16 @@
 import React, { useContext, useEffect } from "react";
-import { useParams, Link as ReachLink } from "@reach/router";
+import { useParams, Link as ReachLink,navigate } from "@reach/router";
 import { useQuery, useMutation } from "react-query";
-import { AuthContext, getNotification, updateNotification } from "utils";
+import {
+  AuthContext,
+  getNotification,
+  updateNotification,
+  generateMessage,
+} from "utils";
 import { makeStyles, Paper, Typography } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 import { Link } from "@material-ui/core";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -17,22 +23,36 @@ const useStyles = makeStyles((theme) => ({
 
 function EquipmentDetail() {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
 
   const params = useParams();
   const { authState } = useContext(AuthContext);
   const queryKey = ["notification", params.id, authState.token];
-  const { data = {}, isLoading } = useQuery(queryKey, (key, id, token) =>
-    getNotification(id, token)
+  const { data = {}, isLoading, isError } = useQuery(
+    queryKey,
+    (key, id, token) => getNotification(id, token),
+    {
+      retry: false,
+      onError: (e) => {
+        enqueueSnackbar(generateMessage(e, "/list"));
+        if (e.status === 401) {
+          navigate("/login");
+        }
+      },
+    }
   );
 
   const [mutate] = useMutation(updateNotification);
 
   useEffect(() => {
-    mutate({ data: { isRead: true }, id: params.id, token: authState.token },{throwOnError:true});
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+    mutate(
+      { data: { isRead: true }, id: params.id, token: authState.token },
+      { throwOnError: true }
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  if (isLoading) {
+  if (isLoading || isError) {
     return <Skeleton variant="rect" height="400px"></Skeleton>;
   }
 

@@ -28,7 +28,7 @@ const FAKE_USERS = {
 const FAKE_EQUIPMENT = {
   id: 1,
   status: "idle",
-  return_time: "1502321312",
+  return_time: 1599732065964,
   name: "fake",
   usage:"Hello",
   owner: {
@@ -60,8 +60,8 @@ const FAKE_EQUIPMENT_PUTON_APPLICATION = {
     avatar: "fake",
   },
   usage: "fake",
-  application_time: "fake",
-  review_time: "fake",
+  application_time: 1599732065964,
+  review_time: 1599732065964,
   candidate: {
     id: 1,
     username: "fake",
@@ -86,8 +86,8 @@ const FAKE_EQUIPMENT_BORROW_APPLICATION = {
     id: 1,
   },
   usage: "fake",
-  application_time: "fake",
-  review_time: "fake",
+  application_time:1599732065964,
+  review_time: 1599732065964,
   candidate: {
     username: "fake",
     email: "fake",
@@ -104,7 +104,7 @@ const FAKE_EQUIPMENT_BORROW_APPLICATIONS = {
 const FAKE_LENDER_APPLICATION = {
   id: 1,
   status: "agree",
-  application_time:"2019-08-11",
+  application_time:1599732065964,
   lab_name: "fake",
   lab_location: "fake",
   candidate: {
@@ -129,7 +129,7 @@ const FAKE_APPLICATION_NOTIFICATION = {
   },
   id:1,
   content: "fake",
-  notification_time: "fake",
+  notification_time: 1599732065964,
   isRead: false,
   application_id: "1",
   type: "lender",

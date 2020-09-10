@@ -20,6 +20,8 @@ import EnhancedTable, {
 } from "components/EnhancedTable";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { TextField, ConfirmHint } from "components/Widget";
+import PersonIcon from "@material-ui/icons/Person";
+import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -30,26 +32,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const headCells = [
-  { id: "id", th: true, disablePadding: true, label: "ID" },
-  { id: "name", th: false, disablePadding: false, label: "Name" },
-  { id: "owner", th: false, disablePadding: false, label: "Owner" },
-  { id: "status", th: false, disablePadding: false, label: "Status" },
+  { id: "id", th: true, label: "ID", sortable: true },
+  { id: "name", label: "Name", sortable: true },
+  { id: "owner", label: "Owner" },
+  { id: "status", label: "Status" },
   {
     id: "current_application",
-    th: false,
-    disablePadding: false,
     label: "CurrentApplication",
   },
   {
     id: "confirmed_back",
-    th: false,
-    disablePadding: false,
     label: "ConfirmedBack",
   },
   {
     id: "actions",
     label: "Actions",
-    th: false,
   },
 ];
 
@@ -127,7 +124,7 @@ function RowData({
       </TableRow>
     );
   } else {
-    return <TableRowSkeleton columns={6}></TableRowSkeleton>;
+    return <TableRowSkeleton columns={7}></TableRowSkeleton>;
   }
 }
 
@@ -140,12 +137,18 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 function TableToolbar({ numSelected, onFilter, onDeleteAll }) {
   const classes = useToolbarStyles();
-  // const { authState } = useContext(AuthContext);
+  const { authState } = useContext(AuthContext);
   const [name, setName] = useState("");
   const [status, setStatus] = useState("");
+  const [isOwn, setIsOwn] = useState(false);
 
   const handleClick = () => {
-    onFilter({ name: name });
+    if (authState.role === "normal" && isOwn) {
+      onFilter({ name: name, current_candidate_id: authState.id });
+    }
+    if (authState.role === "lender" && isOwn) {
+      onFilter({ name: name, owner_id: authState.id });
+    }
   };
 
   return (
@@ -185,6 +188,19 @@ function TableToolbar({ numSelected, onFilter, onDeleteAll }) {
             Lease
           </MenuItem>
         </TextField>
+        {authState.role === "admin" ? null : (
+          <IconButton
+            onClick={(e) => {
+              setIsOwn(!isOwn);
+            }}
+          >
+            {isOwn ? (
+              <PersonIcon></PersonIcon>
+            ) : (
+              <PersonOutlineIcon></PersonOutlineIcon>
+            )}
+          </IconButton>
+        )}
         <IconButton onClick={handleClick}>
           <FilterListIcon></FilterListIcon>
         </IconButton>

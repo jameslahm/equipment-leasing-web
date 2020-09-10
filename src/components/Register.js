@@ -11,7 +11,7 @@ import {
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Footer from "components/Footer";
 import { Link as ReachLink, useLocation, navigate } from "@reach/router";
-import { AuthContext, register } from "utils";
+import { AuthContext, register, generateMessage } from "utils";
 import { useMutation } from "react-query";
 import { useSnackbar } from "notistack";
 import { TextField } from "components/Widget";
@@ -76,7 +76,7 @@ export default function SignUp() {
         { throwOnError: true }
       );
       setAuthStateAndSave(data);
-      enqueueSnackbar("Register Success", {
+      enqueueSnackbar(generateMessage(null, "/register"), {
         variant: "success",
       });
       if (location.state && location.state.from) {
@@ -85,7 +85,7 @@ export default function SignUp() {
         navigate("/dashboard");
       }
     } catch (e) {
-      enqueueSnackbar("Register Error", {
+      enqueueSnackbar(generateMessage(e, "/register"), {
         variant: "error",
       });
     }

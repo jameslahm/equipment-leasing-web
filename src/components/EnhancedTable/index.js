@@ -13,10 +13,11 @@ import {
 } from "@material-ui/core";
 import EnhancedTableHead from "./EnhancedTableHead";
 import { useQuery, useMutation, queryCache } from "react-query";
-import { AuthContext } from "utils";
+import { AuthContext, generateMessage } from "utils";
 import { useSnackbar } from "notistack";
 import EnhancedTableToolbar from "./EnhancedTableToolbar";
 import TableRowSkeleton from "./TableRowSkeleton";
+import { navigate } from "@reach/router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,7 +41,7 @@ function EnhancedTable({
   TableToolbar = EnhancedTableToolbar,
 }) {
   const classes = useStyles();
-  const [order, setOrder] = useState("asc");
+  const [order, setOrder] = useState("desc");
   const [options, setOptions] = useState({});
   const [orderBy, setOrderBy] = useState(headCells[0].id);
   const [selected, setSelected] = useState([]);
@@ -58,13 +59,25 @@ function EnhancedTable({
       page,
       page_size: rowsPerPage,
       order,
-      orderBy,
+      order_by: orderBy,
       ...options,
     },
     authState.token,
   ];
-  const { data = {}, isLoading } = useQuery(queryKey, (key, options, token) =>
-    getAllResource(options, token)
+  const { data = {}, isLoading, isError } = useQuery(
+    queryKey,
+    (key, options, token) => getAllResource(options, token),
+    {
+      retry: false,
+      onError: (e) => {
+        enqueueSnackbar(generateMessage(e, "/list"), {
+          variant: "error",
+        });
+        if (e.status === 401) {
+          navigate("/login");
+        }
+      },
+    }
   );
 
   const [mutate] = useMutation(deleteResource);
@@ -155,6 +168,7 @@ function EnhancedTable({
           onFilter={handleFilter}
           onDeleteAll={(e) => {
             handleDelete(...selected);
+            setSelected([]);
           }}
         />
         <TableContainer>
@@ -186,8 +200,15 @@ function EnhancedTable({
                     key={row.id}
                     isItemSelected={isItemSelected}
                     labelId={labelId}
-                    isLoading={isLoading}
-                    onDelete={handleDelete}
+                    isLoading={isLoading || isError}
+                    onDelete={(id) => {
+                      handleDelete(id);
+                      const index = selected.indexOf(id);
+                      if (index !== -1) {
+                        selected.splice(index, 1);
+                        setSelected([...selected]);
+                      }
+                    }}
                     onClick={handleClick}
                   ></RowData>
                 );

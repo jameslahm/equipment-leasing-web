@@ -13,9 +13,9 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { Link as ReachLink, Redirect } from "@reach/router";
 import { navigate, useLocation } from "@reach/router";
 import { useMutation } from "react-query";
-import { login, AuthContext } from "utils";
+import { login, AuthContext, generateMessage } from "utils";
 import { useSnackbar } from "notistack";
-import {TextField} from "components/Widget";
+import { TextField } from "components/Widget";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -66,7 +66,7 @@ export default function SignIn() {
         { throwOnError: true }
       );
       setAuthStateAndSave(data);
-      enqueueSnackbar("Login Success", {
+      enqueueSnackbar(generateMessage(null, "/login"), {
         variant: "success",
       });
       if (location.state && location.state.from) {
@@ -75,7 +75,7 @@ export default function SignIn() {
         navigate("/dashboard");
       }
     } catch (e) {
-      enqueueSnackbar("Login Fail", {
+      enqueueSnackbar(generateMessage(e, "/login"), {
         variant: "error",
       });
     }

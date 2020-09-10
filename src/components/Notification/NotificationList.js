@@ -1,5 +1,5 @@
 import React from "react";
-import { getAllNotifications, deleteNotification } from "utils";
+import { getAllNotifications, deleteNotification,formatDate } from "utils";
 import { Link as ReachLink } from "@reach/router";
 import {
   TableCell,
@@ -12,23 +12,21 @@ import {
 } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import DeleteIcon from "@material-ui/icons/Delete";
-import EnhancedTable,{TableRowSkeleton} from "components/EnhancedTable";
-import {StatusHint} from "components/Widget";
+import EnhancedTable, { TableRowSkeleton } from "components/EnhancedTable";
+import { StatusHint } from "components/Widget";
 
 const headCells = [
-  { id: "id", th: true, disablePadding: true, label: "ID" },
-  { id: "sender", th: false, disablePadding: false, label: "Sender" },
-  { id: "result", th: false, disablePadding: false, label: "Result" },
+  { id: "id", th: true, label: "ID" },
+  { id: "sender", label: "Sender" },
+  { id: "notification_time", sortable: true, label: "NotificationTime" },
+  { id: "result", label: "Result" },
   {
     id: "type",
-    th: false,
-    disablePadding: false,
     label: "Type",
   },
   {
     id: "actions",
     label: "Actions",
-    th: false,
   },
 ];
 
@@ -74,6 +72,9 @@ function RowData({
           <Link component={ReachLink} to={`/users/${row.sender.id}`}>
             {row.sender.username}
           </Link>
+        </TableCell>
+        <TableCell className={classes.tableCell}>
+          {formatDate(row.notification_time)}
         </TableCell>
         <TableCell className={classes.tableCell}>
           <StatusHint color result={row.result}></StatusHint>

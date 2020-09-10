@@ -15,27 +15,29 @@ import {
   getAllLenderApplications,
   deleteLenderApplication,
   AuthContext,
+  formatDate,
 } from "utils";
 import { Link as ReachLink } from "@reach/router";
-import EnhancedTable,{TableRowSkeleton,EnhancedTableToolbar} from "components/EnhancedTable";
-import {StatusHint} from "components/Widget";
+import EnhancedTable, {
+  TableRowSkeleton,
+  EnhancedTableToolbar,
+} from "components/EnhancedTable";
+import { StatusHint } from "components/Widget";
 import AddIcon from "@material-ui/icons/Add";
 
 const headCells = [
-  { id: "id", th: true, disablePadding: true, label: "ID" },
-  { id: "candidate", th: false, disablePadding: false, label: "Candidate" },
-  { id: "lab_name", th: false, disablePadding: false, label: "LabName" },
+  { id: "id", th: true, label: "ID" },
+  { id: "candidate", label: "Candidate" },
+  { id: "lab_name", label: "LabName" },
   {
     id: "lab_location",
-    th: false,
-    disablePadding: false,
     label: "LabLocation",
   },
-  { id: "status", th: false, disablePadding: false, label: "Status" },
+  { id: "application_time", label: "ApplicationTime", sortable: true },
+  { id: "status", label: "Status" },
   {
     id: "actions",
     label: "Actions",
-    th: false,
   },
 ];
 
@@ -83,6 +85,9 @@ function RowData({
         <TableCell className={classes.tableCell}>{row.lab_name}</TableCell>
         <TableCell className={classes.tableCell}>{row.lab_location}</TableCell>
         <TableCell className={classes.tableCell}>
+          {formatDate(row.application_time)}
+        </TableCell>
+        <TableCell className={classes.tableCell}>
           <StatusHint color result={row.status}></StatusHint>
         </TableCell>
         <TableCell className={classes.tableCell}>
@@ -113,7 +118,7 @@ function RowData({
   }
 }
 
-function TableToolbar({ numSelected, onFilter,onDeleteAll }) {
+function TableToolbar({ numSelected, onFilter, onDeleteAll }) {
   const { authState } = useContext(AuthContext);
   return (
     <EnhancedTableToolbar numSelected={numSelected} onDeleteAll={onDeleteAll}>

@@ -19,10 +19,10 @@ import { BorrowApplicationDetail } from "components/BorrowApplication";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
-// if (process.env.NODE_ENV === "development") {
-//   const { worker } = require("./utils");
-//   worker.start();
-// }
+if (process.env.NODE_ENV === "development") {
+  const { worker } = require("./utils");
+  worker.start();
+}
 
 function App() {
   const [authState, setAuthState] = useState(

@@ -1,3 +1,5 @@
+import { formatDistance } from "date-fns";
+
 export const capitalize = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
@@ -11,4 +13,8 @@ export const canEdit = (authState, user) => {
 
 export const isAdmin = (authState) => {
   return authState.role === "admin";
+};
+
+export const formatDate = (d) => {
+  return formatDistance(new Date(d), new Date())+" ago";
 };

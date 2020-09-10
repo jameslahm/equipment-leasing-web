@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   TableCell,
   TableRow,
@@ -16,11 +16,14 @@ import { getAllUsers, deleteUser } from "utils";
 import { Link as ReachLink } from "@reach/router";
 import EnhancedTable, { TableRowSkeleton } from "components/EnhancedTable";
 import { ConfirmHint } from "components/Widget";
+import { EnhancedTableToolbar } from "components/EnhancedTable";
+import FilterListIcon from "@material-ui/icons/FilterList";
+import { TextField } from "components/Widget";
 
 // Table Header
 const headCells = [
-  { id: "id", th: true, label: "ID" },
-  { id: "username", th: false, label: "Username" },
+  { id: "id", th: true, label: "ID", sortable: true },
+  { id: "username", th: false, label: "Username", sortable: true },
   { id: "email", th: false, label: "Email" },
   { id: "avatar", th: false, label: "Avatar" },
   { id: "role", th: false, label: "Role" },
@@ -103,6 +106,46 @@ function RowData({
   }
 }
 
+const useToolbarStyles = makeStyles((theme) => ({
+  input: {
+    maxWidth: "300px",
+    marginRight: theme.spacing(2),
+  },
+}));
+
+function TableToolbar({ numSelected, onFilter, onDeleteAll }) {
+  const classes = useToolbarStyles();
+  const [username, setUsername] = useState("");
+
+  const handleClick = () => {
+    onFilter({ username: username });
+  };
+
+  return (
+    <EnhancedTableToolbar numSelected={numSelected} onDeleteAll={onDeleteAll}>
+      <Box
+        width="100%"
+        display="flex"
+        justifyContent="flex-end"
+        alignItems="center"
+      >
+        <TextField
+          size="small"
+          className={classes.input}
+          label="username"
+          value={username}
+          onChange={(e) => {
+            setUsername(e.target.value);
+          }}
+        ></TextField>
+        <IconButton onClick={handleClick}>
+          <FilterListIcon></FilterListIcon>
+        </IconButton>
+      </Box>
+    </EnhancedTableToolbar>
+  );
+}
+
 function UserList() {
   return (
     <EnhancedTable
@@ -111,6 +154,7 @@ function UserList() {
       getAllResource={getAllUsers}
       deleteResource={deleteUser}
       RowData={RowData}
+      TableToolbar={TableToolbar}
     ></EnhancedTable>
   );
 }

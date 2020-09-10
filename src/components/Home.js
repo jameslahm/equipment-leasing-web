@@ -13,6 +13,7 @@ import {
   ListItemText,
   ListItemIcon,
   Button,
+  Badge,
 } from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
@@ -24,7 +25,8 @@ import BuildIcon from "@material-ui/icons/Build";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { useLocation, Link as ReachLink, Redirect } from "@reach/router";
 import Footer from "components/Footer";
-import { AuthContext,isAdmin } from "utils";
+import { AuthContext, isAdmin, getAllNotifications } from "utils";
+import { useQuery } from "react-query";
 
 const drawerWidth = 240;
 
@@ -118,6 +120,7 @@ const TitleMap = {
 
 function Home({ children }) {
   const classes = useStyles();
+  const { authState } = useContext(AuthContext);
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -126,11 +129,25 @@ function Home({ children }) {
     setOpen(false);
   };
 
+  const { data = {} } = useQuery(
+    [
+      "notifications",
+      {
+        total: true,
+        isRead: false,
+      },
+      (authState || {}).token,
+    ],
+    (key, options, token) => getAllNotifications(options, token),
+    {
+      enabled: authState && authState.token,
+      retry: false,
+    }
+  );
+
   const location = useLocation();
   const title = TitleMap[location.pathname.split("/")[1] || ""];
-  const isConfirmPath = location.pathname.split("/")[2]==='confirm'
-
-  const { authState } = useContext(AuthContext);
+  const isConfirmPath = location.pathname.split("/")[2] === "confirm";
 
   if (!authState) {
     return (
@@ -220,7 +237,13 @@ function Home({ children }) {
           </ListItem>
           <ListItem component={Link} to="/notifications">
             <ListItemIcon>
-              <NotificationsIcon />
+              <Badge
+                badgeContent={data.total}
+                color="secondary"
+                invisible={!data.total}
+              >
+                <NotificationsIcon />
+              </Badge>
             </ListItemIcon>
             <ListItemText primary="Notifications" />
           </ListItem>

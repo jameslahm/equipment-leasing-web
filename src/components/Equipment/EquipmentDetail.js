@@ -1,7 +1,18 @@
 import React, { useState, useContext } from "react";
-import { useLocation, useParams, Link as ReachLink } from "@reach/router";
+import {
+  useLocation,
+  useParams,
+  Link as ReachLink,
+  navigate,
+} from "@reach/router";
 import { useQuery, useMutation, queryCache } from "react-query";
-import { AuthContext, getEquipment, updateEquipment, canEdit } from "utils";
+import {
+  AuthContext,
+  getEquipment,
+  updateEquipment,
+  canEdit,
+  generateMessage,
+} from "utils";
 import {
   Button,
   makeStyles,
@@ -70,16 +81,24 @@ function EquipmentDetail() {
     : "IDLE";
   const [status, setStatus] = useState(initialStatus);
   const queryKey = ["equipment", params.id, authState.token];
-  const { data = {}, isLoading } = useQuery(
+  const { data = {}, isLoading, isError } = useQuery(
     queryKey,
     (key, id, token) => getEquipment(id, token),
     {
+      retry: false,
+      staleTime: Infinity,
       onSuccess: (data) => {
         ReactDOM.unstable_batchedUpdates(() => {
           setName(data.name);
           setUsage(data.usage);
           setConfirmedBack(data.confirmed_back);
         });
+      },
+      onError: (e) => {
+        enqueueSnackbar(generateMessage(e, "/edit"));
+        if (e.status === 401) {
+          navigate("/login");
+        }
       },
     }
   );
@@ -139,7 +158,7 @@ function EquipmentDetail() {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || isError) {
     return <Skeleton variant="rect" height="400px"></Skeleton>;
   }
 
@@ -213,7 +232,9 @@ function EquipmentDetail() {
             <Typography variant="subtitle1" component="p">
               {usage}
             </Typography>
-            {authState.role === "normal" && !data.current_application &&data.status==='idle' ? (
+            {authState.role === "normal" &&
+            !data.current_application &&
+            data.status === "idle" ? (
               <Button
                 component={ReachLink}
                 to={`/applications/borrow/create/${data.id}`}
