@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import { CssBaseline, IconButton } from "@material-ui/core";
 import { Router } from "@reach/router";
-import Login from "./components/Login";
-import Home from "./components/Home";
-import { ApplicationTabs, ApplicationCreate } from "./components/Application";
+import Login from "components/Login";
+import Home from "components/Home";
+import { ApplicationTabs, ApplicationCreate } from "components/Application";
 import {
   NotificationList,
   NotificationDetail,
-} from "./components/Notification";
-import { UserList, UserDetail } from "./components/User";
-import { EquipmentList, EquipmentDetail } from "./components/Equipment";
-import Dashboard from "./components/Dashboard";
-import Register from "./components/Register";
+} from "components/Notification";
+import { UserList, UserDetail,UserConfirm } from "components/User";
+import { EquipmentList, EquipmentDetail } from "components/Equipment";
+import Dashboard from "components/Dashboard";
+import Register from "components/Register";
 import { AuthContext } from "./utils";
 import { ReactQueryDevtools } from "react-query-devtools";
 import { SnackbarProvider } from "notistack";
 import CloseIcon from "@material-ui/icons/Close";
-import { LenderApplicationDetail } from "./components/LenderApplication";
-import { PutOnApplicationDetail } from "./components/PutOnApplication";
-import { BorrowApplicationDetail } from "./components/BorrowApplication";
+import { LenderApplicationDetail } from "components/LenderApplication";
+import { PutOnApplicationDetail } from "components/PutOnApplication";
+import { BorrowApplicationDetail } from "components/BorrowApplication";
 
 if (process.env.NODE_ENV === "development") {
   const { worker } = require("./utils");
@@ -78,6 +78,7 @@ function App() {
             <NotificationList path="notifications"></NotificationList>
             <NotificationDetail path="notifications/:id"></NotificationDetail>
             <UserList path="users"></UserList>
+            <UserConfirm path="users/confirm"></UserConfirm>
             <UserDetail path="users/:id"></UserDetail>
             <EquipmentList path="equipments"></EquipmentList>
             <EquipmentDetail path="equipments/:id"></EquipmentDetail>

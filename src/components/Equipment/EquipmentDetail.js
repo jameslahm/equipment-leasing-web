@@ -140,7 +140,7 @@ function EquipmentDetail() {
   };
 
   if (isLoading) {
-    return <Skeleton variant="rect"></Skeleton>;
+    return <Skeleton variant="rect" height="400px"></Skeleton>;
   }
 
   return (
@@ -237,7 +237,7 @@ function EquipmentDetail() {
               </Button>
             ) : null}
             <Typography variant="body2" component="p" color="secondary">
-              {!data.application_id && !confirmedBack
+              {!data.current_application.id && !confirmedBack
                 ? "Please confirm the equipment has been returned back"
                 : null}
             </Typography>

@@ -115,10 +115,10 @@ function RowData({
   }
 }
 
-function TableToolbar({ numSelected, onFilter }) {
+function TableToolbar({ numSelected, onFilter,onDeleteAll }) {
   const { authState } = useContext(AuthContext);
   return (
-    <EnhancedTableToolbar numSelected={numSelected}>
+    <EnhancedTableToolbar numSelected={numSelected} onDeleteAll={onDeleteAll}>
       <Box width="100%" display="flex" justifyContent="flex-end">
         {authState.role === "normal" ? (
           <IconButton component={ReachLink} to={`/applications/borrow/create`}>

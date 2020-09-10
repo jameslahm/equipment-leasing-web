@@ -9,6 +9,7 @@ import {
   Link,
   makeStyles,
   Box,
+  MenuItem,
 } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
@@ -33,6 +34,12 @@ const headCells = [
   { id: "name", th: false, disablePadding: false, label: "Name" },
   { id: "owner", th: false, disablePadding: false, label: "Owner" },
   { id: "status", th: false, disablePadding: false, label: "Status" },
+  {
+    id: "current_application",
+    th: false,
+    disablePadding: false,
+    label: "CurrentApplication",
+  },
   {
     id: "confirmed_back",
     th: false,
@@ -68,7 +75,7 @@ function RowData({
           <Checkbox
             checked={isItemSelected}
             inputProps={{ "aria-labelledby": labelId }}
-            onClick={(event) => onClick(event, row.name)}
+            onClick={(event) => onClick(event, row.id)}
           />
         </TableCell>
         <TableCell component="th" id={labelId} scope="row" padding="none">
@@ -82,6 +89,14 @@ function RowData({
         </TableCell>
         <TableCell className={classes.tableCell}>
           {row.status.toUpperCase()}
+        </TableCell>
+        <TableCell className={classes.tableCell}>
+          <Link
+            component={ReachLink}
+            to={`/applications/borrow/${row.current_application.id}`}
+          >
+            {row.current_application.id}
+          </Link>
         </TableCell>
         <TableCell className={classes.tableCell}>
           <ConfirmHint result={row.confirmed_back}></ConfirmHint>
@@ -121,17 +136,18 @@ const useToolbarStyles = makeStyles((theme) => ({
   },
 }));
 
-function TableToolbar({ numSelected, onFilter, onDelete }) {
+function TableToolbar({ numSelected, onFilter, onDeleteAll }) {
   const classes = useToolbarStyles();
-  const { authState } = useContext(AuthContext);
+  // const { authState } = useContext(AuthContext);
   const [name, setName] = useState("");
+  const [status, setStatus] = useState("");
 
   const handleClick = () => {
     onFilter({ name: name });
   };
 
   return (
-    <EnhancedTableToolbar numSelected={numSelected} onDelete={onDelete}>
+    <EnhancedTableToolbar numSelected={numSelected} onDeleteAll={onDeleteAll}>
       <Box
         width="100%"
         display="flex"
@@ -147,6 +163,26 @@ function TableToolbar({ numSelected, onFilter, onDelete }) {
             setName(e.target.value);
           }}
         ></TextField>
+        <TextField
+          size="small"
+          select
+          className={classes.input}
+          label="status"
+          value={status}
+          onChange={(e) => {
+            setStatus(e.target.value);
+          }}
+        >
+          <MenuItem key="idle" value="idle">
+            IDLE
+          </MenuItem>
+          <MenuItem key="unreviewed" value="unreviewed">
+            Not PutOn
+          </MenuItem>
+          <MenuItem key="lease" value="lease">
+            Lease
+          </MenuItem>
+        </TextField>
         <IconButton onClick={handleClick}>
           <FilterListIcon></FilterListIcon>
         </IconButton>

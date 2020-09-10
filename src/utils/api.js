@@ -38,6 +38,15 @@ export const register = (data) => {
   }).then(handleRes);
 };
 
+export const confirmUser = (confirmToken) => {
+  return fetch(`${BASE_URL}/api/users/confirm`, {
+    method: "POST",
+    headers: {
+      Authorization: confirmToken,
+    },
+  }).then(handleRes);
+};
+
 export const getAllUsers = (options, token) => {
   const queryParams = new URLSearchParams(options);
   return fetch(`${BASE_URL}/api/users?${queryParams.toString()}`, {

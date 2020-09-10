@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useLocation, useParams } from "@reach/router";
+import { useLocation, useParams,navigate } from "@reach/router";
 import { useQuery, useMutation, queryCache } from "react-query";
 import {
   AuthContext,
@@ -24,7 +24,7 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import ReactDOM from "react-dom";
 import { useSnackbar } from "notistack";
-import { TextField,ConfirmHint } from "components/Widget";
+import { TextField, ConfirmHint } from "components/Widget";
 import { capitalize } from "utils";
 
 const useStyles = makeStyles((theme) => ({
@@ -55,6 +55,10 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     marginTop: theme.spacing(2),
   },
+  logout: {
+    marginTop: theme.spacing(4),
+    marginLeft: theme.spacing(2),
+  },
 }));
 
 function UserDetail() {
@@ -72,7 +76,7 @@ function UserDetail() {
 
   const params = useParams();
   const location = useLocation();
-  const { authState } = useContext(AuthContext);
+  const { authState,setAuthStateAndSave } = useContext(AuthContext);
   const initialStatus = location.state
     ? location.state.status
       ? location.state.status
@@ -136,8 +140,16 @@ function UserDetail() {
     }
   };
 
+  const handleLogOut=()=>{
+    setAuthStateAndSave(null)
+    enqueueSnackbar("LogOut Success",{
+      variant:"success"
+    })
+    navigate(`/login`)
+  }
+
   if (isLoading) {
-    return <Skeleton variant="rect"></Skeleton>;
+    return <Skeleton variant="rect" height="400px"></Skeleton>;
   }
 
   return (
@@ -176,6 +188,7 @@ function UserDetail() {
             helperText={errors.password}
             label="password"
             value={password}
+            type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
           <FormControlLabel
@@ -198,31 +211,44 @@ function UserDetail() {
           </Button>
         </form>
       ) : (
-        <Box display="flex">
-          <Avatar
-            className={classes.avatar}
-            src={data.avatar}
-            alt={username}
-          ></Avatar>
-          <Box
-            flexGrow={1}
-            ml={8}
-            display="flex"
-            flexDirection="column"
-            alignItems="flex-start"
-            justifyContent="center"
-          >
-            <Typography variant="h6">{username}</Typography>
-            <Typography className={classes.text} variant="subtitle1">
-              {email}
-            </Typography>
-            <Typography className={classes.text} variant="subtitle2">
-              {capitalize(data.role)}
-            </Typography>
-            <Typography className={classes.text}>
-              <ConfirmHint result={data.confirmed}></ConfirmHint>
-            </Typography>
+        <Box>
+          <Box display="flex">
+            <Avatar
+              className={classes.avatar}
+              src={data.avatar}
+              alt={username}
+            ></Avatar>
+            <Box
+              flexGrow={1}
+              ml={8}
+              display="flex"
+              flexDirection="column"
+              alignItems="flex-start"
+              justifyContent="center"
+            >
+              <Typography variant="h6">{username}</Typography>
+              <Typography className={classes.text} variant="subtitle1">
+                {email}
+              </Typography>
+              <Typography className={classes.text} variant="subtitle2">
+                {capitalize(data.role)}
+              </Typography>
+              <Typography className={classes.text}>
+                <ConfirmHint result={data.confirmed}></ConfirmHint>
+              </Typography>
+            </Box>
           </Box>
+
+          {authState.id === parseInt(params.id) ? (
+            <Button
+              variant="contained"
+              className={classes.logout}
+              color="primary"
+              onClick={handleLogOut}
+            >
+              LogOut
+            </Button>
+          ) : null}
         </Box>
       )}
     </Paper>

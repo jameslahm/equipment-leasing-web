@@ -17,8 +17,11 @@ import {
   AuthContext,
 } from "utils";
 import { Link as ReachLink } from "@reach/router";
-import {StatusHint} from "components/Widget";
-import EnhancedTable,{EnhancedTableToolbar,TableRowSkeleton} from "components/EnhancedTable";
+import { StatusHint } from "components/Widget";
+import EnhancedTable, {
+  EnhancedTableToolbar,
+  TableRowSkeleton,
+} from "components/EnhancedTable";
 import AddIcon from "@material-ui/icons/Add";
 
 const headCells = [
@@ -115,10 +118,10 @@ function RowData({
   }
 }
 
-function TableToolbar({ numSelected, onFilter }) {
+function TableToolbar({ numSelected, onFilter, onDeleteAll }) {
   const { authState } = useContext(AuthContext);
   return (
-    <EnhancedTableToolbar numSelected={numSelected}>
+    <EnhancedTableToolbar numSelected={numSelected} onDeleteAll={onDeleteAll}>
       <Box width="100%" display="flex" justifyContent="flex-end">
         {authState.role === "lender" ? (
           <IconButton component={ReachLink} to={`/applications/puton/create`}>

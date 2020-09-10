@@ -81,7 +81,7 @@ function EnhancedTable({
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = rows.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -128,7 +128,9 @@ function EnhancedTable({
   const handleDelete = async (...ids) => {
     try {
       await Promise.all(
-        ids.map((id) => mutate({ id, token: authState.token },{throwOnError:true}))
+        ids.map((id) =>
+          mutate({ id, token: authState.token }, { throwOnError: true })
+        )
       );
       enqueueSnackbar("Delete Success", {
         variant: "success",
@@ -148,7 +150,13 @@ function EnhancedTable({
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <TableToolbar numSelected={selected.length} onFilter={handleFilter} onDelete={handleDelete} />
+        <TableToolbar
+          numSelected={selected.length}
+          onFilter={handleFilter}
+          onDeleteAll={(e) => {
+            handleDelete(...selected);
+          }}
+        />
         <TableContainer>
           <Table
             className={classes.table}
@@ -172,7 +180,7 @@ function EnhancedTable({
                   return <RowData key={index} isLoading={true}></RowData>;
                 }
 
-                const isItemSelected = isSelected(row[headCells[0].id]);
+                const isItemSelected = isSelected(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (
                   <RowData
@@ -197,7 +205,7 @@ function EnhancedTable({
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={data.total | rowsPerPage}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
@@ -213,4 +221,4 @@ function EnhancedTable({
 }
 
 export default EnhancedTable;
-export {EnhancedTableHead,EnhancedTableToolbar,TableRowSkeleton}
+export { EnhancedTableHead, EnhancedTableToolbar, TableRowSkeleton };

@@ -128,6 +128,7 @@ function Home({ children }) {
 
   const location = useLocation();
   const title = TitleMap[location.pathname.split("/")[1] || ""];
+  const isConfirmPath = location.pathname.split("/")[2]==='confirm'
 
   const { authState } = useContext(AuthContext);
 
@@ -228,7 +229,7 @@ function Home({ children }) {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          {authState.confirmed ? (
+          {authState.confirmed || isConfirmPath ? (
             children
           ) : (
             <Typography variant="body2" color="secondary">

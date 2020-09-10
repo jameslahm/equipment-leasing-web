@@ -32,7 +32,7 @@ function EquipmentDetail() {
   });
 
   if (isLoading) {
-    return <Skeleton variant="rect"></Skeleton>;
+    return <Skeleton variant="rect" height="400px"></Skeleton>;
   }
 
   return (
