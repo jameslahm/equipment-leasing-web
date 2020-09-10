@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "http://localhost:5000";
 
 class HTTPError extends Error {
   constructor(message, status) {
@@ -165,7 +165,7 @@ export const updateLenderApplication = ({ data, token, id }) => {
       Authorization: token,
       "Content-Type": CONTENT_TYPE_JSON,
     },
-    body:JSON.stringify(data)
+    body: JSON.stringify(data),
   }).then(handleRes);
 };
 
@@ -215,7 +215,7 @@ export const updatePutOnApplication = ({ data, token, id }) => {
       Authorization: token,
       "Content-Type": CONTENT_TYPE_JSON,
     },
-    body:JSON.stringify(data)
+    body: JSON.stringify(data),
   }).then(handleRes);
 };
 
@@ -268,7 +268,7 @@ export const updateBorrowApplication = ({ data, token, id }) => {
       Authorization: token,
       "Content-Type": CONTENT_TYPE_JSON,
     },
-    body:JSON.stringify(data)
+    body: JSON.stringify(data),
   }).then(handleRes);
 };
 
@@ -307,13 +307,22 @@ export const updateNotification = ({ data, token, id }) => {
       Authorization: token,
       "Content-Type": CONTENT_TYPE_JSON,
     },
-    body:JSON.stringify(data)
+    body: JSON.stringify(data),
   }).then(handleRes);
 };
 
 export const deleteNotification = ({ id, token }) => {
   return fetch(`${BASE_URL}/api/notifications/${id}`, {
     method: "DELETE",
+    headers: {
+      Authorization: token,
+    },
+  }).then(handleRes);
+};
+
+export const getStatData = (token) => {
+  return fetch(`${BASE_URL}/api/stat`, {
+    method: "GET",
     headers: {
       Authorization: token,
     },

@@ -6,7 +6,7 @@ const FAKE_USER_UNCONFIRMED = {
   confirm_token: "jwt.token.here",
   username: "fake",
   avatar: "http://example.com",
-  role: "normal",
+  role: "lender",
   confirmed: false,
 };
 
@@ -16,7 +16,7 @@ const FAKE_USER_CONFIRMED = {
   token: "jwt.token.here",
   username: "fake",
   avatar: "http://example.com",
-  role: "normal",
+  role: "lender",
   confirmed: true,
 };
 
@@ -30,19 +30,19 @@ const FAKE_EQUIPMENT = {
   status: "idle",
   return_time: 1599732065964,
   name: "fake",
-  usage:"Hello",
+  usage: "Hello",
   owner: {
-    id: 1,
+    id: 2,
     lab_name: "fake",
     lab_location: "fake",
     email: "fake",
     username: "fake",
   },
   confirmed_back: false,
-  current_application:{
-    id:1,
-    candidate_id:2
-  }
+  current_application: {
+    id: 1,
+    candidate_id: 2,
+  },
 };
 
 const FAKE_EQUIPMENTS = {
@@ -59,7 +59,6 @@ const FAKE_EQUIPMENT_PUTON_APPLICATION = {
     email: "fake",
     avatar: "fake",
   },
-  usage: "fake",
   application_time: 1599732065964,
   review_time: 1599732065964,
   candidate: {
@@ -67,6 +66,14 @@ const FAKE_EQUIPMENT_PUTON_APPLICATION = {
     username: "fake",
     email: "fake",
     avatar: "fake",
+    lab_location: "fake",
+    lab_name: "fake",
+  },
+  equipment: {
+    id: 1,
+    name: "Haaa",
+    usage:
+      "ashaodcygdshbcifasgdvjsavcalkscnhadyvsdjnkasduasd askdhasjhdoausdhasdbhasnkcasucoaiucbhadkscvsabhdicvak",
   },
 };
 
@@ -85,14 +92,20 @@ const FAKE_EQUIPMENT_BORROW_APPLICATION = {
     lab_location: "fake",
     id: 1,
   },
-  usage: "fake",
-  application_time:1599732065964,
+  usage:
+    "ashaodcygdshbcifasgdvjsavcalkscnhadyvsdjnkasduasd askdhasjhdoausdhasdbhasnkcasucoaiucbhadkscvsabhdicvak",
+  return_time: 1599732065964,
+  application_time: 1599732065964,
   review_time: 1599732065964,
   candidate: {
     username: "fake",
     email: "fake",
     avatar: "fake",
     id: 1,
+  },
+  equipment: {
+    id: 1,
+    name: "Haaa",
   },
 };
 
@@ -104,7 +117,7 @@ const FAKE_EQUIPMENT_BORROW_APPLICATIONS = {
 const FAKE_LENDER_APPLICATION = {
   id: 1,
   status: "agree",
-  application_time:1599732065964,
+  application_time: 1599732065964,
   lab_name: "fake",
   lab_location: "fake",
   candidate: {
@@ -113,6 +126,7 @@ const FAKE_LENDER_APPLICATION = {
     avatar: "fake",
     id: 1,
   },
+  review_time: 1599732065964,
 };
 
 const FAKE_LENDER_APPLICATIONS = {
@@ -127,7 +141,7 @@ const FAKE_APPLICATION_NOTIFICATION = {
     avatar: "fake",
     id: 1,
   },
-  id:1,
+  id: 1,
   content: "fake",
   notification_time: 1599732065964,
   isRead: false,
@@ -143,137 +157,217 @@ const FAKE_APPLICATION_NOTIFICATIONS = {
 
 const handlers = [
   // confirm
-  rest.post('/api/users/confirm',(req,res,ctx)=>{
-    return res(ctx.delay(1000),ctx.status(200),ctx.json(FAKE_USER_CONFIRMED))
+  rest.post("/api/users/confirm", (req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(FAKE_USER_CONFIRMED));
   }),
 
   // login and register
   rest.post("/api/login", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_USER_CONFIRMED));
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(FAKE_USER_CONFIRMED));
   }),
 
   rest.post("/api/register", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_USER_UNCONFIRMED));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_USER_UNCONFIRMED)
+    );
   }),
 
   // User
   rest.get("/api/users", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_USERS));
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(FAKE_USERS));
   }),
 
   // Here we could use to confirm
   rest.put("/api/users/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_USER_CONFIRMED));
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(FAKE_USER_CONFIRMED));
   }),
 
   rest.get("/api/users/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_USER_CONFIRMED));
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(FAKE_USER_CONFIRMED));
   }),
 
   rest.delete("/api/users/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_USER_CONFIRMED));
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(FAKE_USER_CONFIRMED));
   }),
 
   // Equipment
   rest.get("/api/equipments", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_EQUIPMENTS));
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(FAKE_EQUIPMENTS));
   }),
 
   rest.get("/api/equipments/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_EQUIPMENT));
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(FAKE_EQUIPMENT));
   }),
 
   // Here we could use to return back and confirm back
   rest.put("/api/equipments/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_EQUIPMENT));
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(FAKE_EQUIPMENT));
   }),
 
   rest.delete("/api/equipments/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_EQUIPMENT));
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(FAKE_EQUIPMENT));
   }),
 
   // application lender
   rest.post("/api/applications/lender", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_LENDER_APPLICATION));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_LENDER_APPLICATION)
+    );
   }),
 
   rest.get("/api/applications/lender", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_LENDER_APPLICATIONS));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_LENDER_APPLICATIONS)
+    );
   }),
 
   rest.get("/api/applications/lender/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_LENDER_APPLICATION));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_LENDER_APPLICATION)
+    );
   }),
 
   // Here we could use to agree or refuse the application
   rest.put("/api/applications/lender/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_LENDER_APPLICATION));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_LENDER_APPLICATION)
+    );
   }),
 
   rest.delete("/api/applications/lender/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_LENDER_APPLICATION));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_LENDER_APPLICATION)
+    );
   }),
 
   // application puton
   rest.post("/api/applications/puton", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATION));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATION)
+    );
   }),
 
   rest.get("/api/applications/puton", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATIONS));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATIONS)
+    );
   }),
 
   rest.get("/api/applications/puton/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATION));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATION)
+    );
   }),
 
   // Here we could use to agree or refuse the application
   rest.put("/api/applications/puton/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATION));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATION)
+    );
   }),
 
   rest.delete("/api/applications/puton/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATION));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_EQUIPMENT_PUTON_APPLICATION)
+    );
   }),
 
   // application borrow
   rest.post("/api/applications/borrow", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATION));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATION)
+    );
   }),
 
   rest.get("/api/applications/borrow", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATIONS));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATIONS)
+    );
   }),
 
   rest.get("/api/applications/borrow/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATION));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATION)
+    );
   }),
 
   // Here we could use to agree or refuse the application
   rest.put("/api/applications/borrow/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATION));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATION)
+    );
   }),
 
   rest.delete("/api/applications/borrow/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATION));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_EQUIPMENT_BORROW_APPLICATION)
+    );
   }),
 
   // notification
   rest.get("/api/notifications", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_APPLICATION_NOTIFICATIONS));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_APPLICATION_NOTIFICATIONS)
+    );
   }),
 
   rest.get("/api/notifications/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_APPLICATION_NOTIFICATION));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_APPLICATION_NOTIFICATION)
+    );
   }),
 
   // here we could use to change isRead
   rest.put("/api/notifications/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_APPLICATION_NOTIFICATION));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_APPLICATION_NOTIFICATION)
+    );
   }),
 
   rest.delete("/api/notifications/:id", (req, res, ctx) => {
-    return res(ctx.delay(1000),ctx.status(200), ctx.json(FAKE_APPLICATION_NOTIFICATION));
+    return res(
+      ctx.delay(1000),
+      ctx.status(200),
+      ctx.json(FAKE_APPLICATION_NOTIFICATION)
+    );
   }),
 ];
 

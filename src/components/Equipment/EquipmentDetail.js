@@ -23,7 +23,11 @@ import {
   IconButton,
   Typography,
   CardContent,
-  CardMedia,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Link,
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -31,6 +35,11 @@ import EditIcon from "@material-ui/icons/Edit";
 import { useSnackbar } from "notistack";
 import { TextField } from "components/Widget";
 import ReactDOM from "react-dom";
+import RoomIcon from "@material-ui/icons/Room";
+import PersonIcon from "@material-ui/icons/Person";
+import BuildIcon from "@material-ui/icons/Build";
+import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
+import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -95,7 +104,9 @@ function EquipmentDetail() {
         });
       },
       onError: (e) => {
-        enqueueSnackbar(generateMessage(e, "/edit"));
+        enqueueSnackbar(generateMessage(e, "/edit"), {
+          variant: "error",
+        });
         if (e.status === 401) {
           navigate("/login");
         }
@@ -218,20 +229,48 @@ function EquipmentDetail() {
         </form>
       ) : (
         <Box ml={2} maxWidth="500px">
-          <CardMedia
-            className={classes.media}
-            image="https://source.unsplash.com/random"
-          />
           <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              {name}
-            </Typography>
-            {/* <Link component={ReachLink}>
-
-            </Link> */}
-            <Typography variant="subtitle1" component="p">
-              {usage}
-            </Typography>
+            <List>
+              <ListItem>
+                <ListItemIcon>
+                  <BuildIcon></BuildIcon>
+                </ListItemIcon>
+                <ListItemText primary={data.name} />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <PersonIcon></PersonIcon>
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <Link component={ReachLink} to={`/users/${data.owner.id}`}>
+                      {data.owner.username}
+                    </Link>
+                  }
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <RoomIcon></RoomIcon>
+                </ListItemIcon>
+                <ListItemText
+                  primary={data.owner.lab_name}
+                  secondary={data.owner.lab_location}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <LibraryBooksIcon></LibraryBooksIcon>
+                </ListItemIcon>
+                <ListItemText primary={data.usage} />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <IndeterminateCheckBoxIcon></IndeterminateCheckBoxIcon>
+                </ListItemIcon>
+                <ListItemText primary={data.status.toUpperCase()} />
+              </ListItem>
+            </List>
             {authState.role === "normal" &&
             !data.current_application &&
             data.status === "idle" ? (

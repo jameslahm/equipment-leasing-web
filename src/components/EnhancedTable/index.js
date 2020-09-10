@@ -94,7 +94,19 @@ function EnhancedTable({
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.id);
+      const newSelecteds = rows
+        .map((n) => {
+          if (resource !== "equipments") {
+            return n.id;
+          } else {
+            if (n.owner.id === authState.id) {
+              return n.id;
+            } else {
+              return undefined;
+            }
+          }
+        })
+        .filter((n) => n);
       setSelected(newSelecteds);
       return;
     }
@@ -149,6 +161,16 @@ function EnhancedTable({
         variant: "success",
       });
       queryCache.invalidateQueries(queryKey);
+      if (resource === "notifications") {
+        queryCache.invalidateQueries([
+          "notifications",
+          {
+            isRead: false,
+            total: true,
+          },
+          (authState || {}).token,
+        ]);
+      }
     } catch (e) {
       enqueueSnackbar("Delete Fail", {
         variant: "error",
@@ -188,7 +210,7 @@ function EnhancedTable({
             />
             <TableBody>
               {rows.map((row, index) => {
-                if (isLoading) {
+                if (isLoading || isError) {
                   return <RowData key={index} isLoading={true}></RowData>;
                 }
 
@@ -200,7 +222,7 @@ function EnhancedTable({
                     key={row.id}
                     isItemSelected={isItemSelected}
                     labelId={labelId}
-                    isLoading={isLoading || isError}
+                    isLoading={false}
                     onDelete={(id) => {
                       handleDelete(id);
                       const index = selected.indexOf(id);

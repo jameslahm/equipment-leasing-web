@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   TableCell,
   TableRow,
@@ -12,14 +12,14 @@ import clsx from "clsx";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { getAllUsers, deleteUser } from "utils";
-import { Link as ReachLink } from "@reach/router";
+import { getAllUsers, deleteUser, AuthContext } from "utils";
+import { Link as ReachLink, Redirect } from "@reach/router";
 import EnhancedTable, { TableRowSkeleton } from "components/EnhancedTable";
 import { ConfirmHint } from "components/Widget";
 import { EnhancedTableToolbar } from "components/EnhancedTable";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { TextField } from "components/Widget";
-
+import { useSnackbar } from "notistack";
 // Table Header
 const headCells = [
   { id: "id", th: true, label: "ID", sortable: true },
@@ -147,6 +147,16 @@ function TableToolbar({ numSelected, onFilter, onDeleteAll }) {
 }
 
 function UserList() {
+  const { authState } = useContext(AuthContext);
+  const { enqueueSnackbar } = useSnackbar();
+
+  if (authState.role !== "admin") {
+    enqueueSnackbar("Sorry, you have no permission", {
+      variant: "error",
+    });
+    return <Redirect to="/" noThrow></Redirect>;
+  }
+
   return (
     <EnhancedTable
       headCells={headCells}

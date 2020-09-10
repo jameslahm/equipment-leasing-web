@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   TableHead,
   TableRow,
@@ -7,6 +7,7 @@ import {
   TableSortLabel,
   makeStyles,
 } from "@material-ui/core";
+import { AuthContext } from "utils";
 
 const useStyles = makeStyles((theme) => ({
   visuallyHidden: {
@@ -32,17 +33,20 @@ function EnhancedTableHead({
   headCells,
 }) {
   const classes = useStyles();
+  const { authState } = useContext(AuthContext);
 
   return (
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all" }}
-          />
+          {authState.role === "normal" ? null : (
+            <Checkbox
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{ "aria-label": "select all" }}
+            />
+          )}
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
@@ -70,7 +74,9 @@ function EnhancedTableHead({
                   </span>
                 ) : null}
               </TableSortLabel>
-            ) : headCell.label}
+            ) : (
+              headCell.label
+            )}
           </TableCell>
         ))}
       </TableRow>

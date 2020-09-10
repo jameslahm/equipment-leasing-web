@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
-import { useLocation, useParams,navigate } from "@reach/router";
+import { useLocation, useParams, navigate } from "@reach/router";
 import { useQuery, useMutation, queryCache } from "react-query";
-import { AuthContext, canEdit, formatDate, generateMessage } from "utils";
+import { AuthContext, canEdit, formatDate, generateMessage,capitalize } from "utils";
 import {
   Button,
   makeStyles,
@@ -58,6 +58,9 @@ const useStyles = makeStyles((theme) => ({
   },
   textCenter: {
     textAlign: "center",
+  },
+  action: {
+    paddingLeft: theme.spacing(4),
   },
 }));
 
@@ -145,7 +148,7 @@ function ApplicationDetail({
         <Grid item md={7}>
           <ResourceDetail data={data}></ResourceDetail>
           {status === "EDIT" && data.status === "unreviewed" ? (
-            <CardActions>
+            <CardActions className={classes.action}>
               <Button
                 // size="small"
                 variant="contained"
@@ -192,7 +195,7 @@ function ApplicationDetail({
                   <Typography>
                     {data.status === "unreviewed"
                       ? "Unreviewed"
-                      : "Review: " + data.status}
+                      : "Review: " + capitalize(data.status)}
                   </Typography>
                 </Paper>
               </TimelineContent>
