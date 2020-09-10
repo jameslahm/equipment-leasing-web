@@ -72,7 +72,7 @@ export default function SignIn() {
       if (location.state && location.state.from) {
         navigate(location.state.from);
       } else {
-        navigate("/dashboard");
+        navigate("/");
       }
     } catch (e) {
       enqueueSnackbar(generateMessage(e, "/login"), {
@@ -82,7 +82,7 @@ export default function SignIn() {
   };
 
   if (authState) {
-    return <Redirect to="/dashboard" noThrow></Redirect>;
+    return <Redirect to="/" noThrow></Redirect>;
   }
 
   return (

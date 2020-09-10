@@ -16,7 +16,7 @@ import EnhancedTable, { TableRowSkeleton } from "components/EnhancedTable";
 import { StatusHint } from "components/Widget";
 
 const headCells = [
-  { id: "id", th: true, label: "ID" },
+  { id: "id", th: true, label: "ID",sortable:true },
   { id: "sender", label: "Sender" },
   { id: "notification_time", sortable: true, label: "NotificationTime" },
   { id: "result", label: "Result" },

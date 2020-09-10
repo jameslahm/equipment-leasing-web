@@ -13,10 +13,10 @@ import { Link } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 
 function generateContent(data) {
-  if (data.status === "agree") {
+  if (data.result === "agree") {
     return `Congratulations, ${data.sender.username} has agreed your application, Please check soon`;
   }
-  if (data.status === "refuse") {
+  if (data.result === "refuse") {
     return `Sorry, ${data.sender.username} has refused your application`;
   }
   if (data.type === "lender") {
@@ -44,7 +44,7 @@ function EquipmentDetail() {
   const { enqueueSnackbar } = useSnackbar();
 
   const params = useParams();
-  const { authState } = useContext(AuthContext);
+  const { authState,setAuthStateAndSave } = useContext(AuthContext);
   const queryKey = ["notification", params.id, authState.token];
   const [mutate] = useMutation(updateNotification);
   const { data = {}, isLoading, isError } = useQuery(
@@ -52,11 +52,13 @@ function EquipmentDetail() {
     (key, id, token) => getNotification(id, token),
     {
       retry: false,
-      staleTime: Infinity,
+      // staleTime: Infinity,
       onError: (e) => {
         enqueueSnackbar(generateMessage(e, "/list"), {
           variant: "error",
         });
+        setAuthStateAndSave(null)
+
         if (e.status === 401) {
           navigate("/login");
         }

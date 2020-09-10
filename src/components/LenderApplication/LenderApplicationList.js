@@ -59,6 +59,7 @@ function RowData({
   onClick,
 }) {
   const classes = useStyles();
+  const { authState } = useContext(AuthContext);
   if (!isLoading) {
     return (
       <TableRow
@@ -68,11 +69,13 @@ function RowData({
         selected={isItemSelected}
       >
         <TableCell padding="checkbox">
-          <Checkbox
-            checked={isItemSelected}
-            inputProps={{ "aria-labelledby": labelId }}
-            onClick={(event) => onClick(event, row.id)}
-          />
+          {authState.role === "admin" ? (
+            <Checkbox
+              checked={isItemSelected}
+              inputProps={{ "aria-labelledby": labelId }}
+              onClick={(event) => onClick(event, row.id)}
+            />
+          ) : null}
         </TableCell>
         <TableCell component="th" id={labelId} scope="row" padding="none">
           {row.id}
@@ -108,7 +111,7 @@ function RowData({
             </IconButton>
           ) : null}
           <IconButton onClick={() => onDelete(row.id)}>
-            <DeleteIcon></DeleteIcon>
+            {authState.role === "admin" ? <DeleteIcon></DeleteIcon> : null}
           </IconButton>
         </TableCell>
       </TableRow>

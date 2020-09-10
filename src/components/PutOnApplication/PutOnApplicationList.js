@@ -33,7 +33,6 @@ const headCells = [
     id: "status",
     label: "Status",
   },
-  { id: "review", label: "Review" },
   {
     id: "actions",
     label: "Actions",
@@ -86,11 +85,6 @@ function RowData({
         </TableCell>
         <TableCell className={classes.tableCell}>
           <StatusHint color result={row.status}></StatusHint>
-        </TableCell>
-        <TableCell className={classes.tableCell}>
-          <Link component={ReachLink} to={`/users/${row.reviewer.id}`}>
-            {row.reviewer.username}
-          </Link>
         </TableCell>
         <TableCell className={classes.tableCell}>
           <IconButton

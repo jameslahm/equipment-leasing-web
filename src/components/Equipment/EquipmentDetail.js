@@ -39,7 +39,7 @@ import RoomIcon from "@material-ui/icons/Room";
 import PersonIcon from "@material-ui/icons/Person";
 import BuildIcon from "@material-ui/icons/Build";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
-import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
+import IndeterminateCheckBoxIcon from "@material-ui/icons/IndeterminateCheckBox";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -68,6 +68,9 @@ const useStyles = makeStyles((theme) => ({
   media: {
     height: 140,
   },
+  hint: {
+    marginLeft: theme.spacing(2),
+  },
 }));
 
 function EquipmentDetail() {
@@ -82,7 +85,7 @@ function EquipmentDetail() {
 
   const params = useParams();
   const location = useLocation();
-  const { authState } = useContext(AuthContext);
+  const { authState, setAuthStateAndSave } = useContext(AuthContext);
   const initialStatus = location.state
     ? location.state.status
       ? location.state.status
@@ -95,11 +98,11 @@ function EquipmentDetail() {
     (key, id, token) => getEquipment(id, token),
     {
       retry: false,
-      staleTime: Infinity,
+      // staleTime: Infinity,
       onSuccess: (data) => {
         ReactDOM.unstable_batchedUpdates(() => {
-          setName(data.name);
-          setUsage(data.usage);
+          if (!name) setName(data.name);
+          if (!usage) setUsage(data.usage);
           setConfirmedBack(data.confirmed_back);
         });
       },
@@ -107,6 +110,8 @@ function EquipmentDetail() {
         enqueueSnackbar(generateMessage(e, "/edit"), {
           variant: "error",
         });
+        setAuthStateAndSave(null);
+
         if (e.status === 401) {
           navigate("/login");
         }
@@ -133,13 +138,13 @@ function EquipmentDetail() {
     try {
       await mutate(
         {
-          data: { confirmed_back: true },
+          data: { confirmed_back: confirmedBack, name, usage },
           id: params.id,
           token: authState.token,
         },
         { throwOnError: true }
       );
-      enqueueSnackbar("Return Success", {
+      enqueueSnackbar("Update Success", {
         variant: "success",
       });
     } catch (e) {
@@ -297,8 +302,15 @@ function EquipmentDetail() {
                 Return Back
               </Button>
             ) : null}
-            <Typography variant="body2" component="p" color="secondary">
-              {!data.current_application && !confirmedBack
+            <Typography
+              className={classes.hint}
+              variant="body2"
+              component="p"
+              color="secondary"
+            >
+              {!data.current_application &&
+              !confirmedBack &&
+              data.owner.id === authState.id
                 ? "Please confirm the equipment has been returned back"
                 : null}
             </Typography>

@@ -1,7 +1,13 @@
 import React, { useState, useContext } from "react";
 import { useLocation, useParams, navigate } from "@reach/router";
 import { useQuery, useMutation, queryCache } from "react-query";
-import { AuthContext, canEdit, formatDate, generateMessage,capitalize } from "utils";
+import {
+  AuthContext,
+  canEdit,
+  formatDate,
+  generateMessage,
+  capitalize,
+} from "utils";
 import {
   Button,
   makeStyles,
@@ -73,7 +79,7 @@ function ApplicationDetail({
   const classes = useStyles();
   const params = useParams();
   const location = useLocation();
-  const { authState } = useContext(AuthContext);
+  const { authState, setAuthStateAndSave } = useContext(AuthContext);
   const initialStatus = location.state
     ? location.state.status
       ? location.state.status
@@ -85,12 +91,12 @@ function ApplicationDetail({
     queryKey,
     (key, id, token) => getResource(id, token),
     {
-      staleTime: Infinity,
       retry: false,
       onError: (e) => {
         enqueueSnackbar(generateMessage(e), {
           variant: "error",
         });
+        setAuthStateAndSave(null);
         if (e.status === 401) {
           navigate("/login");
         }
@@ -130,7 +136,7 @@ function ApplicationDetail({
   return (
     <Paper className={classes.paper}>
       <Box position="absolute" right={4} top={4}>
-        {canEdit(authState, { id: params.id }) ? (
+        {canEdit(authState, { id: (data.reviewer || {}).id }) ? (
           data.status === "unreviewed" ? (
             status === "IDLE" ? (
               <IconButton onClick={() => setStatus("EDIT")}>

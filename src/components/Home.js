@@ -23,11 +23,22 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import BuildIcon from "@material-ui/icons/Build";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import { useLocation, Link as ReachLink, Redirect } from "@reach/router";
+import {
+  useLocation,
+  Link as ReachLink,
+  Redirect,
+  navigate,
+} from "@reach/router";
 import Footer from "components/Footer";
-import { AuthContext, isAdmin, getAllNotifications } from "utils";
+import {
+  AuthContext,
+  isAdmin,
+  getAllNotifications,
+  getUser,
+  generateMessage,
+} from "utils";
 import { useQuery } from "react-query";
-
+import { useSnackbar } from "notistack";
 
 const drawerWidth = 240;
 
@@ -121,7 +132,7 @@ const TitleMap = {
 
 function Home({ children }) {
   const classes = useStyles();
-  const { authState } = useContext(AuthContext);
+  const { authState, setAuthStateAndSave } = useContext(AuthContext);
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -143,6 +154,29 @@ function Home({ children }) {
     {
       enabled: authState && authState.token,
       retry: false,
+    }
+  );
+
+  const { enqueueSnackbar } = useSnackbar();
+  useQuery(
+    ["user", (authState || {}).id, (authState || {}).token],
+    (key, id, token) => getUser(id, token),
+    {
+      retry: false,
+      // staleTime: Infinity,
+      onSuccess: (data) => {
+        setAuthStateAndSave({ ...(authState || {}), ...data });
+      },
+      enabled: authState && authState.token,
+      onError: (e) => {
+        enqueueSnackbar(generateMessage(e), {
+          variant: "error",
+        });
+        setAuthStateAndSave(null);
+        if (e.status === 401) {
+          navigate("/login");
+        }
+      },
     }
   );
 

@@ -92,17 +92,19 @@ function UserDetail() {
     {
       onSuccess: (data) => {
         ReactDOM.unstable_batchedUpdates(() => {
-          setUsername(data.username);
-          setEmail(data.email);
+          if (!username) setUsername(data.username);
+          if (!email) setEmail(data.email);
           setConfirmed(data.confirmed);
         });
       },
-      staleTime: Infinity,
+      // staleTime: Infinity,
       retry: false,
       onError: (e) => {
         enqueueSnackbar(generateMessage(e, "/edit"), {
           variant: "error",
         });
+        setAuthStateAndSave(null);
+
         if (e.status === 401) {
           navigate("/login");
         }

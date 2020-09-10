@@ -6,7 +6,7 @@ const FAKE_USER_UNCONFIRMED = {
   confirm_token: "jwt.token.here",
   username: "fake",
   avatar: "http://example.com",
-  role: "lender",
+  role: "normal",
   confirmed: false,
 };
 
@@ -16,7 +16,7 @@ const FAKE_USER_CONFIRMED = {
   token: "jwt.token.here",
   username: "fake",
   avatar: "http://example.com",
-  role: "lender",
+  role: "normal",
   confirmed: true,
 };
 

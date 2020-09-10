@@ -82,7 +82,7 @@ export default function SignUp() {
       if (location.state && location.state.from) {
         navigate(location.state.from);
       } else {
-        navigate("/dashboard");
+        navigate("/");
       }
     } catch (e) {
       enqueueSnackbar(generateMessage(e, "/register"), {

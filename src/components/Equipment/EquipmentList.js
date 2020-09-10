@@ -146,11 +146,12 @@ function TableToolbar({ numSelected, onFilter, onDeleteAll }) {
 
   const handleClick = () => {
     if (authState.role === "normal" && isOwn) {
-      onFilter({ name: name, current_candidate_id: authState.id });
+      onFilter({ name: name, current_candidate_id: authState.id,status:status });
     }
     if (authState.role === "lender" && isOwn) {
-      onFilter({ name: name, owner_id: authState.id });
+      onFilter({ name: name, owner_id: authState.id,status:status });
     }
+    onFilter({ name: name,status:status });
   };
 
   return (

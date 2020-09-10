@@ -31,15 +31,27 @@ function EnhancedTableHead({
   rowCount,
   onRequestSort,
   headCells,
+  resource,
 }) {
   const classes = useStyles();
   const { authState } = useContext(AuthContext);
+
+  let showCheckBox = false;
+  if (authState.role === "admin") {
+    showCheckBox = true;
+  }
+  if (resource === "equipments" && authState.role === "lender") {
+    showCheckBox = true;
+  }
+  if (resource === "notifications") {
+    showCheckBox = true;
+  }
 
   return (
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          {authState.role === "normal" ? null : (
+          {!showCheckBox ? null : (
             <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={rowCount > 0 && numSelected === rowCount}

@@ -58,7 +58,7 @@ const renderCustomizedLabel = ({
     <text
       x={x}
       y={y}
-      fill="white"
+      fill="rgba(0, 0, 0, 0.87)"
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
     >
@@ -80,13 +80,13 @@ export default function Chart() {
   const theme = useTheme();
   const classes = useStyles();
   const COLORS = [
-    theme.palette.primary.main,
+    theme.palette.primary.light,
     theme.palette.secondary.main,
     theme.palette.success.main,
     theme.palette.info.main,
   ];
 
-  const { authState } = useContext(AuthContext);
+  const { authState,setAuthStateAndSave } = useContext(AuthContext);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -99,6 +99,7 @@ export default function Chart() {
         enqueueSnackbar(generateMessage(e), {
           variant: "error",
         });
+        setAuthStateAndSave(null)
         if (e.status === 401) {
           navigate("/login");
         }
@@ -184,7 +185,7 @@ export default function Chart() {
         >
           <ListItem button>
             <ListItemText>
-              Lender Applications: {data.lender_application}
+              Lender Applications: {data.lender_applications}
             </ListItemText>
           </ListItem>
           <ListItem button>

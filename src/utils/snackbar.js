@@ -15,6 +15,9 @@ export function generateMessage(err, path) {
         return NOT_FOUND_MESSAGE;
       }
       case 401: {
+        if(path==='/login'){
+          return LOGIN_FAIL_MESSAGE
+        }
         return UNAUTHORIZED_MESSAGE;
       }
       case 400: {

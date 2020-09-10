@@ -49,7 +49,7 @@ function EnhancedTable({
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const { authState } = useContext(AuthContext);
+  const { authState,setAuthStateAndSave } = useContext(AuthContext);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -73,6 +73,8 @@ function EnhancedTable({
         enqueueSnackbar(generateMessage(e, "/list"), {
           variant: "error",
         });
+        setAuthStateAndSave(null)
+
         if (e.status === 401) {
           navigate("/login");
         }
@@ -83,7 +85,7 @@ function EnhancedTable({
   const [mutate] = useMutation(deleteResource);
 
   // here we use fake rows
-  console.log(data, resource);
+  // console.log(data, resource);
   const rows = data[resource] || Array(rowsPerPage).fill(undefined);
 
   const handleRequestSort = (event, property) => {
@@ -207,6 +209,7 @@ function EnhancedTable({
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
+              resource={resource}
             />
             <TableBody>
               {rows.map((row, index) => {
