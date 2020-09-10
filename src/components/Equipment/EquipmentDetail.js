@@ -216,7 +216,7 @@ function EquipmentDetail() {
           <FormControlLabel
             control={
               <Switch
-                value={confirmedBack}
+                checked={confirmedBack}
                 onChange={() => setConfirmedBack(!confirmedBack)}
               ></Switch>
             }

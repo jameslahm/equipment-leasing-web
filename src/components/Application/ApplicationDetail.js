@@ -119,11 +119,11 @@ function ApplicationDetail({
         },
         { throwOnError: true }
       );
-      enqueueSnackbar("Update Success", {
+      enqueueSnackbar("Review Success", {
         variant: "success",
       });
     } catch (e) {
-      enqueueSnackbar("Update Fail", {
+      enqueueSnackbar("Review Fail", {
         variant: "error",
       });
     }
