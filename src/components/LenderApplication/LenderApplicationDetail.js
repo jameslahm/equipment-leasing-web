@@ -4,7 +4,6 @@ import { CardContent, Typography } from "@material-ui/core";
 import { updateLenderApplication, getLenderApplication } from "utils";
 
 const ResourceDetail = ({ data }) => {
-  console.log(data);
   return (
     <CardContent>
       <Typography gutterBottom variant="h5" component="h2">

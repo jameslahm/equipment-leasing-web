@@ -24,7 +24,9 @@ function UserConfirm() {
   const {enqueueSnackbar}=useSnackbar()
 
   useEffect(()=>{
-    mutate(params.confirmToken).then((data)=>{
+    mutate(params.confirm_token,{
+      throwOnError:true
+    }).then((data)=>{
       setAuthStateAndSave(data)
       enqueueSnackbar("Confirm Success",{
         variant:"success"

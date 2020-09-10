@@ -18,7 +18,7 @@ import { Skeleton } from "@material-ui/lab";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import { useSnackbar } from "notistack";
-import {TextField} from "components/Widget";
+import { TextField } from "components/Widget";
 import ReactDOM from "react-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -213,7 +213,7 @@ function EquipmentDetail() {
             <Typography variant="subtitle1" component="p">
               {usage}
             </Typography>
-            {authState.role === "normal" && !data.current_application ? (
+            {authState.role === "normal" && !data.current_application &&data.status==='idle' ? (
               <Button
                 component={ReachLink}
                 to={`/applications/borrow/create/${data.id}`}
@@ -225,7 +225,8 @@ function EquipmentDetail() {
                 Apply
               </Button>
             ) : null}
-            {authState.id === data.current_application.candidate_id ? (
+            {data.current_application &&
+            authState.id === data.current_application.candidate_id ? (
               <Button
                 fullWidth
                 onClick={handleReturnBack}
@@ -237,7 +238,7 @@ function EquipmentDetail() {
               </Button>
             ) : null}
             <Typography variant="body2" component="p" color="secondary">
-              {!data.current_application.id && !confirmedBack
+              {!data.current_application && !confirmedBack
                 ? "Please confirm the equipment has been returned back"
                 : null}
             </Typography>

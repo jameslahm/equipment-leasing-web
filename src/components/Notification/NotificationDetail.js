@@ -29,7 +29,8 @@ function EquipmentDetail() {
 
   useEffect(() => {
     mutate({ data: { isRead: true }, id: params.id, token: authState.token },{throwOnError:true});
-  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]);
 
   if (isLoading) {
     return <Skeleton variant="rect" height="400px"></Skeleton>;

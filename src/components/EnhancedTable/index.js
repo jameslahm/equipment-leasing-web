@@ -174,8 +174,6 @@ function EnhancedTable({
             />
             <TableBody>
               {rows.map((row, index) => {
-                console.log(row, isLoading);
-
                 if (isLoading) {
                   return <RowData key={index} isLoading={true}></RowData>;
                 }
@@ -205,7 +203,7 @@ function EnhancedTable({
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={data.total | rowsPerPage}
+          count={data.total || rowsPerPage}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}

@@ -1,19 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Paper, makeStyles, Button } from "@material-ui/core";
-import {TextField} from "components/Widget";
+import { TextField } from "components/Widget";
 import {
   createLenderApplication,
   createPutOnApplication,
   createBorrowApplication,
+  AuthContext,
 } from "utils";
 import { useMutation } from "react-query";
 import { useSnackbar } from "notistack";
 import { navigate, useParams } from "@reach/router";
+import { DateTimePicker } from "@material-ui/pickers";
 
 const useStyles = makeStyles((theme) => ({
   form: {
     margin: "auto",
     maxWidth: "500px",
+    paddingTop:theme.spacing(2)
   },
   paper: {
     padding: `${theme.spacing(2)}px ${theme.spacing(2)}px`,
@@ -45,17 +48,19 @@ function BorrowApplicationCreate() {
   const classes = useStyles();
   const params = useParams();
   const [usage, setUsage] = useState("");
-  const [errors, setErrors] = useState({ usage: "" });
+  const [date, setDate] = useState(new Date());
+  const [errors, setErrors] = useState({ usage: "",return_time:"" });
+  const { authState } = useContext(AuthContext);
 
   const [mutate] = useMutation(createBorrowApplication);
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     errors.usage = usage ? "" : "Usage can't be empty";
+    errors.return_time= date <= new Date()? "Return Time can't be earlier than now":""
 
-    if (errors.usage) {
+    if (errors.usage || errors.return_time) {
       setErrors({ ...errors });
       return;
     }
@@ -63,7 +68,8 @@ function BorrowApplicationCreate() {
     try {
       const data = await mutate(
         {
-          data: { usage, equipment_id: params.id },
+          data: { usage, equipment_id: params.id,return_time:date.getTime() },
+          token: authState.token,
         },
         { throwOnError: true }
       );
@@ -81,6 +87,15 @@ function BorrowApplicationCreate() {
   return (
     <Paper className={classes.paper}>
       <form className={classes.form} noValidate onSubmit={handleSubmit}>
+        <DateTimePicker
+          variant="inline"
+          label="Return Time"
+          value={date}
+          onChange={setDate}
+          format="yyyy/MM/dd HH:mm"
+          error={!!errors.return_time}
+          helperText={errors.return_time}
+        ></DateTimePicker>
         <TextField
           multiline
           rows={5}
@@ -112,6 +127,7 @@ function PutOnApplicationCreate() {
   const [name, setName] = useState("");
   const [usage, setUsage] = useState("");
   const [errors, setErrors] = useState({ name: "", usage: "" });
+  const { authState } = useContext(AuthContext);
 
   const [mutate] = useMutation(createPutOnApplication);
   const { enqueueSnackbar } = useSnackbar();
@@ -131,6 +147,7 @@ function PutOnApplicationCreate() {
       const data = await mutate(
         {
           data: { name, usage },
+          token: authState.token,
         },
         { throwOnError: true }
       );
@@ -188,6 +205,7 @@ function LenderApplicationCreate() {
   const [labName, setLabName] = useState("");
   const [labLocation, setLabLocation] = useState("");
   const [errors, setErrors] = useState({ labName: "", labLocation: "" });
+  const { authState } = useContext(AuthContext);
 
   const [mutate] = useMutation(createLenderApplication);
   const { enqueueSnackbar } = useSnackbar();
@@ -207,6 +225,7 @@ function LenderApplicationCreate() {
       const data = await mutate(
         {
           data: { lab_name: labName, lab_location: labLocation },
+          token: authState.token,
         },
         { throwOnError: true }
       );

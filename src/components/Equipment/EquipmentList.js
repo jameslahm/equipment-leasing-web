@@ -91,12 +91,14 @@ function RowData({
           {row.status.toUpperCase()}
         </TableCell>
         <TableCell className={classes.tableCell}>
-          <Link
-            component={ReachLink}
-            to={`/applications/borrow/${row.current_application.id}`}
-          >
-            {row.current_application.id}
-          </Link>
+          {row.current_application ? (
+            <Link
+              component={ReachLink}
+              to={`/applications/borrow/${row.current_application.id}`}
+            >
+              {row.current_application.id}
+            </Link>
+          ) : null}
         </TableCell>
         <TableCell className={classes.tableCell}>
           <ConfirmHint result={row.confirmed_back}></ConfirmHint>

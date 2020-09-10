@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "http://localhost:5000";
 
 class HTTPError extends Error {
   constructor(message, status) {
@@ -130,6 +130,7 @@ export const createLenderApplication = ({ data, token }) => {
     method: "POST",
     headers: {
       Authorization: token,
+      "Content-Type": CONTENT_TYPE_JSON,
     },
     body: JSON.stringify(data),
   }).then(handleRes);
@@ -164,6 +165,7 @@ export const updateLenderApplication = ({ data, token, id }) => {
       Authorization: token,
       "Content-Type": CONTENT_TYPE_JSON,
     },
+    body:JSON.stringify(data)
   }).then(handleRes);
 };
 
@@ -181,6 +183,7 @@ export const createPutOnApplication = ({ data, token }) => {
     method: "POST",
     headers: {
       Authorization: token,
+      "Content-Type": CONTENT_TYPE_JSON,
     },
     body: JSON.stringify(data),
   }).then(handleRes);
@@ -212,6 +215,7 @@ export const updatePutOnApplication = ({ data, token, id }) => {
       Authorization: token,
       "Content-Type": CONTENT_TYPE_JSON,
     },
+    body:JSON.stringify(data)
   }).then(handleRes);
 };
 
@@ -229,6 +233,7 @@ export const createBorrowApplication = ({ data, token }) => {
     method: "POST",
     headers: {
       Authorization: token,
+      "Content-Type": CONTENT_TYPE_JSON,
     },
     body: JSON.stringify(data),
   }).then(handleRes);
@@ -263,6 +268,7 @@ export const updateBorrowApplication = ({ data, token, id }) => {
       Authorization: token,
       "Content-Type": CONTENT_TYPE_JSON,
     },
+    body:JSON.stringify(data)
   }).then(handleRes);
 };
 
@@ -301,6 +307,7 @@ export const updateNotification = ({ data, token, id }) => {
       Authorization: token,
       "Content-Type": CONTENT_TYPE_JSON,
     },
+    body:JSON.stringify(data)
   }).then(handleRes);
 };
 

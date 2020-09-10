@@ -83,7 +83,7 @@ function RowData({
           </Link>
         </TableCell>
         <TableCell className={classes.tableCell}>
-          <StatusHint color result={row.result}></StatusHint>
+          <StatusHint color result={row.status}></StatusHint>
         </TableCell>
         <TableCell className={classes.tableCell}>
           <Link component={ReachLink} to={`/users/${row.reviewer.id}`}>
