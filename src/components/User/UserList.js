@@ -12,11 +12,10 @@ import clsx from "clsx";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { getAllUsers, deleteUser } from "../utils";
+import { getAllUsers, deleteUser } from "utils";
 import { Link as ReachLink } from "@reach/router";
-import EnhancedTable from "./EnhancedTable";
-import TableRowSkeleton from "./EnhancedTable/TableRowSkeleton";
-import ConfirmHint from './ConfirmHint'
+import EnhancedTable, { TableRowSkeleton } from "components/EnhancedTable";
+import { ConfirmHint } from "components/Widget";
 
 // Table Header
 const headCells = [

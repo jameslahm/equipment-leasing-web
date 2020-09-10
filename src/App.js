@@ -3,23 +3,22 @@ import { CssBaseline, IconButton } from "@material-ui/core";
 import { Router } from "@reach/router";
 import Login from "./components/Login";
 import Home from "./components/Home";
-import ApplicationList from "./components/ApplicationTabs";
-import NotificationList from "./components/NotificationList";
-import UserList from "./components/UserList";
-import EquipmentList from "./components/EquipmentList";
+import { ApplicationTabs, ApplicationCreate } from "./components/Application";
+import {
+  NotificationList,
+  NotificationDetail,
+} from "./components/Notification";
+import { UserList, UserDetail } from "./components/User";
+import { EquipmentList, EquipmentDetail } from "./components/Equipment";
 import Dashboard from "./components/Dashboard";
 import Register from "./components/Register";
 import { AuthContext } from "./utils";
 import { ReactQueryDevtools } from "react-query-devtools";
 import { SnackbarProvider } from "notistack";
 import CloseIcon from "@material-ui/icons/Close";
-import UserDetail from "./components/UserDetail";
-import EquipmentDetail from "./components/EquipmentDetail";
-import LenderApplicationDetail from "./components/LenderApplicationDetail";
-import PutOnApplicationDetail from "./components/PutOnApplicationDetail";
-import BorrowApplicationDetail from "./components/BorrowApplicationDetail";
-import NotificationDetail from './components/NotificationDetail'
-import ApplicationCreate from './components/ApplicationCreate'
+import { LenderApplicationDetail } from "./components/LenderApplication";
+import { PutOnApplicationDetail } from "./components/PutOnApplication";
+import { BorrowApplicationDetail } from "./components/BorrowApplication";
 
 if (process.env.NODE_ENV === "development") {
   const { worker } = require("./utils");
@@ -60,10 +59,19 @@ function App() {
           <Register path="/register"></Register>
           <Home path="/">
             <Dashboard path="/"></Dashboard>
-            <ApplicationList path="applications"></ApplicationList>
-            <ApplicationCreate type="lender" path="applications/lender/create"></ApplicationCreate>
-            <ApplicationCreate type="puton" path="applications/puton/create"></ApplicationCreate>
-            <ApplicationCreate type="borrow" path="applications/borrow/create/:id"></ApplicationCreate>
+            <ApplicationTabs path="applications"></ApplicationTabs>
+            <ApplicationCreate
+              type="lender"
+              path="applications/lender/create"
+            ></ApplicationCreate>
+            <ApplicationCreate
+              type="puton"
+              path="applications/puton/create"
+            ></ApplicationCreate>
+            <ApplicationCreate
+              type="borrow"
+              path="applications/borrow/create/:id"
+            ></ApplicationCreate>
             <LenderApplicationDetail path="applications/lender/:id"></LenderApplicationDetail>
             <PutOnApplicationDetail path="applications/puton/:id"></PutOnApplicationDetail>
             <BorrowApplicationDetail path="applications/borrow/:id"></BorrowApplicationDetail>

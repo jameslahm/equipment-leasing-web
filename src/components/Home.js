@@ -23,8 +23,8 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import BuildIcon from "@material-ui/icons/Build";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { useLocation, Link as ReachLink, Redirect } from "@reach/router";
-import Footer from "./Footer";
-import { AuthContext,isAdmin } from "../utils";
+import Footer from "components/Footer";
+import { AuthContext,isAdmin } from "utils";
 
 const drawerWidth = 240;
 

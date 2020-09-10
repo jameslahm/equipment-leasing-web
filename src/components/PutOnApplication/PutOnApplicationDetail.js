@@ -1,17 +1,16 @@
 import React from "react";
-import ApplicationDetail from "./ApplicationDetail";
+import { getPutOnApplication, updatePutOnApplication } from "utils";
 import { CardContent, Typography } from "@material-ui/core";
-import { updateLenderApplication, getLenderApplication } from "../utils";
+import {ApplicationDetail} from "components/Application";
 
 const ResourceDetail = ({ data }) => {
-  console.log(data);
   return (
     <CardContent>
       <Typography gutterBottom variant="h5" component="h2">
         {data.candidate.username}
       </Typography>
       <Typography variant="body1" color="textSecondary" component="p">
-        {data.lab_name}
+        {data.usage}
       </Typography>
       <Typography variant="body1" color="textSecondary" component="p">
         {data.lab_location}
@@ -20,15 +19,15 @@ const ResourceDetail = ({ data }) => {
   );
 };
 
-function LenderApplicationDetail() {
+function BorrowApplicationDetail() {
   return (
     <ApplicationDetail
-      resource="lender"
-      getResource={getLenderApplication}
-      updateResource={updateLenderApplication}
+      resource="borrow"
+      getResource={getPutOnApplication}
+      updateResource={updatePutOnApplication}
       ResourceDetail={ResourceDetail}
     ></ApplicationDetail>
   );
 }
 
-export default LenderApplicationDetail;
+export default BorrowApplicationDetail;

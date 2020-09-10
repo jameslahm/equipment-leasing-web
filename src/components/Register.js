@@ -1,18 +1,20 @@
 import React, { useState, useContext } from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
+import {
+  Avatar,
+  Button,
+  Link,
+  Grid,
+  Typography,
+  makeStyles,
+  Container,
+} from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import Footer from "./Footer";
-import { Link as ReachLink,useLocation,navigate } from "@reach/router";
-import { AuthContext, register } from "../utils";
+import Footer from "components/Footer";
+import { Link as ReachLink, useLocation, navigate } from "@reach/router";
+import { AuthContext, register } from "utils";
 import { useMutation } from "react-query";
 import { useSnackbar } from "notistack";
-import TextField from "./TextField";
+import { TextField } from "components/Widget";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -50,7 +52,7 @@ export default function SignUp() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const location=useLocation()
+  const location = useLocation();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -65,20 +67,22 @@ export default function SignUp() {
     }
 
     try {
-      const data = await mutate({
-        username: username,
-        email: email,
-        password: password,
-      },{throwOnError:true});
+      const data = await mutate(
+        {
+          username: username,
+          email: email,
+          password: password,
+        },
+        { throwOnError: true }
+      );
       setAuthStateAndSave(data);
       enqueueSnackbar("Register Success", {
         variant: "success",
       });
-      if(location.state && location.state.from){
-        navigate(location.state.from)
-      }
-      else{
-        navigate('/dashboard')
+      if (location.state && location.state.from) {
+        navigate(location.state.from);
+      } else {
+        navigate("/dashboard");
       }
     } catch (e) {
       enqueueSnackbar("Register Error", {

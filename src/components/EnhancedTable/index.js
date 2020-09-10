@@ -13,9 +13,10 @@ import {
 } from "@material-ui/core";
 import EnhancedTableHead from "./EnhancedTableHead";
 import { useQuery, useMutation, queryCache } from "react-query";
-import { AuthContext } from "../../utils";
+import { AuthContext } from "utils";
 import { useSnackbar } from "notistack";
 import EnhancedTableToolbar from "./EnhancedTableToolbar";
+import TableRowSkeleton from "./TableRowSkeleton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -147,7 +148,7 @@ function EnhancedTable({
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <TableToolbar numSelected={selected.length} onFilter={handleFilter} />
+        <TableToolbar numSelected={selected.length} onFilter={handleFilter} onDelete={handleDelete} />
         <TableContainer>
           <Table
             className={classes.table}
@@ -212,3 +213,4 @@ function EnhancedTable({
 }
 
 export default EnhancedTable;
+export {EnhancedTableHead,EnhancedTableToolbar,TableRowSkeleton}

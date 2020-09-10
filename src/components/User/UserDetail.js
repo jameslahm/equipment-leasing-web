@@ -7,7 +7,7 @@ import {
   updateUser,
   INITIAL_PASSWORD,
   canEdit,
-} from "../utils";
+} from "utils";
 import {
   Button,
   makeStyles,
@@ -24,9 +24,8 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import ReactDOM from "react-dom";
 import { useSnackbar } from "notistack";
-import ConfirmHint from "./ConfirmHint";
-import TextField from "./TextField";
-import { capitalize } from "../utils";
+import { TextField,ConfirmHint } from "components/Widget";
+import { capitalize } from "utils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -114,16 +113,19 @@ function UserDetail() {
     }
 
     try {
-      await mutate({
-        data: {
-          username,
-          email,
-          confirmed,
-          ...(password === INITIAL_PASSWORD ? {} : { password: password }),
+      await mutate(
+        {
+          data: {
+            username,
+            email,
+            confirmed,
+            ...(password === INITIAL_PASSWORD ? {} : { password: password }),
+          },
+          id: params.id,
+          token: authState.token,
         },
-        id: params.id,
-        token: authState.token,
-      },{throwOnError:true});
+        { throwOnError: true }
+      );
       enqueueSnackbar("Update Success", {
         variant: "success",
       });
@@ -177,7 +179,6 @@ function UserDetail() {
             onChange={(e) => setPassword(e.target.value)}
           />
           <FormControlLabel
-            className={classes.input}
             control={
               <Switch
                 value={confirmed}

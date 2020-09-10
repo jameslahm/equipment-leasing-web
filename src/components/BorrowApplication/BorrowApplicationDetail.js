@@ -1,7 +1,7 @@
 import React from "react";
-import { getBorrowApplication, updateBorrowApplication } from "../utils";
+import { getBorrowApplication, updateBorrowApplication } from "utils";
 import { CardContent, Typography } from "@material-ui/core";
-import ApplicationDetail from "./ApplicationDetail";
+import {ApplicationDetail} from "components/Application";
 
 const ResourceDetail = ({ data }) => {
   return (

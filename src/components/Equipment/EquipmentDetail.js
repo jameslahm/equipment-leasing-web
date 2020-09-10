@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useLocation, useParams, Link as ReachLink } from "@reach/router";
 import { useQuery, useMutation, queryCache } from "react-query";
-import { AuthContext, getEquipment, updateEquipment, canEdit } from "../utils";
+import { AuthContext, getEquipment, updateEquipment, canEdit } from "utils";
 import {
   Button,
   makeStyles,
@@ -18,7 +18,7 @@ import { Skeleton } from "@material-ui/lab";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import { useSnackbar } from "notistack";
-import TextField from "./TextField";
+import {TextField} from "components/Widget";
 import ReactDOM from "react-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -179,7 +179,6 @@ function EquipmentDetail() {
           />
 
           <FormControlLabel
-            className={classes.input}
             control={
               <Switch
                 value={confirmedBack}

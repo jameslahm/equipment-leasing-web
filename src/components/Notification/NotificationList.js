@@ -1,6 +1,5 @@
 import React from "react";
-import { getAllNotifications, deleteNotification } from "../utils";
-import EnhancedTable from "./EnhancedTable";
+import { getAllNotifications, deleteNotification } from "utils";
 import { Link as ReachLink } from "@reach/router";
 import {
   TableCell,
@@ -13,8 +12,8 @@ import {
 } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import DeleteIcon from "@material-ui/icons/Delete";
-import TableRowSkeleton from "./EnhancedTable/TableRowSkeleton";
-import StatusHint from "./StatusHint";
+import EnhancedTable,{TableRowSkeleton} from "components/EnhancedTable";
+import {StatusHint} from "components/Widget";
 
 const headCells = [
   { id: "id", th: true, disablePadding: true, label: "ID" },

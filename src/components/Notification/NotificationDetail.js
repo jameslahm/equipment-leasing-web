@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { useParams, Link as ReachLink } from "@reach/router";
 import { useQuery, useMutation } from "react-query";
-import { AuthContext, getNotification, updateNotification } from "../utils";
+import { AuthContext, getNotification, updateNotification } from "utils";
 import { makeStyles, Paper, Typography } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 import { Link } from "@material-ui/core";

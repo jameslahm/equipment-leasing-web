@@ -1,6 +1,6 @@
 import React from "react";
 import { TextField as MuTextField } from "@material-ui/core";
-import { capitalize } from "../utils";
+import { capitalize } from "utils";
 
 function TextField({ label, ...props }) {
   return (

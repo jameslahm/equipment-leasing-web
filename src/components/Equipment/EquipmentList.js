@@ -1,11 +1,5 @@
 import React, { useContext, useState } from "react";
-import {
-  getAllEquipments,
-  deleteEquipment,
-  canEdit,
-  AuthContext,
-} from "../utils";
-import EnhancedTable from "./EnhancedTable";
+import { getAllEquipments, deleteEquipment, canEdit, AuthContext } from "utils";
 import { Link as ReachLink } from "@reach/router";
 import {
   TableCell,
@@ -19,11 +13,12 @@ import {
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import TableRowSkeleton from "./EnhancedTable/TableRowSkeleton";
-import ConfirmHint from "./ConfirmHint";
-import EnhancedTableToolbar from "./EnhancedTable/EnhancedTableToolbar";
+import EnhancedTable, {
+  TableRowSkeleton,
+  EnhancedTableToolbar,
+} from "components/EnhancedTable";
 import FilterListIcon from "@material-ui/icons/FilterList";
-import TextField from "./TextField";
+import { TextField, ConfirmHint } from "components/Widget";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -126,7 +121,7 @@ const useToolbarStyles = makeStyles((theme) => ({
   },
 }));
 
-function TableToolbar({ numSelected, onFilter }) {
+function TableToolbar({ numSelected, onFilter, onDelete }) {
   const classes = useToolbarStyles();
   const { authState } = useContext(AuthContext);
   const [name, setName] = useState("");
@@ -136,7 +131,7 @@ function TableToolbar({ numSelected, onFilter }) {
   };
 
   return (
-    <EnhancedTableToolbar numSelected={numSelected}>
+    <EnhancedTableToolbar numSelected={numSelected} onDelete={onDelete}>
       <Box
         width="100%"
         display="flex"

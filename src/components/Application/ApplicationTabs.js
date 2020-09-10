@@ -1,9 +1,9 @@
 import React from "react";
-import { Tab, makeStyles,Box } from "@material-ui/core";
+import { Tab, makeStyles, Box } from "@material-ui/core";
 import { TabPanel, TabContext, TabList } from "@material-ui/lab";
-import LenderApplicationList from "./LenderApplicationList";
-import PutOnApplicationList from "./PutOnApplicationList";
-import BorrowApplicationList from "./BorrowApplicationList";
+import { LenderApplicationList } from "components/LenderApplication";
+import { PutOnApplicationList } from "components/PutOnApplication";
+import { BorrowApplicationList } from "components/BorrowApplication";
 
 const useStyles = makeStyles((theme) => ({
   panel: {
@@ -20,7 +20,7 @@ function ApplicationTabs() {
   };
 
   return (
-    <Box >
+    <Box>
       <TabContext value={tabValue}>
         <TabList
           onChange={handleTabValueChange}

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Paper, makeStyles, Button } from "@material-ui/core";
-import TextField from "./TextField";
+import {TextField} from "components/Widget";
 import {
   createLenderApplication,
   createPutOnApplication,
   createBorrowApplication,
-} from "../utils";
+} from "utils";
 import { useMutation } from "react-query";
 import { useSnackbar } from "notistack";
 import { navigate, useParams } from "@reach/router";

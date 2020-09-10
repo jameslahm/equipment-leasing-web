@@ -15,12 +15,10 @@ import {
   getAllLenderApplications,
   deleteLenderApplication,
   AuthContext,
-} from "../utils";
+} from "utils";
 import { Link as ReachLink } from "@reach/router";
-import EnhancedTable from "./EnhancedTable";
-import TableRowSkeleton from "./EnhancedTable/TableRowSkeleton";
-import StatusHint from "./StatusHint";
-import EnhancedTableToolbar from "./EnhancedTable/EnhancedTableToolbar";
+import EnhancedTable,{TableRowSkeleton,EnhancedTableToolbar} from "components/EnhancedTable";
+import {StatusHint} from "components/Widget";
 import AddIcon from "@material-ui/icons/Add";
 
 const headCells = [

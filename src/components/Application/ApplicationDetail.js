@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useLocation, useParams } from "@reach/router";
 import { useQuery, useMutation, queryCache } from "react-query";
-import { AuthContext, canEdit } from "../utils";
+import { AuthContext, canEdit } from "utils";
 import {
   Button,
   makeStyles,
@@ -26,7 +26,7 @@ import {
   TimelineSeparator,
 } from "@material-ui/lab";
 import AssignmentIcon from "@material-ui/icons/Assignment";
-import StatusHint from "./StatusHint";
+import {StatusHint} from "components/Widget";
 
 const useStyles = makeStyles((theme) => ({
   paper: {

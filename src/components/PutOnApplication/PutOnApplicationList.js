@@ -12,15 +12,13 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {
-  getAllBorrowApplications,
-  deleteBorrowApplication,
+  getAllPutOnApplications,
+  deletePutOnApplication,
   AuthContext,
-} from "../utils";
+} from "utils";
 import { Link as ReachLink } from "@reach/router";
-import EnhancedTable from "./EnhancedTable";
-import TableRowSkeleton from "./EnhancedTable/TableRowSkeleton";
-import StatusHint from "./StatusHint";
-import EnhancedTableToolbar from "./EnhancedTable/EnhancedTableToolbar";
+import {StatusHint} from "components/Widget";
+import EnhancedTable,{EnhancedTableToolbar,TableRowSkeleton} from "components/EnhancedTable";
 import AddIcon from "@material-ui/icons/Add";
 
 const headCells = [
@@ -92,7 +90,7 @@ function RowData({
         <TableCell className={classes.tableCell}>
           <IconButton
             component={ReachLink}
-            to={`/applications/borrow/${row.id}`}
+            to={`/applications/puton/${row.id}`}
             state={{ status: "IDLE" }}
           >
             <VisibilityIcon></VisibilityIcon>
@@ -100,7 +98,7 @@ function RowData({
           {row.status === "unreviewed" ? (
             <IconButton
               component={ReachLink}
-              to={`/applications/borrow/${row.id}`}
+              to={`/applications/puton/${row.id}`}
               state={{ status: "EDIT" }}
             >
               <EditIcon></EditIcon>
@@ -122,8 +120,8 @@ function TableToolbar({ numSelected, onFilter }) {
   return (
     <EnhancedTableToolbar numSelected={numSelected}>
       <Box width="100%" display="flex" justifyContent="flex-end">
-        {authState.role === "normal" ? (
-          <IconButton component={ReachLink} to={`/applications/borrow/create`}>
+        {authState.role === "lender" ? (
+          <IconButton component={ReachLink} to={`/applications/puton/create`}>
             <AddIcon></AddIcon>
           </IconButton>
         ) : null}
@@ -132,17 +130,17 @@ function TableToolbar({ numSelected, onFilter }) {
   );
 }
 
-function BorrowApplicationList() {
+function PutOnApplicationList() {
   return (
     <EnhancedTable
       headCells={headCells}
-      resource="equipment_borrow_applications"
-      getAllResource={getAllBorrowApplications}
-      deleteResource={deleteBorrowApplication}
+      resource="equipment_puton_applications"
+      getAllResource={getAllPutOnApplications}
+      deleteResource={deletePutOnApplication}
       RowData={RowData}
       TableToolbar={TableToolbar}
     ></EnhancedTable>
   );
 }
 
-export default BorrowApplicationList;
+export default PutOnApplicationList;
