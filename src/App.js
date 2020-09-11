@@ -70,7 +70,7 @@ function App() {
               ></ApplicationCreate>
               <ApplicationCreate
                 type="borrow"
-                path="applications/borrow/create/:id"
+                path="applications/borrow/create"
               ></ApplicationCreate>
               <LenderApplicationDetail path="applications/lender/:id"></LenderApplicationDetail>
               <PutOnApplicationDetail path="applications/puton/:id"></PutOnApplicationDetail>
