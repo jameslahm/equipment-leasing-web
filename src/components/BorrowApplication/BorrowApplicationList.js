@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useContext } from "react";
 import {
   TableCell,
@@ -125,15 +126,10 @@ function RowData({
 }
 
 function TableToolbar({ numSelected, onFilter, onDeleteAll }) {
-  const { authState } = useContext(AuthContext);
+  // const { authState } = useContext(AuthContext);
   return (
     <EnhancedTableToolbar numSelected={numSelected} onDeleteAll={onDeleteAll}>
       <Box width="100%" display="flex" justifyContent="flex-end">
-        {authState.role === "normal" ? (
-          <IconButton component={ReachLink} to={`/applications/borrow/create`}>
-            <AddIcon></AddIcon>
-          </IconButton>
-        ) : null}
       </Box>
     </EnhancedTableToolbar>
   );
