@@ -40,12 +40,13 @@ import PersonIcon from "@material-ui/icons/Person";
 import BuildIcon from "@material-ui/icons/Build";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import IndeterminateCheckBoxIcon from "@material-ui/icons/IndeterminateCheckBox";
+import Comment from "./Comment";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    paddingTop: theme.spacing(4),
+    // paddingTop: theme.spacing(0),
     paddingRight: theme.spacing(2),
-    paddingBottom: theme.spacing(4),
+    // paddingBottom: theme.spacing(2),
     paddingLeft: theme.spacing(2),
     position: "relative",
   },
@@ -71,6 +72,10 @@ const useStyles = makeStyles((theme) => ({
   hint: {
     marginLeft: theme.spacing(2),
   },
+  comment:{
+    marginTop:theme.spacing(2),
+    marginBottom:theme.spacing(2)
+  }
 }));
 
 function EquipmentDetail() {
@@ -182,158 +187,165 @@ function EquipmentDetail() {
   }
 
   return (
-    <Paper className={classes.paper}>
-      <Box position="absolute" right={4} top={4}>
-        {canEdit(authState, { id: data.owner.id }) ? (
-          status === "IDLE" ? (
-            <IconButton onClick={() => setStatus("EDIT")}>
-              <EditIcon></EditIcon>
-            </IconButton>
-          ) : (
-            <IconButton onClick={() => setStatus("IDLE")}>
-              <VisibilityIcon></VisibilityIcon>
-            </IconButton>
-          )
-        ) : null}
-      </Box>
-      {status === "EDIT" ? (
-        <form noValidate onSubmit={handleSubmit} className={classes.form}>
-          <TextField
-            error={!!errors.name}
-            helperText={errors.name}
-            label="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <TextField
-            multiline
-            rows={5}
-            rowsMax={20}
-            error={!!errors.usage}
-            helperText={errors.usage}
-            label="usage"
-            value={usage}
-            onChange={(e) => setUsage(e.target.value)}
-          />
-
-          <FormControlLabel
-            control={
-              <Switch
-                checked={confirmedBack}
-                onChange={() => setConfirmedBack(!confirmedBack)}
-              ></Switch>
-            }
-            label="ConfirmedBack"
-          ></FormControlLabel>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Save
-          </Button>
-        </form>
-      ) : (
-        <Box ml={2} maxWidth="500px">
-          <CardContent>
-            <List>
-              <ListItem>
-                <ListItemIcon>
-                  <BuildIcon></BuildIcon>
-                </ListItemIcon>
-                <ListItemText primary={data.name} />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <PersonIcon></PersonIcon>
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    <Link component={ReachLink} to={`/users/${data.owner.id}`}>
-                      {data.owner.username}
-                    </Link>
-                  }
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <RoomIcon></RoomIcon>
-                </ListItemIcon>
-                <ListItemText
-                  primary={data.owner.lab_name}
-                  secondary={data.owner.lab_location}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <LibraryBooksIcon></LibraryBooksIcon>
-                </ListItemIcon>
-                <ListItemText primary={data.usage} />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <IndeterminateCheckBoxIcon></IndeterminateCheckBoxIcon>
-                </ListItemIcon>
-                <ListItemText primary={data.status.toUpperCase()} />
-              </ListItem>
-            </List>
-            {authState.role === "normal" &&
-            !data.current_application &&
-            data.status === "idle" ? (
-              <Button
-                component={ReachLink}
-                to={`/applications/borrow/create/${data.id}`}
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-              >
-                Apply
-              </Button>
-            ) : null}
-            {data.current_application &&
-            authState.id === data.current_application.candidate_id ? (
-              <Button
-                fullWidth
-                onClick={handleReturnBack}
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-              >
-                Return Back
-              </Button>
-            ) : null}
-            {authState.id === data.owner.id && data.status === "refused" ? (
-              <Button
-                fullWidth
-                onClick={() => {
-                  navigate(`/applications/puton/create/${data.id}`);
-                }}
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-              >
-                Apply PutOn Again
-              </Button>
-            ) : null}
-            <Typography
-              className={classes.hint}
-              variant="body2"
-              component="p"
-              color="secondary"
-            >
-              {!data.current_application &&
-              !confirmedBack &&
-              data.owner.id === authState.id
-                ? "Please confirm the equipment has been returned back"
-                : null}
-            </Typography>
-          </CardContent>
+    <>
+      <Paper className={classes.paper}>
+        <Box position="absolute" right={4} top={4}>
+          {canEdit(authState, { id: data.owner.id }) ? (
+            status === "IDLE" ? (
+              <IconButton onClick={() => setStatus("EDIT")}>
+                <EditIcon></EditIcon>
+              </IconButton>
+            ) : (
+              <IconButton onClick={() => setStatus("IDLE")}>
+                <VisibilityIcon></VisibilityIcon>
+              </IconButton>
+            )
+          ) : null}
         </Box>
-      )}
-    </Paper>
+        {status === "EDIT" ? (
+          <form noValidate onSubmit={handleSubmit} className={classes.form}>
+            <TextField
+              error={!!errors.name}
+              helperText={errors.name}
+              label="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <TextField
+              multiline
+              rows={5}
+              rowsMax={20}
+              error={!!errors.usage}
+              helperText={errors.usage}
+              label="usage"
+              value={usage}
+              onChange={(e) => setUsage(e.target.value)}
+            />
+
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={confirmedBack}
+                  onChange={() => setConfirmedBack(!confirmedBack)}
+                ></Switch>
+              }
+              label="ConfirmedBack"
+            ></FormControlLabel>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Save
+            </Button>
+          </form>
+        ) : (
+          <Box ml={0} maxWidth="500px">
+            <CardContent>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    <BuildIcon></BuildIcon>
+                  </ListItemIcon>
+                  <ListItemText primary={data.name} />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <PersonIcon></PersonIcon>
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <Link
+                        component={ReachLink}
+                        to={`/users/${data.owner.id}`}
+                      >
+                        {data.owner.username}
+                      </Link>
+                    }
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <RoomIcon></RoomIcon>
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={data.owner.lab_name}
+                    secondary={data.owner.lab_location}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <LibraryBooksIcon></LibraryBooksIcon>
+                  </ListItemIcon>
+                  <ListItemText primary={data.usage} />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <IndeterminateCheckBoxIcon></IndeterminateCheckBoxIcon>
+                  </ListItemIcon>
+                  <ListItemText primary={data.status.toUpperCase()} />
+                </ListItem>
+              </List>
+              {authState.role === "normal" &&
+              !data.current_application &&
+              data.status === "idle" ? (
+                <Button
+                  component={ReachLink}
+                  to={`/applications/borrow/create/${data.id}`}
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                >
+                  Apply
+                </Button>
+              ) : null}
+              {data.current_application &&
+              authState.id === data.current_application.candidate_id ? (
+                <Button
+                  fullWidth
+                  onClick={handleReturnBack}
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                >
+                  Return Back
+                </Button>
+              ) : null}
+              {authState.id === data.owner.id && data.status === "refused" ? (
+                <Button
+                  fullWidth
+                  onClick={() => {
+                    navigate(`/applications/puton/create/${data.id}`);
+                  }}
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                >
+                  Apply PutOn Again
+                </Button>
+              ) : null}
+              <Typography
+                className={classes.hint}
+                variant="body2"
+                component="p"
+                color="secondary"
+              >
+                {!data.current_application &&
+                !confirmedBack &&
+                data.owner.id === authState.id
+                  ? "Please confirm the equipment has been returned back"
+                  : null}
+              </Typography>
+            </CardContent>
+          </Box>
+        )}
+      </Paper>
+      <Typography className={classes.comment} variant="h5">Comments</Typography>
+      <Comment></Comment>
+    </>
   );
 }
 

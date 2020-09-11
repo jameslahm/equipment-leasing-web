@@ -1,6 +1,6 @@
 const BASE_URL =
   process.env.NODE_ENV === "development"
-    ? "http://localhost:5000"
+    ? "http://localhost:3000"
     : "https://equipment-leasing-server.herokuapp.com";
 
 class HTTPError extends Error {
@@ -325,6 +325,49 @@ export const deleteNotification = ({ id, token }) => {
 
 export const getStatData = (token) => {
   return fetch(`${BASE_URL}/api/stat`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  }).then(handleRes);
+};
+
+export const getAllComments = (id, options, token) => {
+  const queryParams = new URLSearchParams(options);
+  return fetch(
+    `${BASE_URL}/api/equipments/${id}/comments?${queryParams.toString()}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    }
+  ).then(handleRes);
+};
+
+export const createComment = ({ id, data, token }) => {
+  return fetch(`${BASE_URL}/api/equipments/${id}/comments`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+      "Content-Type": CONTENT_TYPE_JSON,
+    },
+    body: JSON.stringify(data),
+  }).then(handleRes);
+};
+
+export const deleteComment = ({ equipment_id, id, token }) => {
+  return fetch(`${BASE_URL}/api/equipments/${equipment_id}/comments/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: token,
+    },
+  }).then(handleRes);
+};
+
+export const getLogs = (options, token) => {
+  const queryParams = new URLSearchParams(options);
+  return fetch(`${BASE_URL}/api/logs?${queryParams.toString()}`, {
     method: "GET",
     headers: {
       Authorization: token,

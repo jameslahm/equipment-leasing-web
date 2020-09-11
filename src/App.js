@@ -18,6 +18,7 @@ import { PutOnApplicationDetail } from "components/PutOnApplication";
 import { BorrowApplicationDetail } from "components/BorrowApplication";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import Logs from 'components/Logs'
 
 if (process.env.NODE_ENV === "development") {
   const { worker } = require("./utils");
@@ -86,6 +87,7 @@ function App() {
               <UserDetail path="users/:id"></UserDetail>
               <EquipmentList path="equipments"></EquipmentList>
               <EquipmentDetail path="equipments/:id"></EquipmentDetail>
+              <Logs path="logs"></Logs>
             </Home>
           </Router>
         </SnackbarProvider>

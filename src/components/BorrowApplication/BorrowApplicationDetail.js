@@ -15,6 +15,8 @@ import PersonIcon from "@material-ui/icons/Person";
 import { Link as ReachLink } from "@reach/router";
 import BuildIcon from "@material-ui/icons/Build";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
+import TimerIcon from "@material-ui/icons/Timer";
+import { formatDate } from "utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,6 +65,12 @@ const ResourceDetail = ({ data }) => {
                 </Link>
               }
             />
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>
+              <TimerIcon></TimerIcon>
+            </ListItemIcon>
+            <ListItemText primary={formatDate(data.return_time," later")} />
           </ListItem>
           <ListItem>
             <ListItemIcon>

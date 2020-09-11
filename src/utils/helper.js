@@ -15,6 +15,6 @@ export const isAdmin = (authState) => {
   return authState.role === "admin";
 };
 
-export const formatDate = (d) => {
-  return formatDistance(new Date(d), new Date())+" ago";
+export const formatDate = (d, l) => {
+  return formatDistance(new Date(d), new Date()) + (l || " ago");
 };

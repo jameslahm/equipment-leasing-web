@@ -6,7 +6,7 @@ const FAKE_USER_UNCONFIRMED = {
   confirm_token: "jwt.token.here",
   username: "fake",
   avatar: "http://example.com",
-  role: "normal",
+  role: "admin",
   confirmed: false,
 };
 
@@ -16,7 +16,7 @@ const FAKE_USER_CONFIRMED = {
   token: "jwt.token.here",
   username: "fake",
   avatar: "http://example.com",
-  role: "normal",
+  role: "admin",
   confirmed: true,
 };
 
@@ -152,6 +152,35 @@ const FAKE_APPLICATION_NOTIFICATION = {
 
 const FAKE_APPLICATION_NOTIFICATIONS = {
   notifications: [FAKE_APPLICATION_NOTIFICATION],
+  total: 1,
+};
+
+const FAKE_COMMENT = {
+  id: 1,
+  user: {
+    id: 1,
+    username: "wa",
+    avatar: "",
+  },
+  content: "content",
+  comment_time: 1599732065964,
+  rating:2
+};
+
+const FAKE_COMMENTS = {
+  comments: [FAKE_COMMENT],
+  total: 1,
+};
+
+const FAKE_LOG = {
+  id: 1,
+  content: "content",
+  type: "insert",
+  log_time:1599732065964
+};
+
+const FAKE_LOGS = {
+  logs: [FAKE_LOG],
   total: 1,
 };
 
@@ -368,6 +397,21 @@ const handlers = [
       ctx.status(200),
       ctx.json(FAKE_APPLICATION_NOTIFICATION)
     );
+  }),
+
+  rest.get("/api/equipments/:id/comments", (req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(FAKE_COMMENTS));
+  }),
+
+  rest.post("/api/equipments/:id/comments", (req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(FAKE_COMMENT));
+  }),
+
+  rest.delete("/api/equipments/:id/comments/:cd", (req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(FAKE_COMMENT));
+  }),
+  rest.get("/api/logs", (req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(FAKE_LOGS));
   }),
 ];
 

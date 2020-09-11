@@ -234,7 +234,7 @@ function UserDetail() {
             <Avatar
               className={classes.avatar}
               src={data.avatar}
-              alt={username}
+              alt={data.username}
             ></Avatar>
             <Box
               flexGrow={1}

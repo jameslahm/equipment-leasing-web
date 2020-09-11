@@ -39,6 +39,7 @@ import {
 } from "utils";
 import { useQuery } from "react-query";
 import { useSnackbar } from "notistack";
+import EventNoteIcon from "@material-ui/icons/EventNote";
 
 const drawerWidth = 240;
 
@@ -293,6 +294,12 @@ function Home({ children }) {
               </Badge>
             </ListItemIcon>
             <ListItemText primary="Notifications" />
+          </ListItem>
+          <ListItem component={Link} to="/logs">
+            <ListItemIcon>
+              <EventNoteIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logs" />
           </ListItem>
         </List>
       </Drawer>
