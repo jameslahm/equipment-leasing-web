@@ -27,7 +27,7 @@ import { StatusHint } from "components/Widget";
 import AddIcon from "@material-ui/icons/Add";
 
 const headCells = [
-  { id: "id", th: true, label: "ID" },
+  { id: "id", th: true, label: "ID",sortable:true },
   { id: "candidate", label: "Candidate" },
   {
     id: "application_time",
