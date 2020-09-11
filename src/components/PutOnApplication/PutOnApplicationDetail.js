@@ -77,7 +77,7 @@ const ResourceDetail = ({ data }) => {
 function BorrowApplicationDetail() {
   return (
     <ApplicationDetail
-      resource="borrow"
+      resource="puton"
       getResource={getPutOnApplication}
       updateResource={updatePutOnApplication}
       ResourceDetail={ResourceDetail}
