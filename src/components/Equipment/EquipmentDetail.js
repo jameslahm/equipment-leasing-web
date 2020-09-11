@@ -110,13 +110,13 @@ function EquipmentDetail() {
         enqueueSnackbar(generateMessage(e, "/edit"), {
           variant: "error",
         });
-        
+
         if (e.status === 401) {
           setAuthStateAndSave(null);
           navigate("/login");
         }
-        if (e.status === 404){
-          navigate("/")
+        if (e.status === 404) {
+          navigate("/");
         }
       },
     }
@@ -303,6 +303,19 @@ function EquipmentDetail() {
                 className={classes.submit}
               >
                 Return Back
+              </Button>
+            ) : null}
+            {authState.id === data.owner.id && data.status === "refused" ? (
+              <Button
+                fullWidth
+                onClick={() => {
+                  navigate(`/applications/puton/create/${data.id}`);
+                }}
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Apply PutOn Again
               </Button>
             ) : null}
             <Typography

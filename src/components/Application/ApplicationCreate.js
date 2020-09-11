@@ -9,14 +9,14 @@ import {
 } from "utils";
 import { useMutation } from "react-query";
 import { useSnackbar } from "notistack";
-import { navigate, useParams } from "@reach/router";
+import { navigate, useParams, useLocation } from "@reach/router";
 import { DateTimePicker } from "@material-ui/pickers";
 
 const useStyles = makeStyles((theme) => ({
   form: {
     margin: "auto",
     maxWidth: "500px",
-    paddingTop:theme.spacing(2)
+    paddingTop: theme.spacing(2),
   },
   paper: {
     padding: `${theme.spacing(2)}px ${theme.spacing(2)}px`,
@@ -49,7 +49,7 @@ function BorrowApplicationCreate() {
   const params = useParams();
   const [usage, setUsage] = useState("");
   const [date, setDate] = useState(new Date());
-  const [errors, setErrors] = useState({ usage: "",return_time:"" });
+  const [errors, setErrors] = useState({ usage: "", return_time: "" });
   const { authState } = useContext(AuthContext);
 
   const [mutate] = useMutation(createBorrowApplication);
@@ -58,7 +58,8 @@ function BorrowApplicationCreate() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     errors.usage = usage ? "" : "Usage can't be empty";
-    errors.return_time= date <= new Date()? "Return Time can't be earlier than now":""
+    errors.return_time =
+      date <= new Date() ? "Return Time can't be earlier than now" : "";
 
     if (errors.usage || errors.return_time) {
       setErrors({ ...errors });
@@ -68,7 +69,7 @@ function BorrowApplicationCreate() {
     try {
       const data = await mutate(
         {
-          data: { usage, equipment_id: params.id,return_time:date.getTime() },
+          data: { usage, equipment_id: params.id, return_time: date.getTime() },
           token: authState.token,
         },
         { throwOnError: true }
@@ -128,6 +129,7 @@ function PutOnApplicationCreate() {
   const [usage, setUsage] = useState("");
   const [errors, setErrors] = useState({ name: "", usage: "" });
   const { authState } = useContext(AuthContext);
+  const params = useParams();
 
   const [mutate] = useMutation(createPutOnApplication);
   const { enqueueSnackbar } = useSnackbar();
@@ -146,7 +148,11 @@ function PutOnApplicationCreate() {
     try {
       const data = await mutate(
         {
-          data: { name, usage },
+          data: {
+            name,
+            usage,
+            ...(params.id ? { equipment_id: params.id } : {}),
+          },
           token: authState.token,
         },
         { throwOnError: true }

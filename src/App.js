@@ -69,6 +69,10 @@ function App() {
                 path="applications/puton/create"
               ></ApplicationCreate>
               <ApplicationCreate
+                type="puton"
+                path="applications/puton/create/:id"
+              ></ApplicationCreate>
+              <ApplicationCreate
                 type="borrow"
                 path="applications/borrow/create/:id"
               ></ApplicationCreate>
