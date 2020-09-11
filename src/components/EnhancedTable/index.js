@@ -49,7 +49,7 @@ function EnhancedTable({
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const { authState,setAuthStateAndSave } = useContext(AuthContext);
+  const { authState, setAuthStateAndSave } = useContext(AuthContext);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -73,19 +73,30 @@ function EnhancedTable({
         enqueueSnackbar(generateMessage(e, "/list"), {
           variant: "error",
         });
-        
+
         if (e.status === 401) {
-          setAuthStateAndSave(null)
+          setAuthStateAndSave(null);
           navigate("/login");
         }
-        if (e.status === 404){
-          navigate("/")
+        if (e.status === 404) {
+          navigate("/");
         }
       },
     }
   );
 
-  const [mutate] = useMutation(deleteResource);
+  const [mutate] = useMutation(deleteResource, {
+    onSuccess: () => {
+      queryCache.invalidateQueries([
+        "notifications",
+        {
+          total: true,
+          isRead: false,
+        },
+        (authState || {}).token,
+      ]);
+    },
+  });
 
   // here we use fake rows
   // console.log(data, resource);

@@ -4,7 +4,7 @@ const UNAUTHORIZED_MESSAGE =
 const LOGIN_FAIL_MESSAGE = "Sorry, your username or password is not correct";
 const LOGIN_SUCCCESS_MESSAGE = "Login Success";
 const REGISTER_SUCCESS_MESSAGE = "Register Success";
-// const REGISTER_FAIL_MESSAGE = "Register Error";
+const REGISTER_FAIL_MESSAGE = "Register Error";
 const DEFAULT_ERROR_MESSAGE =
   "Some error happend, please check your network and refresh";
 
@@ -24,6 +24,9 @@ export function generateMessage(err, path) {
       case 400: {
         if (path === "/login") {
           return LOGIN_FAIL_MESSAGE;
+        }
+        if (path==='/register'){
+          return REGISTER_FAIL_MESSAGE;
         }
         return DEFAULT_ERROR_MESSAGE;
       }
