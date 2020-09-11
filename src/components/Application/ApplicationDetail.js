@@ -96,9 +96,12 @@ function ApplicationDetail({
         enqueueSnackbar(generateMessage(e), {
           variant: "error",
         });
-        setAuthStateAndSave(null);
         if (e.status === 401) {
+          setAuthStateAndSave(null);
           navigate("/login");
+        }
+        if (e.status === 404){
+          navigate("/")
         }
       },
     }

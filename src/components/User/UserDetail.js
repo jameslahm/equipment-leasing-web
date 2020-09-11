@@ -85,7 +85,11 @@ function UserDetail() {
       : "IDLE"
     : "IDLE";
   const [status, setStatus] = useState(initialStatus);
-  const queryKey = ["user", params.id, authState.token];
+  const queryKey = [
+    "user",
+    params.id,
+    authState.token || authState.confirm_token,
+  ];
   const { data = {}, isLoading, isError } = useQuery(
     queryKey,
     (key, id, token) => getUser(id, token),
@@ -103,10 +107,13 @@ function UserDetail() {
         enqueueSnackbar(generateMessage(e, "/edit"), {
           variant: "error",
         });
-        setAuthStateAndSave(null);
 
         if (e.status === 401) {
+          setAuthStateAndSave(null);
           navigate("/login");
+        }
+        if (e.status === 404) {
+          navigate("/");
         }
       },
     }
@@ -137,7 +144,7 @@ function UserDetail() {
             ...(password === INITIAL_PASSWORD ? {} : { password: password }),
           },
           id: params.id,
-          token: authState.token,
+          token: authState.token || authState.confirm_token,
         },
         { throwOnError: true }
       );

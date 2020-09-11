@@ -1,6 +1,6 @@
 const BASE_URL =
   process.env.NODE_ENV === "development"
-    ? "http://localhost:3000"
+    ? "http://localhost:5000"
     : "https://equipment-leasing-server.herokuapp.com";
 
 class HTTPError extends Error {

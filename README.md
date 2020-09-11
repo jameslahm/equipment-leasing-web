@@ -3,6 +3,7 @@
 - [ ] Return Time
 - [ ] Select Bug
 - [ ] application cache bug
+- [ ] activate account logout
 
 登录Admin
 zhangzhi_up

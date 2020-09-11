@@ -1,4 +1,4 @@
-const NOT_FOUND_MESSAGE = "Sorry, Not Found";
+const NOT_FOUND_MESSAGE = "Sorry, not found";
 const UNAUTHORIZED_MESSAGE =
   "Sorry, your credential has been expired, please login again";
 const LOGIN_FAIL_MESSAGE = "Sorry, your username or password is not correct";
@@ -9,6 +9,7 @@ const DEFAULT_ERROR_MESSAGE =
   "Some error happend, please check your network and refresh";
 
 export function generateMessage(err, path) {
+  console.log(err,path)
   if (err) {
     switch (err.status) {
       case 404: {
@@ -24,10 +25,7 @@ export function generateMessage(err, path) {
         if (path === "/login") {
           return LOGIN_FAIL_MESSAGE;
         }
-        // if (path === "/register") {
-        //   return REGISTER_FAIL_MESSAGE;
-        // }
-        break;
+        return DEFAULT_ERROR_MESSAGE;
       }
       default: {
         return DEFAULT_ERROR_MESSAGE;

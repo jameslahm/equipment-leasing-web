@@ -172,9 +172,12 @@ function Home({ children }) {
         enqueueSnackbar(generateMessage(e), {
           variant: "error",
         });
-        setAuthStateAndSave(null);
         if (e.status === 401) {
+          setAuthStateAndSave(null);
           navigate("/login");
+        }
+        if (e.status === 404) {
+          navigate("/");
         }
       },
     }
@@ -182,7 +185,16 @@ function Home({ children }) {
 
   const location = useLocation();
   const title = TitleMap[location.pathname.split("/")[1] || ""];
-  const isConfirmPath = location.pathname.split("/")[2] === "confirm";
+  const segements = location.pathname.split("/");
+  let isConfirmPath = false;
+  if (segements[1] === "users") {
+    if (segements[2] === "confirm") {
+      isConfirmPath = true;
+    }
+    if (authState && parseInt(segements[2]) === authState.id) {
+      isConfirmPath = true;
+    }
+  }
 
   if (!authState) {
     return (
