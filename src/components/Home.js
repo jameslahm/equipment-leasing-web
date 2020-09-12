@@ -362,7 +362,7 @@ function Home({ children }) {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          {authState.confirmed || isConfirmPath ? (
+          {(authState && authState.confirmed) || isConfirmPath ? (
             children
           ) : (
             <Typography variant="body2" color="secondary">

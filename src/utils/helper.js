@@ -12,7 +12,7 @@ export const canEdit = (authState, user) => {
 };
 
 export const isAdmin = (authState) => {
-  return authState.role === "admin";
+  return authState && authState.role === "admin";
 };
 
 export const formatDate = (d, l) => {
