@@ -200,7 +200,15 @@ function Home({ children }) {
 
   const { enqueueSnackbar } = useSnackbar();
   useQuery(
-    ["user", (authState || {}).id, (authState || {}).token],
+    [
+      "user",
+      (authState || {}).id,
+      authState
+        ? authState.token
+          ? authState.token
+          : authState.confirm_token
+        : undefined,
+    ],
     (key, id, token) => getUser(id, token),
     {
       retry: false,
@@ -208,7 +216,7 @@ function Home({ children }) {
       onSuccess: (data) => {
         setAuthStateAndSave({ ...(authState || {}), ...data });
       },
-      enabled: authState && authState.token,
+      enabled: authState && (authState.token || authState.confirm_token),
       onError: (e) => {
         enqueueSnackbar(generateMessage(e), {
           variant: "error",
