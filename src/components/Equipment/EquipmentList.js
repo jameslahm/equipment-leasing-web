@@ -111,17 +111,19 @@ function RowData({
             <VisibilityIcon></VisibilityIcon>
           </IconButton>
           {canEdit(authState, { id: row.owner.id }) ? (
-            <IconButton
-              component={ReachLink}
-              to={`/equipments/${row.id}`}
-              state={{ status: "EDIT" }}
-            >
-              <EditIcon></EditIcon>
-            </IconButton>
+            <>
+              <IconButton
+                component={ReachLink}
+                to={`/equipments/${row.id}`}
+                state={{ status: "EDIT" }}
+              >
+                <EditIcon></EditIcon>
+              </IconButton>
+              <IconButton onClick={() => onDelete(row.id)}>
+                <DeleteIcon></DeleteIcon>
+              </IconButton>
+            </>
           ) : null}
-          <IconButton onClick={() => onDelete(row.id)}>
-            <DeleteIcon></DeleteIcon>
-          </IconButton>
         </TableCell>
       </TableRow>
     );
@@ -146,12 +148,16 @@ function TableToolbar({ numSelected, onFilter, onDeleteAll }) {
 
   const handleClick = () => {
     if (authState.role === "normal" && isOwn) {
-      onFilter({ name: name, current_candidate_id: authState.id,status:status });
+      onFilter({
+        name: name,
+        current_candidate_id: authState.id,
+        status: status,
+      });
     }
     if (authState.role === "lender" && isOwn) {
-      onFilter({ name: name, owner_id: authState.id,status:status });
+      onFilter({ name: name, owner_id: authState.id, status: status });
     }
-    onFilter({ name: name,status:status });
+    onFilter({ name: name, status: status });
   };
 
   return (
