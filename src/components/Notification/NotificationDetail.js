@@ -26,6 +26,9 @@ function generateContent(data, authState) {
     if (data.type === "puton") {
       return `Hi, ${data.sender.username} has applied to put on a equipment, Please review as soon as possible`;
     }
+    if (data.type === "borrow") {
+      return `Hi, ${data.sender.username} has applied to borrow a equipment, Please review as soon as possible`;
+    }
   }
   if (authState.role === "lender") {
     if (data.type === "return") {

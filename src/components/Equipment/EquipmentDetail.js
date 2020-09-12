@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext,useEffect } from "react";
 import {
   useLocation,
   useParams,
@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     marginTop: theme.spacing(1),
-    marginLeft:theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   save: {
     marginTop: theme.spacing(1),
@@ -75,10 +75,10 @@ const useStyles = makeStyles((theme) => ({
   hint: {
     marginLeft: theme.spacing(2),
   },
-  comment:{
-    marginTop:theme.spacing(2),
-    marginBottom:theme.spacing(2)
-  }
+  comment: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 function EquipmentDetail() {
@@ -100,6 +100,17 @@ function EquipmentDetail() {
       : "IDLE"
     : "IDLE";
   const [status, setStatus] = useState(initialStatus);
+
+  useEffect(() => {
+    if (name) {
+      setName("");
+    }
+    if (usage) {
+      setUsage("");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.id]);
+
   const queryKey = ["equipment", params.id, authState.token];
   const { data = {}, isLoading, isError } = useQuery(
     queryKey,
@@ -246,105 +257,104 @@ function EquipmentDetail() {
           </form>
         ) : (
           <Box ml={0} maxWidth="500px">
-              <List>
-                <ListItem>
-                  <ListItemIcon>
-                    <BuildIcon></BuildIcon>
-                  </ListItemIcon>
-                  <ListItemText primary={data.name} />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <PersonIcon></PersonIcon>
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Link
-                        component={ReachLink}
-                        to={`/users/${data.owner.id}`}
-                      >
-                        {data.owner.username}
-                      </Link>
-                    }
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <RoomIcon></RoomIcon>
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={data.owner.lab_name}
-                    secondary={data.owner.lab_location}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <LibraryBooksIcon></LibraryBooksIcon>
-                  </ListItemIcon>
-                  <ListItemText primary={data.usage} />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <IndeterminateCheckBoxIcon></IndeterminateCheckBoxIcon>
-                  </ListItemIcon>
-                  <ListItemText primary={data.status.toUpperCase()} />
-                </ListItem>
-              </List>
-              {authState.role === "normal" &&
-              !data.current_application &&
-              data.status === "idle" ? (
-                <Button
-                  component={ReachLink}
-                  to={`/applications/borrow/create/${data.id}`}
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  Apply
-                </Button>
-              ) : null}
-              {data.current_application &&
-              authState.id === data.current_application.candidate_id ? (
-                <Button
-                  fullWidth
-                  onClick={handleReturnBack}
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  Return Back
-                </Button>
-              ) : null}
-              {authState.id === data.owner.id && data.status === "refused" ? (
-                <Button
-                  fullWidth
-                  onClick={() => {
-                    navigate(`/applications/puton/create/${data.id}`);
-                  }}
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  Apply PutOn Again
-                </Button>
-              ) : null}
-              <Typography
-                className={classes.hint}
-                variant="body2"
-                component="p"
-                color="secondary"
+            <List>
+              <ListItem>
+                <ListItemIcon>
+                  <BuildIcon></BuildIcon>
+                </ListItemIcon>
+                <ListItemText primary={data.name} />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <PersonIcon></PersonIcon>
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <Link component={ReachLink} to={`/users/${data.owner.id}`}>
+                      {data.owner.username}
+                    </Link>
+                  }
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <RoomIcon></RoomIcon>
+                </ListItemIcon>
+                <ListItemText
+                  primary={data.owner.lab_name}
+                  secondary={data.owner.lab_location}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <LibraryBooksIcon></LibraryBooksIcon>
+                </ListItemIcon>
+                <ListItemText primary={data.usage} />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <IndeterminateCheckBoxIcon></IndeterminateCheckBoxIcon>
+                </ListItemIcon>
+                <ListItemText primary={data.status.toUpperCase()} />
+              </ListItem>
+            </List>
+            {authState.role === "normal" &&
+            !data.current_application &&
+            data.status === "idle" ? (
+              <Button
+                component={ReachLink}
+                to={`/applications/borrow/create/${data.id}`}
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
               >
-                {!data.current_application &&
-                !confirmedBack &&
-                data.owner.id === authState.id
-                  ? "Please confirm the equipment has been returned back"
-                  : null}
-              </Typography>
+                Apply
+              </Button>
+            ) : null}
+            {data.current_application &&
+            authState.id === data.current_application.candidate_id ? (
+              <Button
+                fullWidth
+                onClick={handleReturnBack}
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Return Back
+              </Button>
+            ) : null}
+            {authState.id === data.owner.id && data.status === "refused" ? (
+              <Button
+                fullWidth
+                onClick={() => {
+                  navigate(`/applications/puton/create/${data.id}`);
+                }}
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Apply PutOn Again
+              </Button>
+            ) : null}
+            <Typography
+              className={classes.hint}
+              variant="body2"
+              component="p"
+              color="secondary"
+            >
+              {!data.current_application &&
+              !confirmedBack &&
+              data.owner.id === authState.id
+                ? "Please confirm the equipment has been returned back"
+                : null}
+            </Typography>
           </Box>
         )}
       </Paper>
-      <Typography className={classes.comment} variant="h5">Comments</Typography>
+      <Typography className={classes.comment} variant="h5">
+        Comments
+      </Typography>
       <Comment></Comment>
     </>
   );
