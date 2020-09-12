@@ -237,7 +237,7 @@ function Home({ children }) {
     }
   }
 
-  if (!authState) {
+  if (!authState && !isConfirmPath) {
     return (
       <Redirect
         to="/login"
