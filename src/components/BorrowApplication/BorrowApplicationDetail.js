@@ -1,12 +1,10 @@
 import React from "react";
 import { getBorrowApplication, updateBorrowApplication } from "utils";
 import {
-  CardContent,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  makeStyles,
   Link,
 } from "@material-ui/core";
 import { ApplicationDetail } from "components/Application";
@@ -18,14 +16,7 @@ import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import TimerIcon from "@material-ui/icons/Timer";
 import { formatDate } from "utils";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    paddingTop: 0,
-  },
-}));
-
 const ResourceDetail = ({ data }) => {
-  const classes = useStyles();
   return (
     <List>
       <ListItem>

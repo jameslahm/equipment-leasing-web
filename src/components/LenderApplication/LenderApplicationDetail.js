@@ -1,13 +1,11 @@
 import React from "react";
 import { ApplicationDetail } from "components/Application";
 import {
-  CardContent,
   Link,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  makeStyles,
 } from "@material-ui/core";
 import { updateLenderApplication, getLenderApplication } from "utils";
 import { Link as ReachLink } from "@reach/router";
@@ -15,14 +13,8 @@ import { Link as ReachLink } from "@reach/router";
 import RoomIcon from "@material-ui/icons/Room";
 import PersonIcon from "@material-ui/icons/Person";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    paddingTop: 0,
-  },
-}));
 
 const ResourceDetail = ({ data }) => {
-  const classes = useStyles();
   return (
     <List>
       <ListItem>
