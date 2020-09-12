@@ -217,6 +217,7 @@ function UserDetail() {
               <Switch
                 value={confirmed}
                 onChange={(e) => setConfirmed(!confirmed)}
+                checked={confirmed}
               ></Switch>
             }
             label="Confirmed"
