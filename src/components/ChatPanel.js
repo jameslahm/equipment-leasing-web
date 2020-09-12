@@ -182,7 +182,7 @@ function ChatPanel() {
                       aria-label="delete"
                       onClick={(e) => {
                         delete messages[id];
-                        setAuthStateAndSave(messages);
+                        setMessagesAndSave(messages);
                       }}
                     >
                       <CloseIcon />
