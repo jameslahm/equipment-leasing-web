@@ -275,13 +275,15 @@ function Home({ children }) {
           >
             {title}
           </Typography>
-          <IconButton
-            color="inherit"
-            component={ReachLink}
-            to={`/users/${authState.id}`}
-          >
-            <AccountCircle></AccountCircle>
-          </IconButton>
+          {authState && authState.id ? (
+            <IconButton
+              color="inherit"
+              component={ReachLink}
+              to={`/users/${authState.id}`}
+            >
+              <AccountCircle></AccountCircle>
+            </IconButton>
+          ) : null}
         </Toolbar>
       </AppBar>
       <Drawer
