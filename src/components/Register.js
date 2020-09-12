@@ -57,7 +57,10 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    errors.email = email ? "" : "Email can't be empty";
+    // eslint-disable-next-line no-useless-escape
+    const pattern = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
+
+    errors.email = pattern.test(email) ? "" : "Email can't be empty";
     errors.username = username ? "" : "Username can't be empty";
     errors.password = password ? "" : "Password can't be empty";
 
