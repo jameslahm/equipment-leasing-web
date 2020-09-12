@@ -8,13 +8,16 @@ import {
   TimelineOppositeContent,
   TimelineDot,
   Skeleton,
-  Pagination
+  Pagination,
 } from "@material-ui/lab";
+import clsx from "clsx";
 import {
   Paper,
   Typography,
   makeStyles,
   Box,
+  MenuItem,
+  IconButton,
 } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
@@ -23,29 +26,58 @@ import { useQuery } from "react-query";
 import { AuthContext, getLogs, generateMessage, formatDate } from "utils";
 import { useSnackbar } from "notistack";
 import { navigate } from "@reach/router";
+import { TextField } from "components/Widget";
+import { DateTimePicker } from "@material-ui/pickers";
+import FilterListIcon from "@material-ui/icons/FilterList";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
   },
-  secondaryTail: {
-    backgroundColor: theme.palette.secondary.main,
+  info: {
+    backgroundColor: theme.palette.info.main,
+  },
+  success: {
+    backgroundColor: theme.palette.success.main,
+  },
+  error: {
+    backgroundColor: theme.palette.error.main,
+  },
+  warning: {
+    backgroundColor: theme.palette.warning.main,
+  },
+  input: {
+    maxWidth: "300px",
+    marginLeft: theme.spacing(4),
   },
 }));
 
-export default function CustomizedTimeline() {
+function Logs() {
   const classes = useStyles();
-  const { page, setPage } = useState(1);
+  const [page, setPage] = useState(1);
   const pageSize = 10;
 
   const { authState, setAuthStateAndSave } = useContext(AuthContext);
   const { enqueueSnackbar } = useSnackbar();
+
+  const [startTime, setStartTime] = useState(new Date(0));
+  const [endTime, setEndTime] = useState(new Date());
+
+  const [options, setOptions] = useState({
+    type: "",
+    startTime: new Date(0),
+    endTime: new Date(),
+  });
+
   const { data = {}, isError, isLoading } = useQuery(
     [
       "logs",
       {
-        page: page,
+        page: page - 1,
         page_size: pageSize,
+        type: options.type,
+        start_time: options.startTime.getTime(),
+        end_time: options.endTime.getTime(),
       },
       authState.token,
     ],
@@ -73,12 +105,68 @@ export default function CustomizedTimeline() {
     delete: <DeleteForeverIcon></DeleteForeverIcon>,
   };
 
+  if (authState.role !== "admin") {
+    return <div></div>;
+  }
+
   if (isLoading || isError) {
     return <Skeleton variant="rect" height="400px"></Skeleton>;
   }
 
   return (
-    <Box maxWidth="80%">
+    <Box>
+      <Box display="flex" alignItems="center">
+        <TextField
+          size="small"
+          select
+          className={classes.input}
+          label="type"
+          // value={options.type}
+          defaultValue={options.type}
+          onChange={(e) => {
+            options.type = e.target.value;
+          }}
+        >
+          <MenuItem key="1" value="">
+            All
+          </MenuItem>
+          <MenuItem key="2" value="insert">
+            Insert
+          </MenuItem>
+          <MenuItem key="3" value="update">
+            Update
+          </MenuItem>
+          <MenuItem key="4" value="delete">
+            Delete
+          </MenuItem>
+        </TextField>
+        <DateTimePicker
+          className={classes.input}
+          variant="inline"
+          label="Start Time"
+          value={startTime}
+          onChange={(v) => {
+            setStartTime(v)
+          }}
+          format="yyyy/MM/dd HH:mm"
+        ></DateTimePicker>
+        <DateTimePicker
+          className={classes.input}
+          variant="inline"
+          label="End Time"
+          value={endTime}
+          onChange={(v) => {
+            setEndTime(v)
+          }}
+          format="yyyy/MM/dd HH:mm"
+        ></DateTimePicker>
+        <IconButton
+          className={classes.input}
+          onClick={(e) => setOptions({ ...options,startTime,endTime })}
+        >
+          <FilterListIcon></FilterListIcon>
+        </IconButton>
+      </Box>
       <Timeline align="alternate">
         {data.logs.map((log, i) => {
           return (
@@ -90,21 +178,26 @@ export default function CustomizedTimeline() {
               </TimelineOppositeContent>
               <TimelineSeparator>
                 <TimelineDot
-                  color={
-                    log.type === "insert"
-                      ? "primary"
-                      : log.type === "update"
-                      ? "primary"
-                      : "secondary"
-                  }
-                  variant={log.type === "update" ? "outlined" : "default"}
+                  className={clsx({
+                    [classes.info]: log.type === "insert",
+                    [classes.success]: log.type === "update",
+                    [classes.warning]: log.type === "delete",
+                  })}
                 >
                   {ICONMAP[log.type]}
                 </TimelineDot>
                 <TimelineConnector />
               </TimelineSeparator>
               <TimelineContent>
-                <Paper elevation={3} className={classes.paper}>
+                <Paper
+                  elevation={3}
+                  className={clsx({
+                    [classes.paper]: true,
+                    [classes.info]: log.type === "insert",
+                    [classes.success]: log.type === "update",
+                    [classes.warning]: log.type === "delete",
+                  })}
+                >
                   <Typography>{log.content}</Typography>
                 </Paper>
               </TimelineContent>
@@ -123,3 +216,5 @@ export default function CustomizedTimeline() {
     </Box>
   );
 }
+
+export default Logs;

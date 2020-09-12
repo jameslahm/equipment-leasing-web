@@ -8,6 +8,7 @@ import {
   INITIAL_PASSWORD,
   canEdit,
   generateMessage,
+  ChatContext,
 } from "utils";
 import {
   Button,
@@ -158,6 +159,8 @@ function UserDetail() {
     }
   };
 
+  const {messages,setMessagesAndSave}=useContext(ChatContext)
+
   const handleLogOut = () => {
     setAuthStateAndSave(null);
     enqueueSnackbar("LogOut Success", {
@@ -266,7 +269,28 @@ function UserDetail() {
             >
               LogOut
             </Button>
-          ) : null}
+          ) : (
+            <Button
+              variant="contained"
+              className={classes.logout}
+              color="primary"
+              onClick={() => {
+                if(!(data.id in messages)){
+                  messages[data.id]={
+                    username:data.username,
+                    avatar:data.avatar,
+                    messages:[],
+                    isRead:true,
+                    total:0
+                  }
+                }
+                setMessagesAndSave(messages)
+                navigate(`/chat/${params.id}`);
+              }}
+            >
+              Chat
+            </Button>
+          )}
         </Box>
       )}
     </Paper>

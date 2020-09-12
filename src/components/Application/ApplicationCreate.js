@@ -9,7 +9,7 @@ import {
 } from "utils";
 import { useMutation } from "react-query";
 import { useSnackbar } from "notistack";
-import { navigate, useParams, useLocation } from "@reach/router";
+import { navigate, useParams } from "@reach/router";
 import { DateTimePicker } from "@material-ui/pickers";
 
 const useStyles = makeStyles((theme) => ({

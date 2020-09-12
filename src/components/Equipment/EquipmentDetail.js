@@ -22,7 +22,6 @@ import {
   Box,
   IconButton,
   Typography,
-  CardContent,
   List,
   ListItem,
   ListItemText,
@@ -44,9 +43,9 @@ import Comment from "./Comment";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    // paddingTop: theme.spacing(0),
+    paddingTop: theme.spacing(2),
     paddingRight: theme.spacing(2),
-    // paddingBottom: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
     paddingLeft: theme.spacing(2),
     position: "relative",
   },
@@ -64,7 +63,11 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
   },
   submit: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    marginLeft:theme.spacing(2)
+  },
+  save: {
+    marginTop: theme.spacing(1),
   },
   media: {
     height: 140,
@@ -236,14 +239,13 @@ function EquipmentDetail() {
               fullWidth
               variant="contained"
               color="primary"
-              className={classes.submit}
+              className={classes.save}
             >
               Save
             </Button>
           </form>
         ) : (
           <Box ml={0} maxWidth="500px">
-            <CardContent>
               <List>
                 <ListItem>
                   <ListItemIcon>
@@ -339,7 +341,6 @@ function EquipmentDetail() {
                   ? "Please confirm the equipment has been returned back"
                   : null}
               </Typography>
-            </CardContent>
           </Box>
         )}
       </Paper>

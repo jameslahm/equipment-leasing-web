@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "react-query";
+import { useQuery, useMutation, queryCache } from "react-query";
 import {
   Box,
   Card,
@@ -12,7 +12,7 @@ import {
   Button,
 } from "@material-ui/core";
 import React, { useState, useContext } from "react";
-import { useParams, navigate } from "@reach/router";
+import { useParams, navigate,Link as ReachLink } from "@reach/router";
 import {
   AuthContext,
   getAllComments,
@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
     padding: theme.spacing(2),
   },
+  cardContent:{
+    paddingTop:theme.spacing(0)
+  }
 }));
 
 function Comment() {
@@ -45,21 +48,22 @@ function Comment() {
   const [errors, setErrors] = useState({ content: "" });
   const { enqueueSnackbar } = useSnackbar();
 
+  const queryKey = [
+    "equipments",
+    params.id,
+    "comments",
+    {
+      page: page - 1,
+      page_size: pageSize,
+    },
+    authState.token,
+  ];
   const { data = {}, isLoading, isError } = useQuery(
-    [
-      "equipments",
-      params.id,
-      "comments",
-      {
-        page,
-        page_size: pageSize,
-      },
-      authState.token,
-    ],
+    queryKey,
     (_, equipment_id, __, options, token) =>
       getAllComments(equipment_id, options, token),
     {
-      retry:false,
+      retry: false,
       onError: (e) => {
         enqueueSnackbar(generateMessage(e), {
           variant: "error",
@@ -75,8 +79,16 @@ function Comment() {
     }
   );
 
-  const [mutateCreate] = useMutation(createComment);
-  const [mutateDelete] = useMutation(deleteComment);
+  const [mutateCreate] = useMutation(createComment, {
+    onSuccess: (data) => {
+      queryCache.invalidateQueries(queryKey);
+    },
+  });
+  const [mutateDelete] = useMutation(deleteComment, {
+    onSuccess: (data) => {
+      queryCache.invalidateQueries(queryKey);
+    },
+  });
 
   const handleCreate = async () => {
     errors.content = content ? "" : "Comment can't be empty";
@@ -93,6 +105,7 @@ function Comment() {
         },
         { throwOnError: true }
       );
+      setContent("")
       enqueueSnackbar(generateMessage(null, "/edit"), {
         variant: "success",
       });
@@ -104,7 +117,6 @@ function Comment() {
   };
 
   const handleDelete = async (id) => {
-    console.log(id)
     try {
       await mutateDelete(
         {
@@ -131,7 +143,11 @@ function Comment() {
   return (
     <Box>
       <Paper className={classes.paper}>
-        <Rating name="rating" value={rating} onChange={(e, v) => setRating(v)}></Rating>
+        <Rating
+          name="rating"
+          value={rating}
+          onChange={(e, v) => setRating(v)}
+        ></Rating>
         <TextField
           multiline
           value={content}
@@ -154,10 +170,18 @@ function Comment() {
       </Paper>
       {data.comments.map((comment, i) => {
         return (
-          <Box key={i}>
+          <Box key={i} mt={2}>
             <Card>
               <CardHeader
-                avatar={<Avatar src={comment.user.avatar} alt="Rsdad"></Avatar>}
+                avatar={
+                  <IconButton
+                    size="small"
+                    component={ReachLink}
+                    to={`/users/${comment.user.id}`}
+                  >
+                    <Avatar src={comment.user.avatar} alt="Rsdad"></Avatar>
+                  </IconButton>
+                }
                 action={
                   authState.role === "admin" ||
                   authState.id === comment.user.id ? (
@@ -169,7 +193,7 @@ function Comment() {
                 title={comment.user.username}
                 subheader={<>{formatDate(comment.comment_time)}</>}
               />
-              <CardContent>
+              <CardContent className={classes.cardContent}>
                 <Rating value={comment.rating} readOnly />
                 <Box pl={0.5} mt={1}>
                   <Typography variant="body1">{comment.content}</Typography>

@@ -13,6 +13,9 @@ import { Link } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 
 function generateContent(data) {
+  if(data.type==='return'){
+    return `Your application has been returned back, Please confirm as soon as possible`
+  }
   if (data.result === "agree") {
     return `Congratulations, ${data.sender.username} has agreed your application, Please check soon`;
   }
@@ -98,7 +101,7 @@ function EquipmentDetail() {
       </Typography>
       <Link
         component={ReachLink}
-        to={`/applications/${data.type}/${data.application_id}`}
+        to={`/applications/${data.type==='return'?'borrow':data.type}/${data.application_id}`}
       >
         See Application
       </Link>

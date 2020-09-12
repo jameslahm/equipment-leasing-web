@@ -36,10 +36,13 @@ import {
   getAllNotifications,
   getUser,
   generateMessage,
+  ChatContext,
+  getMessages,
 } from "utils";
 import { useQuery } from "react-query";
 import { useSnackbar } from "notistack";
 import EventNoteIcon from "@material-ui/icons/EventNote";
+import ChatIcon from "@material-ui/icons/Chat";
 
 const drawerWidth = 240;
 
@@ -134,6 +137,10 @@ const TitleMap = {
 function Home({ children }) {
   const classes = useStyles();
   const { authState, setAuthStateAndSave } = useContext(AuthContext);
+  const { messages: originalMessages, setMessagesAndSave } = useContext(
+    ChatContext
+  );
+
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -142,7 +149,7 @@ function Home({ children }) {
     setOpen(false);
   };
 
-  const { data = {} } = useQuery(
+  const { data: notifications = {} } = useQuery(
     [
       "notifications",
       {
@@ -157,6 +164,39 @@ function Home({ children }) {
       retry: false,
     }
   );
+
+  const { data: messages = { unread_users: [] } } = useQuery(
+    ["messages", (authState || {}).token],
+    (key, token) => getMessages(token),
+    {
+      enabled: authState && authState.token,
+      retry: false,
+      onSuccess: (data) => {
+        Object.values(originalMessages).forEach((v) => {
+          v.total = 0;
+        });
+        data.unread_users.forEach((u) => {
+          if (u.id in originalMessages) {
+            originalMessages[u.id].isRead = false;
+            originalMessages[u.id].total = u.total;
+          } else {
+            originalMessages[u.id] = {
+              isRead: false,
+              messages: [],
+              username: u.username,
+              avatar: u.avatar,
+              total: u.total,
+            };
+          }
+        });
+        setMessagesAndSave(originalMessages);
+      },
+    }
+  );
+
+  const unreadMessagesCount = messages.unread_users
+    .map((u) => u.total)
+    .reduce((a, b) => a + b, 0);
 
   const { enqueueSnackbar } = useSnackbar();
   useQuery(
@@ -286,21 +326,35 @@ function Home({ children }) {
           <ListItem component={Link} to="/notifications">
             <ListItemIcon>
               <Badge
-                badgeContent={data.total}
+                badgeContent={notifications.total}
                 color="secondary"
-                invisible={!data.total}
+                invisible={!notifications.total}
               >
                 <NotificationsIcon />
               </Badge>
             </ListItemIcon>
             <ListItemText primary="Notifications" />
           </ListItem>
-          <ListItem component={Link} to="/logs">
+          <ListItem component={Link} to="/chat">
             <ListItemIcon>
-              <EventNoteIcon />
+              <Badge
+                badgeContent={unreadMessagesCount}
+                color="secondary"
+                invisible={!unreadMessagesCount}
+              >
+                <ChatIcon></ChatIcon>
+              </Badge>
             </ListItemIcon>
-            <ListItemText primary="Logs" />
+            <ListItemText primary="Chat" />
           </ListItem>
+          {isAdmin(authState) ? (
+            <ListItem component={Link} to="/logs">
+              <ListItemIcon>
+                <EventNoteIcon />
+              </ListItemIcon>
+              <ListItemText primary="Logs" />
+            </ListItem>
+          ) : null}
         </List>
       </Drawer>
       <main className={classes.content}>

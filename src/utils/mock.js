@@ -6,7 +6,7 @@ const FAKE_USER_UNCONFIRMED = {
   confirm_token: "jwt.token.here",
   username: "fake",
   avatar: "http://example.com",
-  role: "admin",
+  role: "normal",
   confirmed: false,
 };
 
@@ -16,7 +16,7 @@ const FAKE_USER_CONFIRMED = {
   token: "jwt.token.here",
   username: "fake",
   avatar: "http://example.com",
-  role: "admin",
+  role: "normal",
   confirmed: true,
 };
 
@@ -164,7 +164,7 @@ const FAKE_COMMENT = {
   },
   content: "content",
   comment_time: 1599732065964,
-  rating:2
+  rating: 2,
 };
 
 const FAKE_COMMENTS = {
@@ -176,12 +176,40 @@ const FAKE_LOG = {
   id: 1,
   content: "content",
   type: "insert",
-  log_time:1599732065964
+  log_time: 1599732065964,
 };
 
 const FAKE_LOGS = {
   logs: [FAKE_LOG],
   total: 1,
+};
+
+const FAKE_MESSAGE = {
+  id: 1,
+  content: "asdas",
+  message_time: 1599732065964,
+};
+
+const FAKE_MESSAGES = {
+  messages: [FAKE_MESSAGE],
+  total: 1,
+};
+
+const FAKE_UNREAD_MESSAGES = {
+  unread_users: [
+    {
+      id: 1,
+      username: "fake",
+      avatar: "fake",
+      total: 1,
+    },
+    {
+      id: 2,
+      username: "fake",
+      avatar: "fake",
+      total: 1,
+    },
+  ],
 };
 
 const handlers = [
@@ -413,6 +441,22 @@ const handlers = [
   rest.get("/api/logs", (req, res, ctx) => {
     return res(ctx.delay(1000), ctx.status(200), ctx.json(FAKE_LOGS));
   }),
+
+  rest.get('/api/messages',(req,res,ctx)=>{
+    return res(ctx.delay(1000),ctx.status(200),ctx.json(FAKE_UNREAD_MESSAGES))
+  }),
+  
+  rest.get('/api/messages/:id',(req,res,ctx)=>{
+    return res(ctx.delay(1000),ctx.status(200),ctx.json(FAKE_MESSAGES))
+  }),
+
+  rest.put('/api/messages/:id',(req,res,ctx)=>{
+    return res(ctx.delay(1000),ctx.status(200),ctx.json(FAKE_MESSAGES))
+  }),
+
+  rest.post('/api/messages/:id',(req,res,ctx)=>{
+    return res(ctx.delay(1000),ctx.status(200),ctx.json(FAKE_MESSAGES))
+  })
 ];
 
 export const worker = setupWorker(...handlers);

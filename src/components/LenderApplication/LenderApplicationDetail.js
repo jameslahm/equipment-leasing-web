@@ -24,34 +24,32 @@ const useStyles = makeStyles((theme) => ({
 const ResourceDetail = ({ data }) => {
   const classes = useStyles();
   return (
-    <CardContent className={classes.root}>
-      <List>
-        <ListItem>
-          <ListItemIcon>
-            <PersonIcon></PersonIcon>
-          </ListItemIcon>
-          <ListItemText
-            primary={
-              <Link component={ReachLink} to={`/users/${data.candidate.id}`}>
-                {data.candidate.username}
-              </Link>
-            }
-          />
-        </ListItem>
-        <ListItem>
-          <ListItemIcon>
-            <RoomIcon></RoomIcon>
-          </ListItemIcon>
-          <ListItemText primary={data.lab_name} secondary={data.lab_location} />
-        </ListItem>
-        {/* <ListItem>
+    <List>
+      <ListItem>
+        <ListItemIcon>
+          <PersonIcon></PersonIcon>
+        </ListItemIcon>
+        <ListItemText
+          primary={
+            <Link component={ReachLink} to={`/users/${data.candidate.id}`}>
+              {data.candidate.username}
+            </Link>
+          }
+        />
+      </ListItem>
+      <ListItem>
+        <ListItemIcon>
+          <RoomIcon></RoomIcon>
+        </ListItemIcon>
+        <ListItemText primary={data.lab_name} secondary={data.lab_location} />
+      </ListItem>
+      {/* <ListItem>
           <ListItemIcon>
             <LibraryBooksIcon></LibraryBooksIcon>
           </ListItemIcon>
           <ListItemText primary={data.usage} />
         </ListItem> */}
-      </List>
-    </CardContent>
+    </List>
   );
 };
 

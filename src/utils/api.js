@@ -1,6 +1,6 @@
 const BASE_URL =
   process.env.NODE_ENV === "development"
-    ? "http://localhost:3000"
+    ? "http://localhost:5000"
     : "https://equipment-leasing-server.herokuapp.com";
 
 class HTTPError extends Error {
@@ -369,6 +369,44 @@ export const getLogs = (options, token) => {
   const queryParams = new URLSearchParams(options);
   return fetch(`${BASE_URL}/api/logs?${queryParams.toString()}`, {
     method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  }).then(handleRes);
+};
+
+export const getMessages = (token) => {
+  return fetch(`${BASE_URL}/api/messages`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  }).then(handleRes);
+};
+
+export const getMessage = (id, token) => {
+  return fetch(`${BASE_URL}/api/messages/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  }).then(handleRes);
+};
+
+export const createMessage = ({ id, content, token }) => {
+  return fetch(`${BASE_URL}/api/messages/${id}`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+      "Content-Type": CONTENT_TYPE_JSON,
+    },
+    body: JSON.stringify({ content: content }),
+  }).then(handleRes);
+};
+
+export const updateMessage = ({ id, token }) => {
+  return fetch(`${BASE_URL}/api/messages/${id}`, {
+    method: "PUT",
     headers: {
       Authorization: token,
     },

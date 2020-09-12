@@ -25,52 +25,47 @@ const useStyles = makeStyles((theme) => ({
 const ResourceDetail = ({ data }) => {
   const classes = useStyles();
   return (
-    <CardContent className={classes.root}>
-      <List>
-        <ListItem>
-          <ListItemIcon>
-            <PersonIcon></PersonIcon>
-          </ListItemIcon>
-          <ListItemText
-            primary={
-              <Link component={ReachLink} to={`/users/${data.candidate.id}`}>
-                {data.candidate.username}
-              </Link>
-            }
-          />
-        </ListItem>
-        <ListItem>
-          <ListItemIcon>
-            <RoomIcon></RoomIcon>
-          </ListItemIcon>
-          <ListItemText
-            primary={data.candidate.lab_name}
-            secondary={data.candidate.lab_location}
-          />
-        </ListItem>
-        <ListItem>
-          <ListItemIcon>
-            <BuildIcon></BuildIcon>
-          </ListItemIcon>
-          <ListItemText
-            primary={
-              <Link
-                component={ReachLink}
-                to={`/equipments/${data.equipment.id}`}
-              >
-                {data.equipment.name}
-              </Link>
-            }
-          />
-        </ListItem>
-        <ListItem>
-          <ListItemIcon>
-            <LibraryBooksIcon></LibraryBooksIcon>
-          </ListItemIcon>
-          <ListItemText primary={data.equipment.usage} />
-        </ListItem>
-      </List>
-    </CardContent>
+    <List>
+      <ListItem>
+        <ListItemIcon>
+          <PersonIcon></PersonIcon>
+        </ListItemIcon>
+        <ListItemText
+          primary={
+            <Link component={ReachLink} to={`/users/${data.candidate.id}`}>
+              {data.candidate.username}
+            </Link>
+          }
+        />
+      </ListItem>
+      <ListItem>
+        <ListItemIcon>
+          <RoomIcon></RoomIcon>
+        </ListItemIcon>
+        <ListItemText
+          primary={data.candidate.lab_name}
+          secondary={data.candidate.lab_location}
+        />
+      </ListItem>
+      <ListItem>
+        <ListItemIcon>
+          <BuildIcon></BuildIcon>
+        </ListItemIcon>
+        <ListItemText
+          primary={
+            <Link component={ReachLink} to={`/equipments/${data.equipment.id}`}>
+              {data.equipment.name}
+            </Link>
+          }
+        />
+      </ListItem>
+      <ListItem>
+        <ListItemIcon>
+          <LibraryBooksIcon></LibraryBooksIcon>
+        </ListItemIcon>
+        <ListItemText primary={data.equipment.usage} />
+      </ListItem>
+    </List>
   );
 };
 

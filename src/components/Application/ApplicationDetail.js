@@ -36,10 +36,10 @@ import { StatusHint } from "components/Widget";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    paddingTop: theme.spacing(4),
+    paddingTop: theme.spacing(2),
     paddingRight: theme.spacing(2),
-    paddingBottom: theme.spacing(4),
-    paddingLeft: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    paddingLeft: theme.spacing(4),
     position: "relative",
   },
   avatar: {
@@ -66,8 +66,11 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
   action: {
-    paddingLeft: theme.spacing(4),
+    paddingLeft: theme.spacing(2),
   },
+  content:{
+    marginLeft:theme.spacing(2)
+  }
 }));
 
 function ApplicationDetail({
@@ -100,8 +103,8 @@ function ApplicationDetail({
           setAuthStateAndSave(null);
           navigate("/login");
         }
-        if (e.status === 404){
-          navigate("/")
+        if (e.status === 404) {
+          navigate("/");
         }
       },
     }
@@ -182,51 +185,55 @@ function ApplicationDetail({
           ) : null}
         </Grid>
         <Grid item md={5}>
-          <Timeline align="alternate">
-            <TimelineItem>
-              <TimelineOppositeContent>
-                <Typography variant="body2" color="textSecondary">
-                  {formatDate(
-                    data.status === "unreviewed" ? new Date() : data.review_time
-                  )}
-                </Typography>
-              </TimelineOppositeContent>
-              <TimelineSeparator>
-                <TimelineDot
-                  color={data.status === "agree" ? "primary" : "secondary"}
-                >
-                  <StatusHint result={data.status}></StatusHint>
-                </TimelineDot>
-                <TimelineConnector />
-              </TimelineSeparator>
-              <TimelineContent>
-                <Paper elevation={3} className={classes.textCenter}>
-                  <Typography>
-                    {data.status === "unreviewed"
-                      ? "Unreviewed"
-                      : "Review: " + capitalize(data.status)}
+          <Box mr={4}>
+            <Timeline align="alternate">
+              <TimelineItem>
+                <TimelineOppositeContent>
+                  <Typography variant="body2" color="textSecondary">
+                    {formatDate(
+                      data.status === "unreviewed"
+                        ? new Date()
+                        : data.review_time
+                    )}
                   </Typography>
-                </Paper>
-              </TimelineContent>
-            </TimelineItem>
-            <TimelineItem>
-              <TimelineOppositeContent>
-                <Typography variant="body2" color="textSecondary">
-                  {formatDate(data.application_time)}
-                </Typography>
-              </TimelineOppositeContent>
-              <TimelineSeparator>
-                <TimelineDot color="primary">
-                  <AssignmentIcon />
-                </TimelineDot>
-              </TimelineSeparator>
-              <TimelineContent>
-                <Paper elevation={3} className={classes.textCenter}>
-                  <Typography>Send Application</Typography>
-                </Paper>
-              </TimelineContent>
-            </TimelineItem>
-          </Timeline>
+                </TimelineOppositeContent>
+                <TimelineSeparator>
+                  <TimelineDot
+                    color={data.status === "agree" ? "primary" : "secondary"}
+                  >
+                    <StatusHint result={data.status}></StatusHint>
+                  </TimelineDot>
+                  <TimelineConnector />
+                </TimelineSeparator>
+                <TimelineContent>
+                  <Paper elevation={3} className={classes.textCenter}>
+                    <Typography>
+                      {data.status === "unreviewed"
+                        ? "Unreviewed"
+                        : "Review: " + capitalize(data.status)}
+                    </Typography>
+                  </Paper>
+                </TimelineContent>
+              </TimelineItem>
+              <TimelineItem>
+                <TimelineOppositeContent>
+                  <Typography variant="body2" color="textSecondary">
+                    {formatDate(data.application_time)}
+                  </Typography>
+                </TimelineOppositeContent>
+                <TimelineSeparator>
+                  <TimelineDot color="primary">
+                    <AssignmentIcon />
+                  </TimelineDot>
+                </TimelineSeparator>
+                <TimelineContent>
+                  <Paper elevation={3} className={classes.textCenter}>
+                    <Typography>Send Application</Typography>
+                  </Paper>
+                </TimelineContent>
+              </TimelineItem>
+            </Timeline>
+          </Box>
         </Grid>
       </Grid>
     </Paper>

@@ -1,9 +1,6 @@
 ## TODO
-- [ ] Error Handler
-- [ ] Return Time
-- [ ] Select Bug
-- [ ] application cache bug
-- [ ] activate account logout
+- [ ] check admin privilidge see logs
+- [ ] direct chat
 
 登录Admin
 zhangzhi_up
