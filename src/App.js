@@ -32,7 +32,7 @@ function App() {
   );
 
   const [messages, setMessages] = useState(
-    JSON.parse(localStorage.getItem("messages"))||{}
+    JSON.parse(localStorage.getItem("messages")) || {}
   );
 
   const notistackRef = React.createRef();
@@ -46,6 +46,12 @@ function App() {
   }
 
   function setAuthStateAndSave(auth) {
+    let savedMessages = {};
+    if (auth && authState && auth.id === authState.id) {
+      savedMessages = messages;
+    }
+
+    setMessagesAndSave(savedMessages);
     localStorage.setItem("auth", JSON.stringify(auth));
     setAuthState(auth);
   }
