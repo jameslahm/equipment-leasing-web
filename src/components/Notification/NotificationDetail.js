@@ -12,25 +12,50 @@ import { Skeleton } from "@material-ui/lab";
 import { Link } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 
-function generateContent(data) {
-  if(data.type==='return'){
-    return `Your application has been returned back, Please confirm as soon as possible`
+function generateContent(data, authState) {
+  if (authState.role === "admin") {
+    if (data.result === "agree") {
+      return `Hi, you have agreed ${data.sender.username}'s application`;
+    }
+    if (data.result === "refuse") {
+      return `Hi,you have refused ${data.sender.username}'s application`;
+    }
+    if (data.type === "lender") {
+      return `Hi, ${data.sender.username} has applied to be a Lender, Please review as soon as possible`;
+    }
+    if (data.type === "puton") {
+      return `Hi, ${data.sender.username} has applied to put on a equipment, Please review as soon as possible`;
+    }
   }
+  if (authState.role === "lender") {
+    if (data.type === "return") {
+      return `Your application has been returned back, Please confirm as soon as possible`;
+    }
+    if (data.type === "borrow") {
+      if (data.result === "agree") {
+        return `Hi, you have agreed ${data.sender.username}'s application`;
+      }
+      if (data.result === "refuse") {
+        return `Hi,you have refused ${data.sender.username}'s application`;
+      }
+      return `Hi, ${data.sender.username} has applied to borrow your equipment, Please review as soon as possible`;
+    }
+    if (data.result === "agree") {
+      return `Congratulations, ${data.sender.username} has agreed your application, Please check soon`;
+    }
+    if (data.result === "refuse") {
+      return `Sorry, ${data.sender.username} has refused your application`;
+    }
+  }
+
   if (data.result === "agree") {
     return `Congratulations, ${data.sender.username} has agreed your application, Please check soon`;
   }
-  if (data.result === "refuse") {
+
+  if (data.result==='refuse'){
     return `Sorry, ${data.sender.username} has refused your application`;
   }
-  if (data.type === "lender") {
-    return `Hi, ${data.sender.username} has applied to be a Lender, Please review as soon as possible`;
-  }
-  if (data.type === "borrow") {
-    return `Hi, ${data.sender.username} has applied to borrow your equipment, Please review as soon as possible`;
-  }
-  if (data.type === "puton") {
-    return `Hi, ${data.sender.username} has applied to put on a equipment, Please review as soon as possible`;
-  }
+
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -47,7 +72,7 @@ function EquipmentDetail() {
   const { enqueueSnackbar } = useSnackbar();
 
   const params = useParams();
-  const { authState,setAuthStateAndSave } = useContext(AuthContext);
+  const { authState, setAuthStateAndSave } = useContext(AuthContext);
   const queryKey = ["notification", params.id, authState.token];
   const [mutate] = useMutation(updateNotification);
   const { data = {}, isLoading, isError } = useQuery(
@@ -60,13 +85,13 @@ function EquipmentDetail() {
         enqueueSnackbar(generateMessage(e, "/list"), {
           variant: "error",
         });
-        
+
         if (e.status === 401) {
-          setAuthStateAndSave(null)
+          setAuthStateAndSave(null);
           navigate("/login");
         }
-        if (e.status === 404){
-          navigate("/")
+        if (e.status === 404) {
+          navigate("/");
         }
       },
       onSuccess: (data) => {
@@ -97,11 +122,13 @@ function EquipmentDetail() {
   return (
     <Paper className={classes.paper}>
       <Typography gutterBottom variant="body1">
-        {generateContent(data)}
+        {generateContent(data, authState)}
       </Typography>
       <Link
         component={ReachLink}
-        to={`/applications/${data.type==='return'?'borrow':data.type}/${data.application_id}`}
+        to={`/applications/${data.type === "return" ? "borrow" : data.type}/${
+          data.application_id
+        }`}
       >
         See Application
       </Link>
