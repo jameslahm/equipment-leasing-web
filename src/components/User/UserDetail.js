@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useLocation, useParams, navigate } from "@reach/router";
 import { useQuery, useMutation, queryCache } from "react-query";
 import {
@@ -75,9 +75,24 @@ function UserDetail() {
     email: "",
     password: "",
   });
-  const { enqueueSnackbar } = useSnackbar();
 
   const params = useParams();
+
+  useEffect(() => {
+    if (username) {
+      setUsername("");
+    }
+    if (password) {
+      setPassword(INITIAL_PASSWORD);
+    }
+    if (email) {
+      setEmail("");
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.id]);
+
+  const { enqueueSnackbar } = useSnackbar();
+
   const location = useLocation();
   const { authState, setAuthStateAndSave } = useContext(AuthContext);
   const initialStatus = location.state
@@ -162,7 +177,7 @@ function UserDetail() {
     }
   };
 
-  const {messages,setMessagesAndSave}=useContext(ChatContext)
+  const { messages, setMessagesAndSave } = useContext(ChatContext);
 
   const handleLogOut = () => {
     setAuthStateAndSave(null);
@@ -221,6 +236,7 @@ function UserDetail() {
                 value={confirmed}
                 onChange={(e) => setConfirmed(!confirmed)}
                 checked={confirmed}
+                disabled={authState.role !== "admin"}
               ></Switch>
             }
             label="Confirmed"
@@ -251,9 +267,9 @@ function UserDetail() {
               alignItems="flex-start"
               justifyContent="center"
             >
-              <Typography variant="h6">{username}</Typography>
+              <Typography variant="h6">{data.username}</Typography>
               <Typography className={classes.text} variant="subtitle1">
-                {email}
+                {data.email}
               </Typography>
               <Typography className={classes.text} variant="subtitle2">
                 {capitalize(data.role)}
@@ -279,16 +295,16 @@ function UserDetail() {
               className={classes.logout}
               color="primary"
               onClick={() => {
-                if(!(data.id in messages)){
-                  messages[data.id]={
-                    username:data.username,
-                    avatar:data.avatar,
-                    messages:[],
-                    isRead:true,
-                    total:0
-                  }
+                if (!(data.id in messages)) {
+                  messages[data.id] = {
+                    username: data.username,
+                    avatar: data.avatar,
+                    messages: [],
+                    isRead: true,
+                    total: 0,
+                  };
                 }
-                setMessagesAndSave(messages)
+                setMessagesAndSave(messages);
                 navigate(`/chat/${params.id}`);
               }}
             >
