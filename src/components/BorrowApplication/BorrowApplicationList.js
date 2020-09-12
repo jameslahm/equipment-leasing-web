@@ -15,7 +15,6 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import {
   getAllBorrowApplications,
   deleteBorrowApplication,
-  AuthContext,
   formatDate
 } from "utils";
 import { Link as ReachLink } from "@reach/router";
@@ -24,7 +23,6 @@ import EnhancedTable, {
   EnhancedTableToolbar,
 } from "components/EnhancedTable";
 import { StatusHint } from "components/Widget";
-import AddIcon from "@material-ui/icons/Add";
 
 const headCells = [
   { id: "id", th: true, label: "ID",sortable:true },
