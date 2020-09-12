@@ -115,21 +115,21 @@ function ChatPanel() {
     }
   );
 
-  useEffect(() => {
-    if (userId && !messages[userId].isRead) {
-      try {
-        mutateRead(
-          { id: userId, token: authState.token },
-          { throwOnError: true }
-        );
-      } catch (e) {
-        enqueueSnackbar("Update Fail", {
-          variant: "error",
-        });
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+  // useEffect(() => {
+  //   if (userId && !messages[userId].isRead) {
+  //     try {
+  //       mutateRead(
+  //         { id: userId, token: authState.token },
+  //         { throwOnError: true }
+  //       );
+  //     } catch (e) {
+  //       enqueueSnackbar("Update Fail", {
+  //         variant: "error",
+  //       });
+  //     }
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [userId]);
 
   const handleSend = () => {
     try {
