@@ -236,7 +236,7 @@ function UserDetail() {
                 value={confirmed}
                 onChange={(e) => setConfirmed(!confirmed)}
                 checked={confirmed}
-                disabled={authState.role !== "admin"}
+                disabled={true}
               ></Switch>
             }
             label="Confirmed"
