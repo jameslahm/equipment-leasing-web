@@ -119,9 +119,11 @@ function RowData({
               >
                 <EditIcon></EditIcon>
               </IconButton>
-              <IconButton onClick={() => onDelete(row.id)}>
-                <DeleteIcon></DeleteIcon>
-              </IconButton>
+              {row.status !== "lease" ? (
+                <IconButton onClick={() => onDelete(row.id)}>
+                  <DeleteIcon></DeleteIcon>
+                </IconButton>
+              ) : null}
             </>
           ) : null}
         </TableCell>
