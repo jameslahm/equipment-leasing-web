@@ -154,8 +154,8 @@ function EnhancedTable({
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+    setRowsPerPage(parseInt(event.target.value, 10));
   };
 
   const handleChangeDense = (event) => {
@@ -195,6 +195,7 @@ function EnhancedTable({
   };
 
   const handleFilter = (options) => {
+    setPage(0)
     setOptions(options);
   };
 

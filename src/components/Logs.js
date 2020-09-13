@@ -62,6 +62,7 @@ function Logs() {
 
   const [startTime, setStartTime] = useState(new Date(0));
   const [endTime, setEndTime] = useState(new Date());
+  const [type, setType] = useState("");
 
   const [options, setOptions] = useState({
     type: "",
@@ -121,10 +122,9 @@ function Logs() {
           select
           className={classes.input}
           label="type"
-          // value={options.type}
-          defaultValue={options.type}
+          value={type}
           onChange={(e) => {
-            options.type = e.target.value;
+            setType(e.target.value);
           }}
         >
           <MenuItem key="1" value="">
@@ -146,7 +146,7 @@ function Logs() {
           label="Start Time"
           value={startTime}
           onChange={(v) => {
-            setStartTime(v)
+            setStartTime(v);
           }}
           format="yyyy/MM/dd HH:mm"
         ></DateTimePicker>
@@ -156,13 +156,15 @@ function Logs() {
           label="End Time"
           value={endTime}
           onChange={(v) => {
-            setEndTime(v)
+            setEndTime(v);
           }}
           format="yyyy/MM/dd HH:mm"
         ></DateTimePicker>
         <IconButton
           className={classes.input}
-          onClick={(e) => setOptions({ ...options,startTime,endTime })}
+          onClick={(e) => {
+            setPage(1)
+            setOptions({ ...options, startTime, endTime,type })}}
         >
           <FilterListIcon></FilterListIcon>
         </IconButton>
