@@ -15,7 +15,7 @@ import {
   getAllPutOnApplications,
   deletePutOnApplication,
   AuthContext,
-  formatDate
+  formatDate,
 } from "utils";
 import { Link as ReachLink } from "@reach/router";
 import { StatusHint } from "components/Widget";
@@ -57,6 +57,7 @@ function RowData({
   onClick,
 }) {
   const classes = useStyles();
+  const { authState } = useContext(AuthContext);
   if (!isLoading) {
     return (
       <TableRow
@@ -66,11 +67,13 @@ function RowData({
         selected={isItemSelected}
       >
         <TableCell padding="checkbox">
-          <Checkbox
-            checked={isItemSelected}
-            inputProps={{ "aria-labelledby": labelId }}
-            onClick={(event) => onClick(event, row.id)}
-          />
+          {authState.role === "admin" ? (
+            <Checkbox
+              checked={isItemSelected}
+              inputProps={{ "aria-labelledby": labelId }}
+              onClick={(event) => onClick(event, row.id)}
+            />
+          ) : null}
         </TableCell>
         <TableCell component="th" id={labelId} scope="row" padding="none">
           {row.id}
@@ -103,9 +106,11 @@ function RowData({
               <EditIcon></EditIcon>
             </IconButton>
           ) : null}
-          <IconButton onClick={() => onDelete(row.id)}>
-            <DeleteIcon></DeleteIcon>
-          </IconButton>
+          {authState.role === "admin" ? (
+            <IconButton onClick={() => onDelete(row.id)}>
+              <DeleteIcon></DeleteIcon>
+            </IconButton>
+          ) : null}
         </TableCell>
       </TableRow>
     );

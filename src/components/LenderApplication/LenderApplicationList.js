@@ -110,9 +110,11 @@ function RowData({
               <EditIcon></EditIcon>
             </IconButton>
           ) : null}
-          <IconButton onClick={() => onDelete(row.id)}>
-            {authState.role === "admin" ? <DeleteIcon></DeleteIcon> : null}
-          </IconButton>
+          {authState.role === "admin" ? (
+            <IconButton onClick={() => onDelete(row.id)}>
+              <DeleteIcon></DeleteIcon>
+            </IconButton>
+          ) : null}
         </TableCell>
       </TableRow>
     );

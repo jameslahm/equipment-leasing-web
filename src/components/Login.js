@@ -123,9 +123,9 @@ export default function SignIn() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Typography variant="body2" color="primary">
                 Forgot password?
-              </Link>
+              </Typography>
             </Grid>
             <Grid item>
               <Link component={ReachLink} to="/register" variant="body2">

@@ -239,6 +239,7 @@ function EquipmentDetail() {
             <FormControlLabel
               control={
                 <Switch
+                  disabled={!!data.current_application}
                   checked={confirmedBack}
                   onChange={() => setConfirmedBack(!confirmedBack)}
                 ></Switch>

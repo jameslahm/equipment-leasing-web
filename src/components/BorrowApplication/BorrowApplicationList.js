@@ -15,7 +15,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import {
   getAllBorrowApplications,
   deleteBorrowApplication,
-  formatDate
+  formatDate,
+  AuthContext,
 } from "utils";
 import { Link as ReachLink } from "@reach/router";
 import EnhancedTable, {
@@ -25,7 +26,7 @@ import EnhancedTable, {
 import { StatusHint } from "components/Widget";
 
 const headCells = [
-  { id: "id", th: true, label: "ID",sortable:true },
+  { id: "id", th: true, label: "ID", sortable: true },
   { id: "candidate", label: "Candidate" },
   {
     id: "application_time",
@@ -61,6 +62,7 @@ function RowData({
   onClick,
 }) {
   const classes = useStyles();
+  const { authState } = useContext(AuthContext);
   if (!isLoading) {
     return (
       <TableRow
@@ -70,11 +72,13 @@ function RowData({
         selected={isItemSelected}
       >
         <TableCell padding="checkbox">
-          <Checkbox
-            checked={isItemSelected}
-            inputProps={{ "aria-labelledby": labelId }}
-            onClick={(event) => onClick(event, row.id)}
-          />
+        {authState.role === "admin" ? (
+            <Checkbox
+              checked={isItemSelected}
+              inputProps={{ "aria-labelledby": labelId }}
+              onClick={(event) => onClick(event, row.id)}
+            />
+          ) : null}
         </TableCell>
         <TableCell component="th" id={labelId} scope="row" padding="none">
           {row.id}
@@ -112,9 +116,11 @@ function RowData({
               <EditIcon></EditIcon>
             </IconButton>
           ) : null}
-          <IconButton onClick={() => onDelete(row.id)}>
-            <DeleteIcon></DeleteIcon>
-          </IconButton>
+          {authState.role === "admin" ? (
+            <IconButton onClick={() => onDelete(row.id)}>
+              <DeleteIcon></DeleteIcon>
+            </IconButton>
+          ) : null}
         </TableCell>
       </TableRow>
     );
@@ -127,8 +133,7 @@ function TableToolbar({ numSelected, onFilter, onDeleteAll }) {
   // const { authState } = useContext(AuthContext);
   return (
     <EnhancedTableToolbar numSelected={numSelected} onDeleteAll={onDeleteAll}>
-      <Box width="100%" display="flex" justifyContent="flex-end">
-      </Box>
+      <Box width="100%" display="flex" justifyContent="flex-end"></Box>
     </EnhancedTableToolbar>
   );
 }
